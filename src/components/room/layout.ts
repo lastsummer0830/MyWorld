@@ -488,23 +488,3 @@ export const FOG = {
   night: { near: 16, far: 46 },
 } as const;
 
-// =======================================================
-//  날씨 프리셋 (WEATHER)
-// =======================================================
-export const WEATHER = {
-  blizzard: {
-    // -- 포그 (눈보라: 회청색, 시야 제한) ----------------------
-    fogColor:         "#8AAFC8",
-    fogNear:          6,
-    fogFar:           38,
-
-    // -- 조명 (어둡고 차갑게) ----------------------------------
-    sunIntensity:     0.1,
-    sunColor:         "#C8D8E8",
-    ambientIntensity: 0.2,
-    ambientColor:     "#B0C8DC",
-
-    // -- 눈 속도 배율 -----------------------------------------
-    snowSpeedMult:    2.5,
-  },
-} as const;

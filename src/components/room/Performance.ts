@@ -22,12 +22,3 @@ export const CANVAS_PERF = {
   },
 } as const;
 
-export const ENV_PERF = {
-  preset:     "sunset" as const,
-  background: false,
-  blur:       0.5,
-  resolution: LOW_END ? 64 : 128,
-} as const;
-
-export const FRAMELOOP_ALWAYS = "always" as const;
-export const FRAMELOOP_DEMAND = "demand" as const;
