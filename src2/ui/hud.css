@@ -1,0 +1,175 @@
+/*
+  씬 위에 올라가는 UI.
+  원칙: 3D 세계 위에 얹힌 "웹 버튼"이 아니라 그 세계의 유리 조각처럼 보일 것.
+  - 불투명 흰 배경 금지 → 반투명 유리 + 배경 블러
+  - 낮/밤에 따라 UI 자체의 톤도 함께 바뀐다 (밤에는 어두운 유리 + 반딧불이색 발광)
+*/
+
+.hud {
+  --glass: rgba(255, 255, 255, 0.42);
+  --glass-hover: rgba(255, 255, 255, 0.68);
+  --edge: rgba(255, 255, 255, 0.75);
+  --ink: #4a4636;
+  --glow: transparent;
+  --shadow: 0 8px 24px rgba(90, 100, 120, 0.16);
+
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  font-family: 'Josefin Sans', 'Noto Sans KR', system-ui, sans-serif;
+  transition: color 900ms ease;
+}
+
+/* 밤: 유리가 어두워지고 가장자리에 반딧불이 빛이 스민다. */
+.hud.is-night {
+  --glass: rgba(38, 40, 72, 0.5);
+  --glass-hover: rgba(58, 60, 100, 0.72);
+  --edge: rgba(255, 224, 122, 0.34);
+  --ink: #f3ecd8;
+  --glow: rgba(255, 224, 122, 0.22);
+  --shadow: 0 8px 28px rgba(10, 10, 30, 0.35);
+}
+
+/* ── 왼쪽 네비 ────────────────────────────── */
+
+.hud-nav {
+  position: absolute;
+  left: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.hud-item {
+  appearance: none;
+  cursor: pointer;
+  min-width: 132px;
+  padding: 13px 20px;
+  text-align: left;
+
+  color: var(--ink);
+  background: var(--glass);
+  border: 1px solid var(--edge);
+  border-radius: 18px;
+  box-shadow: var(--shadow), 0 0 22px var(--glow);
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  transition:
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 380ms ease,
+    box-shadow 380ms ease,
+    color 900ms ease;
+}
+
+.hud-item:hover {
+  transform: translateX(9px);
+  background: var(--glass-hover);
+  box-shadow: var(--shadow), 0 0 34px var(--glow);
+}
+
+.hud-item .sub {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  opacity: 0.62;
+}
+
+/* ── 오른쪽 위 낮/밤 스위치 ─────────────────── */
+
+.hud-mood {
+  position: absolute;
+  top: 30px;
+  right: 34px;
+  pointer-events: auto;
+
+  width: 78px;
+  height: 38px;
+  padding: 4px;
+  cursor: pointer;
+
+  background: var(--glass);
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  box-shadow: var(--shadow), 0 0 22px var(--glow);
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+
+  transition:
+    background 380ms ease,
+    box-shadow 380ms ease;
+}
+
+/* 노브가 미끄러지며 해 ↔ 달이 바뀐다. 딸깍 넘어가는 스위치가 아니라 하늘이 흐르는 느낌으로. */
+.hud-knob {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  line-height: 1;
+
+  background: linear-gradient(160deg, #fff6de, #ffd894);
+  box-shadow: 0 2px 10px rgba(255, 196, 100, 0.55);
+
+  transition:
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 620ms ease,
+    box-shadow 620ms ease;
+}
+
+.is-night .hud-knob {
+  transform: translateX(40px);
+  background: linear-gradient(160deg, #e8ecff, #a9b6e6);
+  box-shadow: 0 2px 14px rgba(200, 214, 255, 0.5);
+}
+
+/* ── 하단 조작 안내 ──────────────────────── */
+
+.hud-hint {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 9px 20px;
+  color: var(--ink);
+  background: var(--glass);
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  opacity: 0.82;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .hud-nav {
+    left: 16px;
+    gap: 9px;
+  }
+  .hud-item {
+    min-width: 104px;
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+  .hud-hint {
+    font-size: 10px;
+    padding: 7px 13px;
+  }
+}
