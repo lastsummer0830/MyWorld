@@ -34,6 +34,11 @@
 
 ## 4. 다음 작업 (TODO)
 
+> ★ **2026-07-14 방향 확정: 아이소메트릭 전면 개편 + 원작 라이선스 완전 탈피.**
+> 계획서 = `REBUILD_PLAN.md` (이 파일부터 읽는다). 기법 스킬 = **AJ_Proj 루트**의 `.claude/skills/isometric-diorama-builder`, `.claude/skills/procedural-asset-styleguide` (repo 밖에 둠 — Public 전환 대비).
+> 아래 기존 TODO 중 0·1(git/빌드 검증)은 유효, 나머지는 개편 단계에 흡수됨.
+
+
 0. **`git init` + 첫 커밋** — 이 폴더에서 `git init` → `.gitignore` 확인 → 첫 커밋. (AJ_Proj 규칙: `git add .` 금지 — 파일 명시적으로 add. push는 조아진 승인 후.)
 1. **`npm install` + `npm run dev`로 실제 화면 확인** — 여름 배경/방 리스타일은 코드만 작성된 상태로 아직 빌드·화면 검증이 안 됐다. 타입 에러가 있으면 먼저 잡고, 색감·배치·애니메이션 어색한 곳 조아진과 함께 조정.
 2. `portfolioData.ts`의 `TODO(아진)` 채우기 — tagline, intro, 학력, 프로젝트 background/approach, 캡처 이미지.
