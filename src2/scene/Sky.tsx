@@ -1,103 +1,129 @@
 'use client';
 
-// 꿈같은 하늘 — 씬을 통째로 감싸는 그라디언트 돔.
-// 배경을 단색으로 두면 "검은 허공에 뜬 물체"가 된다. 위아래로 색이 흐르는 돔이 있어야 공간이 넓어 보인다.
-// 밤에는 같은 돔 위에 별이 떠오른다(낮에는 완전히 투명).
+// 하늘 — 화면 전체를 덮는 그라디언트 배경.
+//
+// ★ 왜 "구(球) 돔"이 아니라 화면 공간인가:
+//   직교(ortho) 카메라는 화면에 담기는 월드 범위가 오직 줌 배율로 정해진다. 지금은 약 50m 폭이다.
+//   그래서 반지름 300m짜리 하늘 돔을 세워도 화면에는 그 돔의 아주 작은 한 조각만 잡히고,
+//   그 조각은 전부 지평선 부근이라 위아래 색의 중간값 하나로 칠해진다 → 화면 전체가 회백색이 된다.
+//   원근 카메라였다면 돔이 시야를 채웠겠지만 직교에서는 통하지 않는다.
+//   → 정점 셰이더에서 클립 공간에 직접 사각형을 박아 화면을 통째로 칠한다. 카메라와 무관하게 항상 꽉 찬다.
+//
+// 별도 같은 이유로 월드에 뿌리면 화면에 몇 개 안 걸린다 → 셰이더에서 화면 격자로 절차 생성한다.
 
 import { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { moodColor } from './palette';
+import { DAY, moodColor } from './palette';
 
+// position.xy를 그대로 클립 좌표로 쓴다(투영 행렬을 거치지 않는다).
+// z = 1 → 가장 먼 평면. 어떤 카메라 각도·배율에서도 화면을 정확히 덮는다.
 const VERT = /* glsl */ `
-  varying vec3 vWorld;
+  varying vec2 vUv;
   void main() {
-    vWorld = (modelMatrix * vec4(position, 1.0)).xyz;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vUv = uv;
+    gl_Position = vec4(position.xy, 1.0, 1.0);
   }
 `;
 
-// 높이(y)를 0~1로 눌러 두 색을 섞는다. exponent가 지평선 부근의 띠 두께를 정한다.
 const FRAG = /* glsl */ `
   uniform vec3 topColor;
   uniform vec3 bottomColor;
-  uniform float radius;
-  varying vec3 vWorld;
+  uniform vec2 sunDir;
+  uniform float night;
+  uniform float time;
+  uniform vec2 res;
+  varying vec2 vUv;
+
+  float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(41.3, 289.1))) * 43758.5453);
+  }
+
   void main() {
-    float h = clamp(vWorld.y / radius, -1.0, 1.0) * 0.5 + 0.5;
-    gl_FragColor = vec4(mix(bottomColor, topColor, pow(h, 0.85)), 1.0);
+    // 아래에서 위로 흐르는 그라디언트. exponent가 지평선 부근 띠의 두께를 정한다.
+    vec3 col = mix(bottomColor, topColor, pow(clamp(vUv.y, 0.0, 1.0), 0.8));
+
+    // 태양 — 직교 투영에는 소실점이 없어서 "하늘의 어느 점에 해가 있다"가 물리적으로 정해지지 않는다.
+    // 그래서 태양이 있는 '방향' 쪽 화면 가장자리에 빛무리를 놓는다. 빛이 어디서 오는지 근거를 만드는 연출.
+    vec2 p = (vUv - 0.5) * vec2(res.x / max(res.y, 1.0), 1.0);
+    float d = distance(p, sunDir * 0.52);
+    float day = 1.0 - night;
+    col += vec3(1.0, 0.92, 0.70) * exp(-d * d * 3.2) * 0.5 * day; //  넓게 번지는 빛무리
+    col += vec3(1.0, 0.97, 0.86) * smoothstep(0.07, 0.028, d) * 0.85 * day; //  해 원반
+
+    // 별 — 화면을 격자로 쪼개 칸마다 최대 하나. 밤에만 켜지고, 아래쪽(지평선)에는 적게 뿌린다.
+    if (night > 0.01) {
+      float aspect = res.x / max(res.y, 1.0);
+      vec2 grid = vUv * vec2(64.0 * aspect, 64.0);
+      vec2 id = floor(grid);
+      vec2 f = fract(grid);
+      float r = hash(id);
+      if (r > 0.90) {
+        vec2 c = vec2(hash(id + 1.7), hash(id + 3.1));
+        // 개체마다 위상이 달라야 살아 있는 하늘처럼 보인다.
+        float twinkle = 0.55 + 0.45 * sin(time * 1.6 + r * 40.0);
+        float star = smoothstep(0.10, 0.0, distance(f, c)) * twinkle;
+        star *= smoothstep(0.18, 0.62, vUv.y);
+        col += vec3(1.0, 0.97, 0.87) * star * night;
+      }
+    }
+
+    gl_FragColor = vec4(col, 1.0);
   }
 `;
 
-const RADIUS = 220;
-const STAR_COUNT = 420;
-
-export default function Sky({ nightRef }: { nightRef: React.RefObject<number> }) {
+export default function Sky({
+  nightRef,
+  sunDirRef,
+}: {
+  nightRef: React.RefObject<number>;
+  sunDirRef: React.RefObject<THREE.Vector2>;
+}) {
   const mat = useRef<THREE.ShaderMaterial>(null);
-  const stars = useRef<THREE.Points>(null);
+  const size = useThree((s) => s.size);
   const tmp = useRef(new THREE.Color());
 
   const uniforms = useMemo(
     () => ({
-      topColor: { value: new THREE.Color('#79C4EE') },
-      bottomColor: { value: new THREE.Color('#FFE7CF') },
-      radius: { value: RADIUS },
+      topColor: { value: new THREE.Color(DAY.skyTop) },
+      bottomColor: { value: new THREE.Color(DAY.skyBottom) },
+      sunDir: { value: new THREE.Vector2(0, 1) },
+      night: { value: 0 },
+      time: { value: 0 },
+      res: { value: new THREE.Vector2(1, 1) },
     }),
     [],
   );
 
-  // 별 좌표 — 돔 안쪽 위 반구에만 뿌린다. 매 프레임 재생성하지 않도록 한 번만 만든다.
-  const starGeo = useMemo(() => {
-    const pos = new Float32Array(STAR_COUNT * 3);
-    let seed = 424242;
-    const rand = () => {
-      seed = (seed * 1664525 + 1013904223) % 4294967296;
-      return seed / 4294967296;
-    };
-    for (let i = 0; i < STAR_COUNT; i++) {
-      const a = rand() * Math.PI * 2;
-      const y = 0.12 + rand() * 0.85;
-      const r = Math.sqrt(1 - y * y) * RADIUS * 0.92;
-      pos.set([Math.cos(a) * r, y * RADIUS * 0.92, Math.sin(a) * r], i * 3);
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    return g;
-  }, []);
-
-  useFrame(() => {
+  useFrame((state) => {
+    const m = mat.current;
+    if (!m) return;
     const night = nightRef.current;
 
-    if (mat.current) {
-      moodColor(tmp.current, 'skyTop', night);
-      (mat.current.uniforms.topColor.value as THREE.Color).copy(tmp.current);
-      moodColor(tmp.current, 'skyBottom', night);
-      (mat.current.uniforms.bottomColor.value as THREE.Color).copy(tmp.current);
-    }
-    if (stars.current) {
-      // 낮에는 완전히 사라지고, 밤이 깊어질수록 또렷해진다.
-      (stars.current.material as THREE.PointsMaterial).opacity = Math.max(0, night * 1.15 - 0.15);
-    }
+    moodColor(tmp.current, 'skyTop', night);
+    (m.uniforms.topColor.value as THREE.Color).copy(tmp.current);
+    moodColor(tmp.current, 'skyBottom', night);
+    (m.uniforms.bottomColor.value as THREE.Color).copy(tmp.current);
+
+    (m.uniforms.sunDir.value as THREE.Vector2).copy(sunDirRef.current);
+    m.uniforms.night.value = night;
+    m.uniforms.time.value = state.clock.elapsedTime;
+    (m.uniforms.res.value as THREE.Vector2).set(size.width, size.height);
   });
 
   return (
-    <group>
-      <mesh>
-        <sphereGeometry args={[RADIUS, 32, 24]} />
-        <shaderMaterial
-          ref={mat}
-          uniforms={uniforms}
-          vertexShader={VERT}
-          fragmentShader={FRAG}
-          side={THREE.BackSide}
-          depthWrite={false}
-          fog={false}
-        />
-      </mesh>
-
-      <points ref={stars} geometry={starGeo}>
-        <pointsMaterial size={1.5} color="#FFF6E0" transparent opacity={0} sizeAttenuation depthWrite={false} />
-      </points>
-    </group>
+    // 배경이므로 깊이 판정에서 빼고 가장 먼저 그린다. frustumCulled를 꺼야 화면 밖으로 판정돼 사라지지 않는다.
+    <mesh frustumCulled={false} renderOrder={-1000}>
+      <planeGeometry args={[2, 2]} />
+      <shaderMaterial
+        ref={mat}
+        uniforms={uniforms}
+        vertexShader={VERT}
+        fragmentShader={FRAG}
+        depthTest={false}
+        depthWrite={false}
+        fog={false}
+      />
+    </mesh>
   );
 }

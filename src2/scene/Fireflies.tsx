@@ -8,10 +8,10 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { GRID, TILE } from './constants';
+import { ISLAND_R } from './constants';
+import { COLOR } from './palette';
 
-const SPAN = GRID * TILE;
-const COUNT = 22;
+const COUNT = 28;
 
 type Bug = { x: number; y: number; z: number; phase: number; speed: number; amp: number };
 
@@ -20,7 +20,7 @@ export default function Fireflies({ nightRef }: { nightRef: React.RefObject<numb
   const mat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
-        color: new THREE.Color('#FFE07A'),
+        color: new THREE.Color(COLOR.firefly),
         toneMapped: false,
         transparent: true,
         opacity: 0.9,
@@ -34,14 +34,19 @@ export default function Fireflies({ nightRef }: { nightRef: React.RefObject<numb
       s = (s * 1664525 + 1013904223) % 4294967296;
       return s / 4294967296;
     };
-    return Array.from({ length: COUNT }, () => ({
-      x: (rand() - 0.5) * SPAN * 1.15,
-      y: 0.6 + rand() * 4.2,
-      z: (rand() - 0.5) * SPAN * 1.15,
-      phase: rand() * Math.PI * 2,
-      speed: 0.5 + rand() * 0.9,
-      amp: 0.25 + rand() * 0.5,
-    }));
+    // 원형 섬 위에 고르게 뿌린다. sqrt를 씌우지 않으면 중심에 몰린다.
+    return Array.from({ length: COUNT }, () => {
+      const a = rand() * Math.PI * 2;
+      const r = Math.sqrt(rand()) * ISLAND_R * 0.95;
+      return {
+        x: Math.cos(a) * r,
+        y: 0.6 + rand() * 4.6,
+        z: Math.sin(a) * r,
+        phase: rand() * Math.PI * 2,
+        speed: 0.5 + rand() * 0.9,
+        amp: 0.25 + rand() * 0.5,
+      };
+    });
   }, []);
 
   useFrame((state) => {

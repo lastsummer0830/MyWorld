@@ -1,46 +1,51 @@
 'use client';
 
-// 아이소메트릭 무대 (단계 0 스캐폴드).
+// 아이소메트릭 무대.
 // 카메라: 직교 투영(원근 왜곡 없음) + 부각 30° 고정 + 수평 360° 자유 회전 + 휠 확대.
 //   ★ 아이소메트릭 룩을 만드는 건 직교 투영이지 카메라 잠금이 아니다. 그래서 돌려도 미니어처 느낌이 유지된다.
 // 인터랙션: 호버 시 떠오름, 클릭 시 그 오브젝트 속으로 파고드는 카메라.
 // 지금 놓인 회색 박스는 가구가 아니라 검사용 말뚝이다 — 단계 2에서 실제 배치로 대체된다.
+//
+// `?swatch=1` 로 열면 정원 위에 색견본이 깔린다. 실제 조명·실제 각도에서 색을 확인하기 위한 것.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, OrthographicCamera } from '@react-three/drei';
+import { Html, OrbitControls, OrthographicCamera } from '@react-three/drei';
+import { EffectComposer } from '@react-three/postprocessing';
+import { BloomEffect } from 'postprocessing';
 import * as THREE from 'three';
 import {
   CAM_POLAR,
   CAM_POS,
-  GRASS_H,
-  GRID,
-  SLAB_H,
+  ISLAND_R,
+  ISLAND_R_SAFE,
+  SHADOW_SPAN,
   SUN_POS,
-  TILE,
   ZOOM_FOCUS,
   ZOOM_MAX,
   ZOOM_MIN,
   fitZoom,
 } from './constants';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { DAY, moodColor, moodNumber } from './palette';
+import { MAT, SWATCHES, tickMaterials } from './materials';
+import Island from './Island';
 import Surroundings from './Surroundings';
 import Sky from './Sky';
+import Sunlight from './Sunlight';
+import Motes from './Motes';
 import Fireflies from './Fireflies';
-import { moodColor, moodNumber } from './palette';
 import Hud from '../ui/Hud';
 
-const SPAN = GRID * TILE;
 const ORIGIN = new THREE.Vector3(0, 0, 0);
 
-type Probe = { tile: [number, number]; size: [number, number, number] };
+type Probe = { pos: [number, number]; size: [number, number, number] };
 
-// 24m 정원의 스케일 감을 보려고 세운 말뚝들. 실제 크기를 흉내 낸다.
-// 퍼걸러(4×4×3m) / 티테이블(1.6m) / 연못 자리(7×5m) — 단계 2에서 진짜 배치로 대체된다.
+// 44m 정원의 스케일 감을 보려고 세운 말뚝들. 실제 크기를 흉내 낸다.
+// 퍼걸러(6×3×6m) / 티테이블(1.6m) / 연못 자리(10×7m) — 단계 2에서 진짜 배치로 대체된다.
 const PROBES: Probe[] = [
-  { tile: [-9, -6], size: [4, 3, 4] },
-  { tile: [3, 4], size: [1.6, 0.9, 1.6] },
-  { tile: [8, -8], size: [7, 0.3, 5] },
+  { pos: [-8, -5], size: [6, 3, 6] },
+  { pos: [2, 3], size: [1.6, 0.9, 1.6] },
+  { pos: [9, -9], size: [10, 0.3, 7] },
 ];
 
 /**
@@ -127,7 +132,7 @@ function ProbeBlock({
   onSelect: () => void;
 }) {
   const ref = useRef<THREE.Mesh>(null);
-  const [x, z] = probe.tile;
+  const [x, z] = probe.pos;
   const baseY = probe.size[1] / 2;
 
   useFrame((_, dt) => {
@@ -138,12 +143,13 @@ function ProbeBlock({
     mesh.position.y = THREE.MathUtils.lerp(mesh.position.y, goalY, k);
   });
 
-  const color = selected ? '#E4D9A8' : hovered ? '#CFC7BB' : '#B7B0A6';
+  const mat = MAT('matte', selected ? 'blockActive' : hovered ? 'blockHover' : 'block');
 
   return (
     <mesh
       ref={ref}
-      position={[x * TILE, baseY, z * TILE]}
+      position={[x, baseY, z]}
+      material={mat}
       castShadow
       receiveShadow
       onPointerOver={(e) => {
@@ -157,25 +163,47 @@ function ProbeBlock({
       }}
     >
       <boxGeometry args={probe.size} />
-      <meshStandardMaterial color={color} roughness={0.9} metalness={0} />
     </mesh>
   );
 }
 
 /**
- * 낮/밤 분위기 — 하늘·빛·안개를 한꺼번에 몰아준다.
+ * 낮/밤 분위기 — 하늘·빛·안개·발광 재질·Bloom을 한꺼번에 몰아준다.
  * night는 0(낮)↔1(밤) 사이를 lerp로 오간다. "확 전환"되되 뚝 끊기지는 않게.
  */
-function Mood({ target, nightRef }: { target: number; nightRef: React.RefObject<number> }) {
+/** 태양이 월드에서 향하는 방향(고정). 화면상 방향은 카메라가 돌 때마다 다시 구한다. */
+const SUN_WORLD = new THREE.Vector3(...SUN_POS).normalize();
+
+function Mood({
+  target,
+  nightRef,
+  sunDirRef,
+  bloom,
+}: {
+  target: number;
+  nightRef: React.RefObject<number>;
+  sunDirRef: React.RefObject<THREE.Vector2>;
+  bloom: BloomEffect;
+}) {
   const scene = useThree((s) => s.scene);
+  const camera = useThree((s) => s.camera);
   const sun = useRef<THREE.DirectionalLight>(null);
   const amb = useRef<THREE.AmbientLight>(null);
+  const hemi = useRef<THREE.HemisphereLight>(null);
   const tmp = useRef(new THREE.Color());
+  const tmpV = useRef(new THREE.Vector3());
 
   useFrame((_, dt) => {
+    // 태양 방향을 카메라 공간으로 옮기면, 그 x·y가 곧 "화면에서 해가 있는 쪽"이 된다.
+    // 하늘의 빛무리와 빛기둥이 이 값을 읽으므로, 카메라를 돌리면 햇살 각도도 자연스럽게 따라 돈다.
+    const v = tmpV.current.copy(SUN_WORLD).transformDirection(camera.matrixWorldInverse);
+    const len = Math.hypot(v.x, v.y);
+    // 해가 시선축과 거의 일치하면 화면상 방향이 정의되지 않는다 — 직전 값을 유지한다.
+    if (len > 1e-3) sunDirRef.current.set(v.x / len, v.y / len);
+
     // 프레임률과 무관한 감쇠. 고정 계수로 lerp하면 저사양 기기에서 전환 속도가 달라진다.
     const k = 1 - Math.pow(0.02, dt);
-    // 하늘·구름도 같은 값을 읽어야 하므로 state가 아니라 ref로 흘린다(매 프레임 리렌더 방지).
+    // 하늘·구름·재질이 모두 같은 값을 읽어야 하므로 state가 아니라 ref로 흘린다(매 프레임 리렌더 방지).
     nightRef.current = THREE.MathUtils.lerp(nightRef.current, target, k);
     const t = nightRef.current;
 
@@ -191,63 +219,107 @@ function Mood({ target, nightRef }: { target: number; nightRef: React.RefObject<
       amb.current.color.copy(tmp.current);
       amb.current.intensity = moodNumber('ambientIntensity', t);
     }
+    if (hemi.current) {
+      moodColor(tmp.current, 'hemiSky', t);
+      hemi.current.color.copy(tmp.current);
+      moodColor(tmp.current, 'hemiGround', t);
+      hemi.current.groundColor.copy(tmp.current);
+      hemi.current.intensity = moodNumber('hemiIntensity', t);
+    }
+
+    // ★ Bloom은 밤에만. 낮에 켜 두면 하늘(밝기 0.72~0.92)과 흰 구름이 통째로 번져
+    //   화면이 하얗게 씻겨 나간다 — 반딧불이를 살리려던 장치가 정반대로 작동한다.
+    bloom.intensity = moodNumber('bloom', t);
+
+    // 발광 재질(잔디의 밤빛·알전구)을 한곳에서 갱신한다.
+    tickMaterials(t);
   });
 
   return (
     <>
-      <ambientLight ref={amb} intensity={0.62} />
+      {/*
+        ambient는 약하게. 세게 주면 그늘이 사라져 전체가 균일하게 창백해진다(= 흐린 날).
+        햇살은 밝기가 아니라 "밝은 면과 그늘의 대비"에서 나온다.
+      */}
+      <ambientLight ref={amb} color={DAY.ambient} intensity={DAY.ambientIntensity} />
+
+      {/*
+        ★ 정원 느낌의 핵심. 위에서는 하늘색이, 아래에서는 잔디에 반사된 연둣빛이 올라온다.
+        이게 있어야 그늘진 면에 초록빛이 배어들어 "풀밭 위에 놓인 물건"으로 보인다.
+        없으면 그늘이 그냥 회색이 되어 오브젝트가 바닥에서 붕 뜬다.
+      */}
+      <hemisphereLight
+        ref={hemi}
+        color={DAY.hemiSky}
+        groundColor={DAY.hemiGround}
+        intensity={DAY.hemiIntensity}
+      />
+
       <directionalLight
         ref={sun}
         position={SUN_POS}
-        intensity={1.35}
+        color={DAY.sun}
+        intensity={DAY.sunIntensity}
         castShadow
-        // 판이 24m로 넓어져 1024로는 그림자가 뭉갠다. 2048은 이 씬에서 감당 가능한 선.
         shadow-mapSize={[2048, 2048]}
-        // 그림자 프러스텀 기본값(±5)은 바닥판보다 좁아 그림자가 잘린다. 판 전체를 덮게 넓힌다.
-        shadow-camera-left={-SPAN}
-        shadow-camera-right={SPAN}
-        shadow-camera-top={SPAN}
-        shadow-camera-bottom={-SPAN}
+        // 그림자 프러스텀 기본값(±5)은 섬보다 좁아 그림자가 잘린다. 섬 전체를 덮게 넓힌다.
+        shadow-camera-left={-SHADOW_SPAN}
+        shadow-camera-right={SHADOW_SPAN}
+        shadow-camera-top={SHADOW_SPAN}
+        shadow-camera-bottom={-SHADOW_SPAN}
         shadow-camera-near={0.1}
-        shadow-camera-far={80}
+        shadow-camera-far={140}
+        // 넓은 프러스텀에서 생기는 그림자 얼룩(acne)을 지운다.
+        shadow-bias={-0.0006}
+        shadow-normalBias={0.04}
       />
     </>
   );
 }
 
 /**
- * 정원 판 — 잔디 뚜껑 + 흙 단면.
- * 단면이 층으로 보여야 "땅을 도려내 온 조각"으로 읽힌다(참고 이미지의 그 느낌).
- * 격자는 단계 2에서 가구를 스냅 배치할 때의 눈금이다.
+ * 색견본 (`?swatch=1`) — 등록된 재질을 실제 조명 아래 늘어놓는다.
+ * 스타일가이드 §5: 색은 정면 평면이 아니라 "실제 사용 각도·실제 빛"에서 판단해야 한다.
+ * 구와 상자를 함께 두는 이유: 곡면의 부드러운 명암과 평면의 딱 떨어지는 명암이 둘 다 보여야 재질이 판단된다.
  */
-function TileFloor({ nightRef }: { nightRef: React.RefObject<number> }) {
-  const grass = useRef<THREE.MeshStandardMaterial>(null);
-
-  useFrame(() => {
-    // 밤에 잔디가 아주 옅게 자체 발광한다 — 판이 어둠에 완전히 먹히지 않게 붙잡아 주는 장치.
-    if (grass.current) grass.current.emissiveIntensity = nightRef.current * 0.22;
-  });
+function SwatchBoard() {
+  const COLS = 7;
+  const GAP = 5;
 
   return (
-    <group>
-      <mesh position={[0, -GRASS_H / 2, 0]} receiveShadow>
-        <boxGeometry args={[SPAN, GRASS_H, SPAN]} />
-        <meshStandardMaterial
-          ref={grass}
-          color="#A9CC72"
-          emissive="#B9DD7E"
-          emissiveIntensity={0}
-          roughness={0.95}
-          metalness={0}
-        />
-      </mesh>
+    <group position={[0, 0, 0]}>
+      {SWATCHES.map((s, i) => {
+        const col = i % COLS;
+        const row = Math.floor(i / COLS);
+        const x = (col - (COLS - 1) / 2) * GAP;
+        const z = (row - 0.5) * GAP * 1.4;
+        const mat = MAT(s.preset, s.color, s.preset === 'glow' ? { dayGlow: 0.6, nightGlow: 2.2 } : {});
 
-      <mesh position={[0, -GRASS_H - SLAB_H / 2, 0]}>
-        <boxGeometry args={[SPAN, SLAB_H, SPAN]} />
-        <meshStandardMaterial color="#8A6650" roughness={1} metalness={0} />
-      </mesh>
-
-      <gridHelper args={[SPAN, GRID, '#8FB35F', '#9CC169']} position={[0, 0.004, 0]} />
+        return (
+          <group key={i} position={[x, 0, z]}>
+            <mesh position={[-1, 1.1, 0]} material={mat} castShadow receiveShadow>
+              <sphereGeometry args={[1.1, 32, 24]} />
+            </mesh>
+            <mesh position={[1.1, 0.9, 0]} material={mat} castShadow receiveShadow>
+              <boxGeometry args={[1.6, 1.8, 1.6]} />
+            </mesh>
+            <Html position={[0, -0.1, 1.6]} center style={{ pointerEvents: 'none' }}>
+              <div
+                style={{
+                  font: '600 12px/1 system-ui, sans-serif',
+                  color: '#2E3A2A',
+                  background: 'rgba(255,255,255,0.72)',
+                  padding: '3px 7px',
+                  borderRadius: 999,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {s.label}
+              </div>
+            </Html>
+          </group>
+        );
+      })}
     </group>
   );
 }
@@ -256,18 +328,47 @@ export default function IsoStage() {
   const [hovered, setHovered] = useState<number | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [isNight, setIsNight] = useState(false);
+  const [swatch, setSwatch] = useState(false);
 
-  // 낮(0)↔밤(1)의 현재 값. 하늘·구름·빛이 모두 이 하나를 읽는다.
+  // 낮(0)↔밤(1)의 현재 값. 하늘·구름·빛·재질이 모두 이 하나를 읽는다.
   const nightRef = useRef(0);
+
+  // 화면에서 해가 있는 방향. Mood가 매 프레임 갱신하고, 하늘과 햇살이 읽어 간다.
+  const sunDirRef = useRef(new THREE.Vector2(0, 1));
+
+  /**
+   * ★ Bloom을 <Bloom> 컴포넌트 + ref로 쓰면 안 된다.
+   *   React 19부터 ref는 일반 prop으로 전달되는데, @react-three/postprocessing의 wrapEffect가
+   *   받은 prop 전체를 JSON.stringify해 캐시 키로 쓴다. 마운트 후 ref.current에 들어간 BloomEffect는
+   *   내부에 순환 참조(KawaseBlurPass → Resolution → resizable)가 있어 stringify가 그대로 터진다.
+   *   → 인스턴스를 직접 만들어 <primitive>로 넣는다. EffectComposer는 자식 중 Effect를 찾아 쓰므로 동작은 같고,
+   *     매 프레임 intensity를 만질 핸들도 그대로 얻는다.
+   */
+  const bloom = useMemo(
+    () =>
+      new BloomEffect({
+        intensity: 0, //  세기는 Mood가 낮/밤에 맞춰 몰아준다.
+        // ★ 0.9 — 이 값이 "무엇이 빛나는가"를 정한다.
+        //   낮 하늘이 0.72~0.87이므로 하늘은 걸리지 않고, 해 원반과 햇빛이 정면으로 때린 면만 번진다.
+        //   낮추면(0.62였다) 하늘이 통째로 걸려 화면이 하얗게 씻겨 나간다 — 오늘 그렇게 한 번 태웠다.
+        luminanceThreshold: 0.9,
+        luminanceSmoothing: 0.25,
+        mipmapBlur: true,
+        radius: 0.72,
+      }),
+    [],
+  );
+  useEffect(() => () => bloom.dispose(), [bloom]);
+
+  // 쿼리 파라미터는 마운트 후에 읽는다 — 서버 렌더 결과와 달라지면 hydration이 깨진다.
+  useEffect(() => {
+    setSwatch(new URLSearchParams(window.location.search).has('swatch'));
+  }, []);
 
   const focus =
     selected === null
       ? null
-      : new THREE.Vector3(
-          PROBES[selected].tile[0] * TILE,
-          PROBES[selected].size[1] / 2,
-          PROBES[selected].tile[1] * TILE,
-        );
+      : new THREE.Vector3(PROBES[selected].pos[0], PROBES[selected].size[1] / 2, PROBES[selected].pos[1]);
 
   useEffect(() => {
     document.body.style.cursor = hovered !== null ? 'pointer' : 'auto';
@@ -285,43 +386,52 @@ export default function IsoStage() {
         gl={{ antialias: true }}
         onPointerMissed={() => setSelected(null)}
       >
-        {/* 안개는 먼 하늘로 자연스럽게 녹아들게 하는 용도. 색은 Mood가 낮/밤에 맞춰 몰아준다. */}
-        <fog attach="fog" args={['#DCEBF2', SPAN * 4, SPAN * 11]} />
+        {/* 안개 — 직교 카메라에는 원근이 없어서 거리감을 만들 수단이 이것뿐이다.
+            원경(부유섬·구름)을 하늘색으로 흐리게 지워 "저 멀리"로 밀어낸다.
+            섬 자체(반경 22m)에는 닿지 않게 60m부터 시작하고, 154m에서 완전히 하늘색이 된다.
+            far를 멀리 잡으면(13배로 뒀었다) 원경이 또렷하게 남아 거대한 회색 덩어리로 보인다.
+            색은 Mood가 낮/밤에 맞춰 몰아준다. */}
+        <fog attach="fog" args={[DAY.fog, ISLAND_R * 2.7, ISLAND_R * 7]} />
 
-        <OrthographicCamera makeDefault position={CAM_POS} near={-200} far={400} />
+        <OrthographicCamera makeDefault position={CAM_POS} near={-300} far={600} />
         <Controls />
         <CameraRig focus={focus} />
-        <Mood target={isNight ? 1 : 0} nightRef={nightRef} />
+        <Mood target={isNight ? 1 : 0} nightRef={nightRef} sunDirRef={sunDirRef} bloom={bloom} />
 
-        <Sky nightRef={nightRef} />
+        <Sky nightRef={nightRef} sunDirRef={sunDirRef} />
         <Surroundings nightRef={nightRef} />
-        <TileFloor nightRef={nightRef} />
+        <Island />
+        {/* 낮의 금빛 부유물 ↔ 밤의 반딧불이. 낮/밤에 서로 자리를 넘겨준다. */}
+        <Motes nightRef={nightRef} />
         <Fireflies nightRef={nightRef} />
+
+        {/* 햇살 — 씬 위에 얹히는 빛기둥. 맨 마지막에 가산 합성으로 그린다. */}
+        <Sunlight nightRef={nightRef} sunDirRef={sunDirRef} />
+
+        {swatch ? (
+          <SwatchBoard />
+        ) : (
+          PROBES.map((probe, i) => (
+            <ProbeBlock
+              key={i}
+              probe={probe}
+              hovered={hovered === i}
+              selected={selected === i}
+              onHover={(v) => setHovered(v ? i : null)}
+              onSelect={() => setSelected((cur) => (cur === i ? null : i))}
+            />
+          ))
+        )}
 
         {/*
           Bloom — 밤의 필수 요소. 반딧불이가 "빛"으로 보이려면 번져야 한다.
-          단, 후처리는 GPU를 잡아먹는다(집 PC에서 컨텍스트 소실 전력 있음). mipmapBlur + 보수적 설정 유지.
+          intensity는 Mood가 밤 값에 맞춰 몰아준다(낮 = 0).
+          EffectComposer를 조건부로 넣었다 뺐다 하면 셰이더가 재컴파일되며 화면이 깜빡인다 —
+          그래서 항상 두고 세기만 0으로 내린다.
         */}
         <EffectComposer>
-          <Bloom
-            intensity={1.15}
-            luminanceThreshold={0.62}
-            luminanceSmoothing={0.25}
-            mipmapBlur
-            radius={0.72}
-          />
+          <primitive object={bloom} />
         </EffectComposer>
-
-        {PROBES.map((probe, i) => (
-          <ProbeBlock
-            key={i}
-            probe={probe}
-            hovered={hovered === i}
-            selected={selected === i}
-            onHover={(v) => setHovered(v ? i : null)}
-            onSelect={() => setSelected((cur) => (cur === i ? null : i))}
-          />
-        ))}
       </Canvas>
 
       <Hud
@@ -333,3 +443,6 @@ export default function IsoStage() {
     </div>
   );
 }
+
+// 배치 가능 반경 — 단계 2에서 오브젝트를 놓을 때 이 원 안에 들어오는지 확인한다.
+export const PLACEABLE_R = ISLAND_R_SAFE;
