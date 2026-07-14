@@ -1,7 +1,7 @@
 # CLAUDE.md — MyWorld 프로젝트 지침
 
 이 폴더는 **MyWorld** — 조아진의 3D 인터랙티브 포트폴리오 (독립 git repo).
-상위 폴더 `D:\dev\AJ_Proj\`의 감독관 지침(CLAUDE.md)이 함께 적용된다.
+상위 폴더 (`../` = AJ_Proj)의 감독관 지침(CLAUDE.md)이 함께 적용된다.
 충돌 시: **git/승인/보고 규칙은 감독관 지침**을, **코드 컨벤션은 이 문서**를 따른다.
 
 ## 1. 프로젝트 정체성
@@ -46,7 +46,7 @@
 4. 모바일 확인 + 갤러리 업적 동작 확인.
 5. GitHub repo 생성 + push (조아진 승인 후. 계정: lastsummer0830).
 6. 배포(Vercel) 및 README에 라이브 데모 링크 추가.
-7. 완료 시 `D:\dev\AJ_Proj\PORTFOLIO_STATUS.md`의 MyWorld 체크리스트 갱신.
+7. 완료 시 `../PORTFOLIO_STATUS.md`의 MyWorld 체크리스트 갱신.
 
 ## 5. 주의
 
