@@ -117,14 +117,21 @@ const SKILL_META: Record<string, { slug: string; color: string }> = {
   "Three.js":   { slug: "threedotjs",   color: "#E8E0FF" },
   "Electron":   { slug: "electron",     color: "#9FEAF9" },
   "Tauri":      { slug: "tauri",        color: "#FFC131" },
-  "AWS":        { slug: "amazonwebservices", color: "#FF9900" },
   "Render":     { slug: "render",       color: "#E8E0FF" },
   "Git":        { slug: "git",          color: "#F05032" },
   "Node.js":    { slug: "nodedotjs",    color: "#5FA04E" },
   "Java":       { slug: "openjdk",      color: "#E8E0FF" },
   "Spring":     { slug: "spring",       color: "#6DB33F" },
+  "Spring Boot":{ slug: "springboot",   color: "#6DB33F" },
+  "jQuery":     { slug: "jquery",       color: "#0769AD" },
   "MySQL":      { slug: "mysql",        color: "#4479A1" },
+  "Maven":      { slug: "apachemaven",  color: "#C71A36" },
+  "Gradle":     { slug: "gradle",       color: "#E8E0FF" },
+  "Tomcat":     { slug: "apachetomcat", color: "#F8DC75" },
+  "Docker":     { slug: "docker",       color: "#2496ED" },
   "Supabase":   { slug: "supabase",     color: "#3FCF8E" },
+  // simpleicons에 아이콘 없음(404) → 로고 없이 텍스트 뱃지로 표시됨:
+  //   Oracle, MyBatis, JPA, Servlet/JSP, AWS EC2
 };
 
 function SkillBadge({ name }: { name: string }) {
