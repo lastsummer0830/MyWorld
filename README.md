@@ -5,7 +5,6 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![Three.js](https://img.shields.io/badge/Three.js-r183-black?logo=three.js)](https://threejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey)](./LICENSE)
 
 <br/>
 
@@ -20,14 +19,14 @@
 
 ## 🎨 Concept
 
-| | 원작 (myRoom) | MyWorld |
-|---|---|---|
-| 계절 | ❄️ 겨울 스노우글로브 | ☀️ 여름 정원 유리 구슬 |
-| 배경 | 눈, 침엽수, 눈사람, 모닥불 | 잔디, 활엽수, 꽃밭, 연못, 큰 나무와 그네, 피크닉 |
-| 방 색감 | 브라운/웜베이지 | 파스텔 + 밝은 오크 + 플랜테리어 |
-| 동물 | 🐱 고양이 | 🐶 강아지 |
-| 날씨 | 눈보라 | 여름 소나기 |
-| 낮/밤 | 겨울 조명 | 여름 햇살 / 반딧불이 여름밤 |
+| | |
+|---|---|
+| 무대 | ☀️ 하늘에 떠 있는 여름 정원 섬 — 땅을 도려내 온 조각 |
+| 배경 | 잔디, 활엽수, 꽃밭, 연못, 큰 나무와 그네, 피크닉 |
+| 색감 | 파스텔 + 밝은 오크 + 플랜테리어 |
+| 동물 | 🐶 강아지 (블루멀 셸티 · 오드아이) |
+| 날씨 | 여름 소나기 |
+| 낮/밤 | 여름 햇살 / 반딧불이 여름밤 |
 
 ---
 
@@ -88,13 +87,7 @@ npm run dev
 
 ---
 
-## 🙏 Credits & License
+## 🙏 Credits
 
-이 프로젝트는 [JCJ (cjfwls39)](https://github.com/cjfwls39)님의 [**myRoom**](https://github.com/cjfwls39/myRoom)을
-뼈대(3D 씬 구조·인터랙션·갤러리 시스템)로 삼아, 컨셉·비주얼·콘텐츠를 리메이크한 파생 작업물입니다.
-
-원작 라이선스인 [CC BY-NC 4.0](./LICENSE)을 따릅니다 (비상업적 사용 · 원작자 표기).
-
-- 원작: © 2026 JCJ (cjfwls39) — myRoom
-- 리메이크: © 2026 조아진 (lastsummer0830)
+- © 2026 조아진 (lastsummer0830)
 - *AI 코딩 도구(Claude by Anthropic) 사용 · Developed with AI coding tools*
