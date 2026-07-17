@@ -46,43 +46,119 @@ function Islet({ pos, r, h }: { pos: [number, number, number]; r: number; h: num
   );
 }
 
-/** 구름 한 덩이 — 구 몇 개를 뭉쳐 로우폴리 뭉게구름으로. 천천히 흐른다. */
-function Cloud({
-  pos,
-  scale,
-  drift,
-  material,
-}: {
-  pos: [number, number, number];
-  scale: number;
-  drift: number;
-  material: THREE.Material;
-}) {
-  const group = useRef<THREE.Group>(null);
-  const startX = pos[0];
+/**
+ * 구름 무리 — 뭉게구름 여러 덩이를 instancedMesh 하나로 그린다.
+ *
+ * ★ 덩이마다 blob 배치를 새로 뽑는다. 예전엔 blob 배열이 상수라 18덩이가 전부 같은 모양이었고,
+ *   그 반복이 눈에 그대로 보였다("조잡한 구름"). 사람 눈은 반복을 제일 먼저 잡아낸다.
+ * ★ 크기는 이 파일 맨 위 규칙(주인공 섬의 1/6~1/15)을 따른다. 예전 구름은 최대 23m까지 부풀어
+ *   섬(44m)의 절반이었다 — 직교라 멀리 둬도 안 작아지니 배경이 주인공만 해졌다.
+ * ★ 구름은 가로로 퍼진다. 구를 그대로 쓰면 공 뭉치로 읽히므로 세로로 눌러 준다.
+ */
+const CLOUD_COUNT = 18;
+
+/** 세로로 누르는 비율 — 구름은 공이 아니라 가로로 퍼진 덩어리다. */
+const SQUASH = 0.58;
+
+/**
+ * 덩이 하나의 blob들 — 로컬 좌표(가로 지름 ≈ 3.5)와 반지름.
+ *
+ * ★ 뭉게구름의 핵심은 "바닥이 평평하고 위가 봉긋"이다. 수증기가 이슬점 고도에서 응결하기 때문에
+ *   바닥 높이가 가지런하다. 이 단서가 없으면 그냥 공 뭉치로 읽힌다.
+ *   → 각 blob의 **밑면을 같은 높이에 맞춘다**(y = r*SQUASH). 중앙일수록 위로 더 부풀린다.
+ * ★ 한 줄로 늘어놓지 말 것. 예전엔 x축 위에 나란히 굴려놔서 소금빵이 됐다.
+ *   → x·z **평면(원반)에 흩는다.**
+ */
+function makeBlobs(rand: () => number) {
+  const n = 7 + Math.floor(rand() * 5); // 7~11개
+  return Array.from({ length: n }, () => {
+    // 원반 위에 고르게 흩기 (sqrt를 씌워야 가장자리로 몰리지 않는다)
+    const a = rand() * Math.PI * 2;
+    const rad = Math.sqrt(rand());
+    const centerness = 1 - rad;
+    const r = 0.26 + centerness * 0.34 + rand() * 0.12;
+    return {
+      x: Math.cos(a) * rad,
+      z: Math.sin(a) * rad * 0.75, // z를 살짝 좁혀 옆에서 봐도 넓적하게
+      // 밑면 정렬 + 중앙 봉긋 + 아주 약한 흔들림(완벽히 평평하면 인공물로 보인다)
+      y: r * SQUASH + centerness * 0.2 + (rand() - 0.5) * 0.05,
+      r,
+    };
+  });
+}
+
+function Clouds({ material }: { material: THREE.Material }) {
+  const mesh = useRef<THREE.InstancedMesh>(null);
+
+  // 각 blob의 최종 정보를 미리 굽는다 — useFrame에서는 위치만 더한다(객체 생성 금지).
+  const { blobs, count } = useMemo(() => {
+    const rand = seeded(9911);
+    const out: { base: THREE.Vector3; r: number; cloud: number; drift: number; phase: number }[] = [];
+
+    for (let c = 0; c < CLOUD_COUNT; c++) {
+      const a = rand() * Math.PI * 2;
+      const dist = D * 1.6 + rand() * D * 3.0;
+      const cx = Math.cos(a) * dist;
+      const cy = -38 + rand() * 68;
+      const cz = Math.sin(a) * dist;
+
+      // 가로 지름 3.2~7.2m = 섬(44m)의 1/13 ~ 1/6. 규칙 안쪽.
+      const size = (1.6 + rand() * 2.0) / 2;
+      const rotY = rand() * Math.PI * 2; // 덩이마다 다른 방향 → 같은 실루엣이 반복되지 않는다
+      const flat = 0.5 + rand() * 0.12;  // 세로로 눌러 구름 모양으로
+      const drift = 0.03 + rand() * 0.05;
+      const phase = rand() * Math.PI * 2;
+
+      const cos = Math.cos(rotY);
+      const sin = Math.sin(rotY);
+
+      for (const b of makeBlobs(rand)) {
+        const lx = b.x * size;
+        const lz = b.z * size;
+        out.push({
+          base: new THREE.Vector3(
+            cx + lx * cos - lz * sin,
+            cy + b.y * size * flat,
+            cz + lx * sin + lz * cos,
+          ),
+          r: b.r * size,
+          cloud: c,
+          drift,
+          phase,
+        });
+      }
+    }
+    return { blobs: out, count: out.length };
+  }, []);
+
+  // useFrame 안에서 새로 만들지 않도록 임시 객체를 미리 잡아 둔다.
+  const tmp = useMemo(
+    () => ({ m: new THREE.Matrix4(), q: new THREE.Quaternion(), p: new THREE.Vector3(), s: new THREE.Vector3() }),
+    [],
+  );
 
   useFrame((state) => {
-    // 좌우로 아주 느리게 흐른다. 완전히 멈춰 있으면 배경이 죽은 그림처럼 보인다.
-    if (group.current) {
-      group.current.position.x = startX + Math.sin(state.clock.elapsedTime * drift) * 6;
+    const im = mesh.current;
+    if (!im) return;
+    const t = state.clock.elapsedTime;
+    for (let i = 0; i < blobs.length; i++) {
+      const b = blobs[i];
+      // 좌우로 아주 느리게 흐른다. 완전히 멈춰 있으면 배경이 죽은 그림처럼 보인다.
+      const dx = Math.sin(t * b.drift + b.phase) * 6;
+      tmp.p.set(b.base.x + dx, b.base.y, b.base.z);
+      // 세로로 눌러 둔다 — 구름은 공이 아니라 가로로 퍼진 덩어리다.
+      tmp.s.set(b.r, b.r * 0.62, b.r);
+      tmp.m.compose(tmp.p, tmp.q, tmp.s);
+      im.setMatrixAt(i, tmp.m);
     }
+    im.instanceMatrix.needsUpdate = true;
   });
 
-  const blobs: [number, number, number, number][] = [
-    [0, 0, 0, 1],
-    [0.9, -0.12, 0.2, 0.72],
-    [-0.85, -0.1, -0.15, 0.66],
-    [0.25, 0.42, -0.3, 0.6],
-  ];
-
   return (
-    <group ref={group} position={pos} scale={scale}>
-      {blobs.map(([x, y, z, r], i) => (
-        <mesh key={i} position={[x, y, z]} material={material}>
-          <sphereGeometry args={[r, 10, 8]} />
-        </mesh>
-      ))}
-    </group>
+    <instancedMesh ref={mesh} args={[undefined, undefined, count]} material={material} frustumCulled={false}>
+      {/* 화면상 지름이 20~40px 수준이라 이 정도 분할이면 각진 티가 안 난다. */}
+      <sphereGeometry args={[1, 14, 10]} />
+    </instancedMesh>
   );
 }
 
@@ -114,27 +190,12 @@ export default function Surroundings({ nightRef }: { nightRef: React.RefObject<n
     });
   }, []);
 
-  const clouds = useMemo(() => {
-    const rand = seeded(9911);
-    return Array.from({ length: 18 }, () => {
-      const a = rand() * Math.PI * 2;
-      const dist = D * 1.6 + rand() * D * 3.0;
-      return {
-        pos: [Math.cos(a) * dist, -38 + rand() * 68, Math.sin(a) * dist] as [number, number, number],
-        scale: 2.5 + rand() * 5,
-        drift: 0.03 + rand() * 0.05,
-      };
-    });
-  }, []);
-
   return (
     <group>
       {islets.map((isle, i) => (
         <Islet key={`i${i}`} {...isle} />
       ))}
-      {clouds.map((c, i) => (
-        <Cloud key={`c${i}`} {...c} material={cloudMat} />
-      ))}
+      <Clouds material={cloudMat} />
     </group>
   );
 }

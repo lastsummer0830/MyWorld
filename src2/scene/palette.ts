@@ -102,7 +102,9 @@ export const DAY: Mood = {
   hemiSky: '#C8E2F2',
   hemiGround: '#D9CE93', //  잔디에서 반사돼 올라오는 빛. 따뜻한 연둣빛이라 그늘이 노랗게 물든다.
   hemiIntensity: 0.9,
-  cloud: '#FFF6E8',
+  // ★ 크림색(#FFF6E8)이었다가 금빛 해(#FFD190)를 받으니 완전히 빵 색이 됐다("소금빵이니").
+  //   구름 자체는 거의 흰색이어야 한다 — 따뜻함은 햇빛이 입히는 것이지 구름이 갖고 있는 게 아니다.
+  cloud: '#FCFDFF',
   /**
    * ★ 낮 Bloom은 "아주 약하게".
    *
