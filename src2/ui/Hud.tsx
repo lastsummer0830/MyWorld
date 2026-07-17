@@ -18,10 +18,13 @@ export default function Hud({
   isNight,
   onToggleNight,
   onNav,
+  children,
 }: {
   isNight: boolean;
   onToggleNight: () => void;
   onNav: (key: NavKey) => void;
+  /** 열린 패널이 들어오는 자리 — 낮/밤 토큰을 상속받으려면 `.hud` 안이어야 한다. */
+  children?: React.ReactNode;
 }) {
   return (
     <div className={`hud${isNight ? ' is-night' : ''}`}>
@@ -43,6 +46,8 @@ export default function Hud({
       </button>
 
       <div className="hud-hint">드래그로 둘러보기 · 휠로 확대 · 클릭해서 들어가기</div>
+
+      {children}
     </div>
   );
 }

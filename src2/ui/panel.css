@@ -1,0 +1,287 @@
+/*
+  HUD 네비를 눌렀을 때 열리는 내용 패널.
+  hud.css와 같은 원칙 — 유리 조각처럼 보일 것. 토큰(--edge/--ink)도 그대로 쓴다.
+  ★ 낮/밤 토큰을 hud.css에서 상속받으려면 이 패널이 .hud 안에 있어야 한다.
+
+  ★ 배경은 hud.css의 --glass(0.42)를 쓰지 않는다. 그건 **버튼용 값**이다 —
+    글자 두세 개짜리 버튼은 배경이 비쳐도 읽히지만, 본문이 긴 패널에 같은 값을 쓰면
+    섬과 구름이 글자를 뚫고 올라와 못 읽는다(실제로 그랬다).
+    유리 느낌은 blur가 만드는 것이지 투명도가 만드는 게 아니다 → **불투명도를 올리고 blur를 키운다.**
+*/
+
+.hud {
+  --panel-glass: rgba(252, 253, 255, 0.9);
+  --panel-veil: rgba(22, 28, 44, 0.3);
+  /* 밝은 유리 위에서는 --edge(흰색)가 보이지 않는다 → 구분선은 잉크색을 옅게 깐다. */
+  --panel-line: rgba(74, 70, 54, 0.16);
+  --panel-chip: rgba(74, 70, 54, 0.05);
+  --panel-chip-hover: rgba(74, 70, 54, 0.12);
+}
+
+.hud.is-night {
+  --panel-glass: rgba(30, 32, 60, 0.9);
+  --panel-veil: rgba(6, 8, 22, 0.44);
+  --panel-line: rgba(243, 236, 216, 0.18);
+  --panel-chip: rgba(243, 236, 216, 0.07);
+  --panel-chip-hover: rgba(243, 236, 216, 0.16);
+}
+
+.panel-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  /* 뒤 씬을 눌러 줘야 패널이 앞으로 나온다 — 패널만 밝게 하면 배경과 싸운다. */
+  background: var(--panel-veil);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: panel-veil-in 260ms ease both;
+}
+
+@keyframes panel-veil-in {
+  from { opacity: 0; }
+}
+
+.panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+
+  width: min(560px, calc(100vw - 48px));
+  max-height: min(76vh, 720px);
+  overflow-y: auto;
+  padding: 30px 34px 34px;
+
+  color: var(--ink);
+  background: var(--panel-glass);
+  border: 1px solid var(--edge);
+  border-radius: 24px;
+  box-shadow: var(--shadow), 0 0 34px var(--glow);
+  backdrop-filter: blur(24px) saturate(1.25);
+  -webkit-backdrop-filter: blur(24px) saturate(1.25);
+
+  font-family: 'Josefin Sans', 'Noto Sans KR', system-ui, sans-serif;
+  animation: panel-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 14px));
+  }
+}
+
+.panel-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--panel-line);
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 240ms ease, background 240ms ease;
+}
+
+.panel-close:hover {
+  opacity: 1;
+  background: var(--panel-chip-hover);
+}
+
+.panel-title {
+  margin: 0 0 22px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+/* ── About ─────────────────────────────── */
+
+.panel-head {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.panel-avatar {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--panel-line);
+  background: var(--panel-chip);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.panel-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.panel-name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.panel-role {
+  margin: 3px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.panel-tagline {
+  margin: 7px 0 0;
+  font-size: 13px;
+  opacity: 0.78;
+}
+
+.panel-body {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  line-height: 1.85;
+  white-space: pre-line;
+  opacity: 0.95;
+}
+
+.panel-label {
+  margin: 24px 0 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.panel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--panel-line);
+}
+
+.panel-row .k {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.panel-row .sub {
+  font-size: 11.5px;
+  opacity: 0.6;
+}
+
+.panel-row .v {
+  font-size: 11px;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+/* ── Skills ────────────────────────────── */
+
+.panel-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.panel-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-line);
+  background: var(--panel-chip);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.panel-tag img {
+  width: 13px;
+  height: 13px;
+  display: block;
+}
+
+/* ── Projects / Contact ────────────────── */
+
+.panel-card {
+  padding: 14px 0;
+  border-top: 1px solid var(--panel-line);
+}
+
+.panel-card h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.panel-card p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.7;
+  white-space: pre-line;
+  opacity: 0.75;
+}
+
+.panel-badge {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-line);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  vertical-align: middle;
+}
+
+.panel-link {
+  display: inline-block;
+  margin-top: 9px;
+  margin-right: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-line);
+  background: var(--panel-chip);
+  color: inherit;
+  text-decoration: none;
+  font-size: 11px;
+  transition: background 240ms ease;
+}
+
+.panel-link:hover {
+  background: var(--panel-chip-hover);
+}
+
+.panel-note {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--panel-line);
+  font-size: 11.5px;
+  line-height: 1.8;
+  white-space: pre-line;
+  opacity: 0.55;
+}

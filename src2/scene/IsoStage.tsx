@@ -35,6 +35,8 @@ import Sunlight from './Sunlight';
 import Motes from './Motes';
 import Fireflies from './Fireflies';
 import Hud from '../ui/Hud';
+import type { NavKey } from '../ui/Hud';
+import Panel from '../ui/Panel';
 
 const ORIGIN = new THREE.Vector3(0, 0, 0);
 
@@ -328,6 +330,7 @@ export default function IsoStage() {
   const [hovered, setHovered] = useState<number | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [isNight, setIsNight] = useState(false);
+  const [view, setView] = useState<NavKey | null>(null);
   const [swatch, setSwatch] = useState(false);
 
   // 낮(0)↔밤(1)의 현재 값. 하늘·구름·빛·재질이 모두 이 하나를 읽는다.
@@ -437,9 +440,15 @@ export default function IsoStage() {
       <Hud
         isNight={isNight}
         onToggleNight={() => setIsNight((v) => !v)}
-        // 각 항목이 어느 오브젝트로 카메라를 데려갈지는 단계 6(콘텐츠)에서 연결한다.
-        onNav={() => setSelected(null)}
-      />
+        // 카메라를 해당 오브젝트로 데려가는 연출은 단계 6에서 붙인다.
+        // 지금은 내용을 눈으로 확인할 수 있게 패널만 띄운다.
+        onNav={(key) => {
+          setSelected(null);
+          setView(key);
+        }}
+      >
+        {view && <Panel view={view} onClose={() => setView(null)} />}
+      </Hud>
     </div>
   );
 }
