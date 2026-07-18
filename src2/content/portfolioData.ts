@@ -8,8 +8,8 @@
  * 프로필 사진 = /public/images/
  * 프로젝트 사진 = /public/images/projects/
  *
- * ★ TODO(아진): 아래에 "TODO" 표시된 곳은 직접 채우거나 다듬을 것.
- *   현황판(PORTFOLIO_STATUS.md)에 있는 사실만 채워뒀고, 부풀린 내용은 없음.
+ * 내용은 각 repo README·이력서의 사실만 반영했다 (부풀림 없음).
+ *   이미지는 캡처 확보 후 넣는다 (보류 항목).
  */
 
 // ── About Me ──────────────────────────────────────────────────
@@ -102,7 +102,7 @@ export const SKILLS_DATA = [
 //    github     : 저장소 URL (없으면 버튼 숨김)
 //
 //  ※ 현재 3개 기준으로 갤러리가 배치되어 있음. 개수 유지하며 내용만 다듬는 게 안전.
-//  ※ repo들이 아직 Private이므로 github 링크는 Public 전환 후에 유효해짐.
+//  ※ repo들이 Public이라 github 링크가 바로 유효함.
 //
 export const PROJECTS_DATA = [
   {
@@ -110,14 +110,16 @@ export const PROJECTS_DATA = [
     period:   "2026",
     status:   "completed" as "completed" | "inprogress",
 
-    images: [] as string[],   // TODO(아진): 실행 캡처 넣기 (pokemonJava README용 캡처와 공용 가능)
+    images: [] as string[],   // 캡처 대기(보류 항목) — pokemonJava README 캡처와 공용 가능
 
     summary:
       "Java Swing으로 만든 턴제 포켓몬 RPG.\n" +
-      "22개 클래스, 약 3,200줄 규모로 게임 메커니즘을 직접 구현했습니다.",
+      "24개 클래스, 약 3,560줄 규모로 게임 메커니즘을 직접 구현했습니다.",
 
     background:
-      "TODO(아진): 왜 만들었는지 — 포켓몬 게임을 직접 구현해보고 싶었던 동기 등.",
+      "자바 기본기를 완결된 게임 하나로 정리하고 싶었습니다.\n" +
+      "포켓몬은 타입 상성·상태이상·진화처럼 규칙이 서로 얽힌 데이터가 많습니다.\n" +
+      "데이터 설계와 로직 분리를 연습하기 좋은 소재라고 판단했습니다.",
 
     approach:
       "외부 API 없이 포켓몬·기술 데이터를 전부 직접 설계했습니다. 그 과정에서\n" +
@@ -143,19 +145,25 @@ export const PROJECTS_DATA = [
     period:   "2026 — 진행 중",
     status:   "inprogress" as "completed" | "inprogress",
 
-    images: [] as string[],   // TODO(아진)
+    images: [] as string[],   // 캡처 대기(보류 항목)
 
     summary:
       "pokemonJava를 잇는 TypeScript 리메이크/발전작. 현재 개발 진행 중입니다.",
 
     background:
-      "TODO(아진): Java 선행작에서 무엇이 아쉬워서 TS로 다시 만드는지.",
+      "Java 선행작의 그래픽·데이터 관리 한계를 웹에서 개선하고 싶었습니다.\n" +
+      "기존 게임 데이터를 눈대중이 아니라 원본 파일에서 추출해 옮기는 것을 원칙으로 삼았습니다.",
 
     approach:
-      "TODO(아진): 기술 선택 이유와 현재까지의 구현 포인트.",
+      "게임 엔진 없이 Phaser 3 + TypeScript로 2D 타일 RPG를 밑바닥부터 만들고 있습니다.\n" +
+      "전투·포획·인카운터 로직은 Phaser에 의존하지 않는 순수 함수로 분리했습니다.\n" +
+      "난수를 주입해 재현하고, 결과를 픽셀 단위로 원본과 대조해 검증합니다.",
 
     features: [
-      "TODO(아진): 현재까지 구현된 기능",
+      "오버월드 격자 이동 — 맵 3장을 단일 격자로 심리스 연결",
+      "5세대 공식을 그대로 이식한 포획·야생 조우 확률",
+      "타입 상성·상태이상·트레이너전을 갖춘 턴제 전투",
+      "Playwright + 픽셀 diff로 원본과 재현 대조 (464px 중 불일치 0)",
     ],
 
     skills:  ["TypeScript"],
@@ -168,7 +176,7 @@ export const PROJECTS_DATA = [
     period:   "2026 — 개편 중",
     status:   "inprogress" as "completed" | "inprogress",
 
-    images: [] as string[],   // TODO(아진): 개편 후 before/after 캡처
+    images: [] as string[],   // 캡처 대기 — 개편 후 before/after
 
     summary:
       "닌텐도 스위치 UI 컨셉의 웹 포트폴리오. 스위치 홈 화면을 재현하고\n" +
@@ -180,7 +188,9 @@ export const PROJECTS_DATA = [
       "프로젝트 카드가 나오는 인터랙션이 목표입니다.",
 
     approach:
-      "TODO(아진): 개편하면서 유튜브 임베드를 직접 구현 인터랙션으로 바꾸는 과정 등.",
+      "개편 진행 중이라 아직 목표 단계입니다.\n" +
+      "초기엔 유튜브 임베드·외부 이미지로 화면을 때웠습니다.\n" +
+      "스위치 홈 UI와 마리오 ?박스를 CSS·SVG·Canvas로 직접 그려 교체하고 있습니다.",
 
     features: [
       "닌텐도 스위치 홈 화면 UI 재현 (개편 목표)",
