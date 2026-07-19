@@ -34,21 +34,12 @@ import Sky from './Sky';
 import Sunlight from './Sunlight';
 import Motes from './Motes';
 import Fireflies from './Fireflies';
+import Garden from './garden/Garden';
 import Hud from '../ui/Hud';
 import type { NavKey } from '../ui/Hud';
 import Panel from '../ui/Panel';
 
 const ORIGIN = new THREE.Vector3(0, 0, 0);
-
-type Probe = { pos: [number, number]; size: [number, number, number] };
-
-// 44m 정원의 스케일 감을 보려고 세운 말뚝들. 실제 크기를 흉내 낸다.
-// 퍼걸러(6×3×6m) / 티테이블(1.6m) / 연못 자리(10×7m) — 단계 2에서 진짜 배치로 대체된다.
-const PROBES: Probe[] = [
-  { pos: [-8, -5], size: [6, 3, 6] },
-  { pos: [2, 3], size: [1.6, 0.9, 1.6] },
-  { pos: [9, -9], size: [10, 0.3, 7] },
-];
 
 /**
  * 마우스 조작. 수평은 360° 자유, 부각만 30°로 잠근다 — 아이소메트릭 문법은 이 각에서 나온다.
@@ -117,56 +108,6 @@ function CameraRig({ focus }: { focus: THREE.Vector3 | null }) {
   });
 
   return null;
-}
-
-/** 검사용 박스 하나. 호버하면 살짝 떠오르고 밝아진다. */
-function ProbeBlock({
-  probe,
-  hovered,
-  selected,
-  onHover,
-  onSelect,
-}: {
-  probe: Probe;
-  hovered: boolean;
-  selected: boolean;
-  onHover: (v: boolean) => void;
-  onSelect: () => void;
-}) {
-  const ref = useRef<THREE.Mesh>(null);
-  const [x, z] = probe.pos;
-  const baseY = probe.size[1] / 2;
-
-  useFrame((_, dt) => {
-    const mesh = ref.current;
-    if (!mesh) return;
-    const k = 1 - Math.pow(0.003, dt);
-    const goalY = baseY + (hovered || selected ? 0.35 : 0);
-    mesh.position.y = THREE.MathUtils.lerp(mesh.position.y, goalY, k);
-  });
-
-  const mat = MAT('matte', selected ? 'blockActive' : hovered ? 'blockHover' : 'block');
-
-  return (
-    <mesh
-      ref={ref}
-      position={[x, baseY, z]}
-      material={mat}
-      castShadow
-      receiveShadow
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        onHover(true);
-      }}
-      onPointerOut={() => onHover(false)}
-      onClick={(e) => {
-        e.stopPropagation();
-        onSelect();
-      }}
-    >
-      <boxGeometry args={probe.size} />
-    </mesh>
-  );
 }
 
 /**
@@ -327,8 +268,6 @@ function SwatchBoard() {
 }
 
 export default function IsoStage() {
-  const [hovered, setHovered] = useState<number | null>(null);
-  const [selected, setSelected] = useState<number | null>(null);
   const [isNight, setIsNight] = useState(false);
   const [view, setView] = useState<NavKey | null>(null);
   const [swatch, setSwatch] = useState(false);
@@ -368,17 +307,8 @@ export default function IsoStage() {
     setSwatch(new URLSearchParams(window.location.search).has('swatch'));
   }, []);
 
-  const focus =
-    selected === null
-      ? null
-      : new THREE.Vector3(PROBES[selected].pos[0], PROBES[selected].size[1] / 2, PROBES[selected].pos[1]);
-
-  useEffect(() => {
-    document.body.style.cursor = hovered !== null ? 'pointer' : 'auto';
-    return () => {
-      document.body.style.cursor = 'auto';
-    };
-  }, [hovered]);
+  // 오브젝트를 클릭해 그 속으로 파고드는 연출은 단계 6에서 붙인다. 지금은 고정 시점.
+  const focus: THREE.Vector3 | null = null;
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
@@ -387,7 +317,7 @@ export default function IsoStage() {
         // dpr 2배는 픽셀 4배 = GPU 컨텍스트 소실 위험. 여기 함부로 올리지 않는다.
         dpr={[1, 1.5]}
         gl={{ antialias: true }}
-        onPointerMissed={() => setSelected(null)}
+        onPointerMissed={() => setView(null)}
       >
         {/* 안개 — 직교 카메라에는 원근이 없어서 거리감을 만들 수단이 이것뿐이다.
             원경(부유섬·구름)을 하늘색으로 흐리게 지워 "저 멀리"로 밀어낸다.
@@ -411,20 +341,7 @@ export default function IsoStage() {
         {/* 햇살 — 씬 위에 얹히는 빛기둥. 맨 마지막에 가산 합성으로 그린다. */}
         <Sunlight nightRef={nightRef} sunDirRef={sunDirRef} />
 
-        {swatch ? (
-          <SwatchBoard />
-        ) : (
-          PROBES.map((probe, i) => (
-            <ProbeBlock
-              key={i}
-              probe={probe}
-              hovered={hovered === i}
-              selected={selected === i}
-              onHover={(v) => setHovered(v ? i : null)}
-              onSelect={() => setSelected((cur) => (cur === i ? null : i))}
-            />
-          ))
-        )}
+        {swatch ? <SwatchBoard /> : <Garden />}
 
         {/*
           Bloom — 밤의 필수 요소. 반딧불이가 "빛"으로 보이려면 번져야 한다.
@@ -442,10 +359,7 @@ export default function IsoStage() {
         onToggleNight={() => setIsNight((v) => !v)}
         // 카메라를 해당 오브젝트로 데려가는 연출은 단계 6에서 붙인다.
         // 지금은 내용을 눈으로 확인할 수 있게 패널만 띄운다.
-        onNav={(key) => {
-          setSelected(null);
-          setView(key);
-        }}
+        onNav={(key) => setView(key)}
       >
         {view && <Panel view={view} onClose={() => setView(null)} />}
       </Hud>

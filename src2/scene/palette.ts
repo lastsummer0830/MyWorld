@@ -20,15 +20,33 @@ export const COLOR = {
   wood: '#C9AE8C', //  밝은 오크 (원작 컨셉 계승)
   woodDark: '#A88A67', //  나무다리·기둥의 짙은 부분
   fabric: '#F2E8DC', //  차양·쿠션의 천
+  roof: '#CDA091', //  집 지붕 — 부드러운 테라코타
+  mint: '#DCEBDD', //  집 벽 — 민트크림 (원작 컨셉 계승)
   glass: '#DCEFF5', //  유리
   water: '#7FC4D9', //  연못
   waterDeep: '#4F97B5', //  연못 깊은 곳
 
+  // 정원 식물·꽃 (단계 3~4)
+  leaf: '#8FB56A', //  덩굴·잎사귀 — 잔디보다 조금 짙고 선명한 초록
+  leafDark: '#6E9450', //  잎의 그늘진 쪽
+  rose: '#E8A9BC', //  퍼걸러 장미덩굴 — 파스텔 로즈 (포인트 색)
+  petalPink: '#F3B9CE', //  꽃밭 — 분홍
+  petalYellow: '#F4D97E', //  꽃밭 — 노랑
+  petalWhite: '#F6F0E7', //  꽃밭 — 흰
+  petalLav: '#C9B8E4', //  꽃밭 — 라벤더
+  lily: '#7FB07A', //  연잎
+  koi: '#F0A268', //  코이 — 주황
+  koiPale: '#F6E7D2', //  코이 — 흰바탕
+
   // 생물 (단계 4)
   dogCream: '#F2E3C8',
   dogBrown: '#B98A5F',
+  dogSlate: '#8C93A6', //  블루멀 셸티의 회청색 무늬
+  dogInk: '#5C5F70', //  코·눈
+  eyeBlue: '#A9CBDD', //  오드아이의 파란 눈
 
   // 빛나는 것
+  screen: '#CFE7F4', //  맥북 켜진 화면 — 옅은 하늘빛 발광
   firefly: '#FFE07A', //  밤의 주인공
   mote: '#FFF0C8', //  낮의 금빛 부유물(꽃가루). 햇빛을 받아 반짝이는 티끌.
   lamp: '#FFD9A0',
