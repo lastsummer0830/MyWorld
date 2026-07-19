@@ -29,11 +29,14 @@ export const COLOR = {
   // 정원 식물·꽃 (단계 3~4)
   leaf: '#8FB56A', //  덩굴·잎사귀 — 잔디보다 조금 짙고 선명한 초록
   leafDark: '#6E9450', //  잎의 그늘진 쪽
+  leafDeep: '#4E7A42', //  꽃 밑동의 넓은 잎 — 레퍼런스처럼 깊고 선명한 초록(밑동 그림자용)
   rose: '#E8A9BC', //  퍼걸러 장미덩굴 — 파스텔 로즈 (포인트 색)
   petalPink: '#F3B9CE', //  꽃밭 — 분홍
   petalYellow: '#F4D97E', //  꽃밭 — 노랑
   petalWhite: '#F6F0E7', //  꽃밭 — 흰
   petalLav: '#C9B8E4', //  꽃밭 — 라벤더
+  petalCoral: '#F3B49B', //  꽃밭 — 살구/코랄 (레퍼런스 폭스글러브 계열)
+  pollen: '#F2C14E', //  꽃 수술(중심) — 따뜻한 노랑. 꽃잎보다 채도 높은 포인트
   lily: '#7FB07A', //  연잎
   koi: '#F0A268', //  코이 — 주황
   koiPale: '#F6E7D2', //  코이 — 흰바탕
