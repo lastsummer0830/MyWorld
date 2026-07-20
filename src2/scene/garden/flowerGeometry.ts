@@ -103,3 +103,95 @@ export function makeCenterGeometry(): THREE.BufferGeometry {
   g.scale(1, 0.5, 1); //  납작한 돔
   return g;
 }
+
+// ── 종(種)별 파트 ─────────────────────────────────────────────
+// 위 makePetal/Leaf/Center는 "앵초(primrose)"의 부품. 아래는 다른 종의 부품이다.
+// 꽃 1종을 색만 바꿔 뿌리면 대충 티가 난다(조아진 지적) → 종마다 실루엣 자체를 다르게.
+
+/**
+ * 임의 지오메트리에 z 기준 회색 그라데이션(밑동 짙고 끝 밝은)을 구워 넣는다.
+ * ConeGeometry 같은 완제 지오메트리에도 buildLeafLike와 같은 결을 주기 위한 헬퍼.
+ */
+function bakeZGradient(
+  g: THREE.BufferGeometry,
+  zMin: number,
+  zMax: number,
+  darkAtMin: number,
+  lightAtMax: number,
+): THREE.BufferGeometry {
+  const pos = g.getAttribute('position');
+  const col = new Float32Array(pos.count * 3);
+  for (let i = 0; i < pos.count; i++) {
+    const t = THREE.MathUtils.clamp((pos.getZ(i) - zMin) / (zMax - zMin), 0, 1);
+    const gray = THREE.MathUtils.lerp(darkAtMin, lightAtMax, t);
+    col[i * 3] = gray;
+    col[i * 3 + 1] = gray;
+    col[i * 3 + 2] = gray;
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  return g;
+}
+
+/** 데이지 꽃잎 — 가늘고 긴 스트랩. 가운데 얕은 키(keel)가 솟아 각이 살고, 끝이 둥글게 모인다. */
+export function makeStrapPetalGeometry(): THREE.BufferGeometry {
+  const V = [
+    [0, 0, 0],
+    [0, 0.03, 0.55], //  솟은 키
+    [0, 0.015, 1.0], //  끝
+    [-0.12, 0.01, 0.3],
+    [-0.095, 0.02, 0.74],
+    [0.12, 0.01, 0.3],
+    [0.095, 0.02, 0.74],
+  ];
+  const F = [
+    [0, 3, 1],
+    [3, 4, 1],
+    [4, 2, 1],
+    [0, 1, 5],
+    [5, 1, 6],
+    [6, 1, 2],
+  ];
+  //  데이지 꽃잎은 거의 순백 — 밑동만 아주 살짝 눌러 볼륨감만.
+  return buildLeafLike(V, F, 1.0, 0.9, 1.0);
+}
+
+/** 가늘고 곧은 잎(블레이드) — 데이지·알리움 밑동의 풀잎. 넓은 잎보다 좁고 곧게 선다. */
+export function makeBladeLeafGeometry(): THREE.BufferGeometry {
+  const V = [
+    [0, 0, 0],
+    [0, 0.05, 0.5],
+    [0, 0.03, 1.0],
+    [-0.08, 0.02, 0.42],
+    [-0.05, 0.04, 0.82],
+    [0.08, 0.02, 0.42],
+    [0.05, 0.04, 0.82],
+  ];
+  const F = [
+    [0, 3, 1],
+    [3, 4, 1],
+    [4, 2, 1],
+    [0, 1, 5],
+    [5, 1, 6],
+    [6, 1, 2],
+  ];
+  return buildLeafLike(V, F, 1.0, 0.46, 1.0);
+}
+
+/**
+ * 폭스글러브(디기탈리스) 벨 꽃 한 송이 — 목(throat)에서 입(mouth)으로 벌어진 저폴리 트럼펫.
+ * 다른 파트와 로컬 규약을 맞춘다: 목이 원점, 입이 +Z로 열린다(목 짙고 입 밝게).
+ * openEnded라 벨 안쪽이 보인다 → 재질은 DoubleSide.
+ */
+export function makeBellGeometry(): THREE.BufferGeometry {
+  const g = new THREE.ConeGeometry(0.5, 1.0, 6, 1, true);
+  g.translate(0, -0.5, 0); //  꼭지(목)를 원점으로
+  g.rotateX(-Math.PI / 2); //  입이 +Z로 열리도록
+  return bakeZGradient(g, 0, 1.0, 0.5, 1.0);
+}
+
+/** 알리움/램슨 꽃차례 — 작은 별꽃이 뭉친 공. 저폴리 페싯 구(球)로 단순화한다. */
+export function makePomGeometry(): THREE.BufferGeometry {
+  const g = new THREE.IcosahedronGeometry(0.5, 0);
+  g.scale(1, 0.92, 1); //  살짝만 눌러 자연스러운 공
+  return g;
+}

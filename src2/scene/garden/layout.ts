@@ -22,15 +22,23 @@ export const GARDEN = {
 
 /**
  * 꽃밭 군락 — 가장자리를 따라 흩뿌린다.
- * 각 군락은 중심과 반경만 정하고, 실제 꽃은 FlowerBed가 시드 난수로 채운다.
+ * 각 군락은 중심·반경과 대표 종(種)만 정하고, 실제 꽃은 Meadow가 시드 난수로 채운다.
+ * ▸ 군락마다 한 종을 주력으로 심어야 "설계된 정원"으로 읽힌다(색만 랜덤이면 색종이 뿌린 티).
  */
-export const FLOWER_BEDS: { pos: [number, number]; r: number; seed: number; n: number }[] = [
-  { pos: [-11, 3], r: 3.2, seed: 11, n: 22 },
-  { pos: [-6, 8], r: 2.6, seed: 27, n: 16 },
-  { pos: [12, 4], r: 2.8, seed: 43, n: 18 },
-  { pos: [1, -11], r: 3.0, seed: 58, n: 20 },
-  { pos: [13, -3], r: 2.2, seed: 71, n: 12 },
-  { pos: [-9, -12], r: 2.4, seed: 90, n: 14 },
+export type FlowerSpecies = 'daisy' | 'primrose' | 'allium' | 'foxglove';
+export const FLOWER_BEDS: {
+  pos: [number, number];
+  r: number;
+  seed: number;
+  n: number;
+  species: FlowerSpecies;
+}[] = [
+  { pos: [-11, 3], r: 3.2, seed: 11, n: 22, species: 'daisy' },
+  { pos: [-6, 8], r: 2.6, seed: 27, n: 14, species: 'primrose' },
+  { pos: [12, 4], r: 2.8, seed: 43, n: 16, species: 'foxglove' },
+  { pos: [1, -11], r: 3.0, seed: 58, n: 18, species: 'allium' },
+  { pos: [13, -3], r: 2.2, seed: 71, n: 12, species: 'daisy' },
+  { pos: [-9, -12], r: 2.4, seed: 90, n: 12, species: 'primrose' },
 ];
 
 /** 잔디에 흩뿌리는 자잘한 풀 포기(디테일). */
