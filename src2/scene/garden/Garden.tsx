@@ -4,6 +4,7 @@
 // 배치 좌표/회전은 layout.ts 한 곳에서만 온다. 여기선 "무엇을 어디에"만 조립한다.
 
 import { GARDEN } from './layout';
+import GroundCover from './GroundCover';
 import Pergola from './Pergola';
 import TeaTable from './TeaTable';
 import Pond from './Pond';
@@ -24,6 +25,7 @@ function At({ spot, children }: { spot: Spot; children: React.ReactNode }) {
 export default function Garden() {
   return (
     <group>
+      <GroundCover />
       <Meadow />
       <At spot={GARDEN.pergola}>
         <Pergola />

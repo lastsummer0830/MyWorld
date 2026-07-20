@@ -14,7 +14,7 @@ import * as THREE from 'three';
 import { ISLAND_R } from './constants';
 import { COLOR } from './palette';
 
-const COUNT = 90;
+const COUNT = 55;
 const TOP = 11; //  떠오를 수 있는 최대 높이
 
 type Mote = { x: number; z: number; y0: number; rise: number; phase: number; sway: number; size: number };
@@ -30,7 +30,7 @@ export default function Motes({ nightRef }: { nightRef: React.RefObject<number> 
         // 조명 계산을 거치지 않아야 "빛나는 티끌"로 보인다. Bloom이 이 밝기를 집어내 부드럽게 번지게 한다.
         toneMapped: false,
         transparent: true,
-        opacity: 0.75,
+        opacity: 0.35,
         depthWrite: false,
       }),
     [],
@@ -55,7 +55,7 @@ export default function Motes({ nightRef }: { nightRef: React.RefObject<number> 
         sway: 0.3 + rand() * 0.9,
         // ★ 실제 꽃가루 크기(수 cm)로 만들면 화면에서 1픽셀이라 아예 안 보인다.
         //   44m 섬이 화면 폭 850px이면 1m ≈ 19px — 즉 반지름 0.1m는 되어야 겨우 4px이다.
-        size: 0.09 + rand() * 0.15,
+        size: 0.05 + rand() * 0.08,
       };
     });
   }, []);
@@ -66,7 +66,7 @@ export default function Motes({ nightRef }: { nightRef: React.RefObject<number> 
     const t = state.clock.elapsedTime;
     const day = 1 - nightRef.current;
 
-    mat.opacity = day * 0.75;
+    mat.opacity = day * 0.35;
     // 밤에는 통째로 숨긴다 — 투명해도 90개를 계속 그리는 건 낭비다.
     m.visible = day > 0.02;
     if (!m.visible) return;
