@@ -3,8 +3,9 @@
 // 정원 조립기 — 구조물·생물을 layout의 자리에 놓는다.
 // 배치 좌표/회전은 layout.ts 한 곳에서만 온다. 여기선 "무엇을 어디에"만 조립한다.
 
-import { GARDEN } from './layout';
+import { GARDEN, TREES } from './layout';
 import GroundCover from './GroundCover';
+import Tree from './Tree';
 import Pergola from './Pergola';
 import TeaTable from './TeaTable';
 import Pond from './Pond';
@@ -27,6 +28,11 @@ export default function Garden() {
     <group>
       <GroundCover />
       <Meadow />
+      {TREES.map((t, i) => (
+        <group key={i} position={[t.pos[0], 0, t.pos[1]]}>
+          <Tree species={t.species} seed={t.seed} scale={t.scale} />
+        </group>
+      ))}
       <At spot={GARDEN.pergola}>
         <Pergola />
       </At>

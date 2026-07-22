@@ -41,6 +41,24 @@ export const FLOWER_BEDS: {
   { pos: [-9, -12], r: 2.4, seed: 90, n: 12, species: 'primrose' },
 ];
 
+/**
+ * 나무 자리.
+ * ▸ 섬에 수직 요소가 집·퍼걸러뿐이라 실루엣이 납작했다. 나무는 **가장자리 쪽**에 두어
+ *   가운데(퍼걸러·티테이블·강아지)를 가리지 않으면서 섬의 윤곽을 만든다.
+ * ▸ 큰 벚나무 하나를 주인공으로 두고 나머지는 조연 — 같은 크기로 늘어놓으면 가로수길이 된다.
+ */
+export const TREES: {
+  pos: [number, number];
+  species: 'cherry' | 'lemon';
+  scale: number;
+  seed: number;
+}[] = [
+  { pos: [-7.5, -11], species: 'cherry', scale: 1.15, seed: 501 }, //  집 오른편 뒤 — 주인공
+  { pos: [8.5, 10.5], species: 'cherry', scale: 0.82, seed: 502 }, //  앞쪽 오른편 조연
+  { pos: [12.5, 2.5], species: 'lemon', scale: 1.0, seed: 503 }, //  연못과 꽃밭 사이
+  { pos: [-13.5, -1.5], species: 'lemon', scale: 0.88, seed: 504 }, //  집 앞 왼편
+];
+
 /** 잔디에 흩뿌리는 자잘한 풀 포기(디테일). */
 export const GRASS_TUFTS: { pos: [number, number]; r: number; seed: number; n: number } = {
   pos: [0, 0],
