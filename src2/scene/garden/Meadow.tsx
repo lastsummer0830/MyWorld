@@ -1,16 +1,22 @@
 'use client';
 
-// 꽃밭 — 종(種)이 뚜렷한 꽃 네 가지를 군락으로 심는다.
+// 꽃밭 — 종(種)이 뚜렷한 꽃 네 가지를 정원 전역의 식재 구역에 심는다.
 // 레퍼런스(조아진 제공 저폴리 꽃): 데이지 · 앵초(primrose) · 알리움 · 폭스글러브(digitalis).
-//   ▸ "꽃 1종을 색만 바꿔 뿌리면 대충 티가 난다"(조아진) → 군락마다 대표 종을 두고 형태 자체를 다르게.
+//   ▸ "꽃 1종을 색만 바꿔 뿌리면 대충 티가 난다"(조아진) → 종마다 형태 자체를 다르게.
 //   ▸ 개수가 많아 파트별로 InstancedMesh 한 번씩(성능 스킬 §7). 색은 per-instance color.
 //   ▸ 잎·꽃잎은 지오메트리에 구운 길이방향 그라데이션(밑동 짙고 끝 밝은)과 곱해진다.
-// 바닥 잔디는 GroundCover가 따로 깐다 — 여기선 "꽃"만 담당한다.
+// 초록 볼륨(관목·긴잔디)은 GroundCover가 같은 식재 구역에 깐다 — 여기선 "꽃"만 담당한다.
+//
+// ★★ 2026-07-27 개편 — 꽃밭 6개(FLOWER_BEDS)를 버렸다.
+//   가장자리에 원형 화단 6개를 두는 방식이라 꽃이 늘 바깥 링에만 남았다("꽃이 왜 양쪽에만
+//   있냐" 2026-07-22 지적). 이제 화단이라는 단위 자체를 쓰지 않고, `layout.samplePlanting`이
+//   내주는 **섬 − 잔디 = 식재 구역** 전역에 심는다. 종은 `speciesAt`이 위치로 정하므로
+//   가까운 꽃끼리 자연히 무리(드리프트)를 이룬다.
 
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { COLOR } from '../palette';
-import { FLOWER_BEDS, type FlowerSpecies } from './layout';
+import { samplePlanting, speciesAt, type FlowerSpecies } from './layout';
 import {
   makeBellGeometry,
   makeBladeLeafGeometry,
@@ -20,7 +26,7 @@ import {
   makePomGeometry,
   makeStrapPetalGeometry,
 } from './flowerGeometry';
-import { mulberry32, scatterDisc } from './rng';
+import { mulberry32 } from './rng';
 
 const TAU = Math.PI * 2;
 const AXIS_X = new THREE.Vector3(1, 0, 0);
@@ -202,15 +208,27 @@ const PLANTERS: Record<FlowerSpecies, (B: Buckets, x: number, z: number, r: Rand
   foxglove: plantFoxglove,
 };
 
+/** 꽃 자리 추첨 횟수. 통과율 25~30%라 실제로는 600송이 안팎이 심긴다. */
+const FLOWER_TRIES = 4200;
+
+/**
+ * 층별로 꽃을 얼마나 남길지.
+ * ★ 잔디 가(front)는 꽃이 촘촘해야 코티지 가든이 된다. 안쪽(back)은 관목이 주인공이라
+ *   꽃을 3할만 남긴다 — 다만 **0할은 안 된다.** 뒷줄이 관목뿐이면 검은 초록 벽이 되고
+ *   색이 위까지 올라오지 않는다(접시꽃·델피늄이 뒷줄에 서는 이유).
+ */
+const KEEP: Record<'back' | 'mid' | 'front', number> = { back: 0.3, mid: 0.7, front: 1 };
+
 export default function Meadow() {
   const parts = useMemo(() => {
     const B: Buckets = { spade: [], strap: [], bell: [], pom: [], center: [], broad: [], blade: [], stem: [] };
 
-    for (const bed of FLOWER_BEDS) {
-      const pts = scatterDisc(bed.r, bed.n, bed.seed);
-      const rand = mulberry32(bed.seed * 7 + 3);
-      const plant = PLANTERS[bed.species];
-      for (const pt of pts) plant(B, bed.pos[0] + pt.x, bed.pos[1] + pt.z, rand);
+    const rand = mulberry32(9137);
+    for (const pt of samplePlanting(FLOWER_TRIES, 20260727)) {
+      if (rand() > KEEP[pt.layer]) continue;
+      // 키는 잔디에서 먼 정도로 — 잔디 가엔 낮은 종(데이지·앵초), 안쪽엔 키큰 종(폭스글러브·알리움).
+      const tall = pt.layer === 'back' || (pt.layer === 'mid' && pt.c > 0.45);
+      PLANTERS[speciesAt(pt.x, pt.z, tall, rand())](B, pt.x, pt.z, rand);
     }
 
     // ── 재질 ──────────────────────────────────────────────────
