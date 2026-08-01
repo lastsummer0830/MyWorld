@@ -15,7 +15,8 @@ import { EffectComposer } from '@react-three/postprocessing';
 import { BloomEffect } from 'postprocessing';
 import * as THREE from 'three';
 import {
-  CAM_POLAR,
+  CAM_POLAR_MAX,
+  CAM_POLAR_MIN,
   CAM_POS,
   ISLAND_R,
   ISLAND_R_SAFE,
@@ -52,8 +53,8 @@ function Controls() {
   return (
     <OrbitControls
       makeDefault
-      minPolarAngle={CAM_POLAR}
-      maxPolarAngle={CAM_POLAR}
+      minPolarAngle={CAM_POLAR_MIN}
+      maxPolarAngle={CAM_POLAR_MAX}
       enablePan={false}
       enableZoom
       zoomSpeed={0.9}

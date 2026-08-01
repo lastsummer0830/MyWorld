@@ -7,11 +7,15 @@ import * as THREE from 'three';
 export const TILE = 1;
 
 /**
- * 정원 섬의 평균 반경 → 지름 44m.
+ * 정원 섬의 평균 반경 → 지름 54m.
  * ★ 이 섬이 주인공이다. 바깥 하늘·구름·부유섬은 배경 — 첫 화면에서 섬이 화면을 지배해야 한다.
- * 44m면 퍼걸러(6m)·연못(10m)·집 외관(8m)이 다 들어가고 강아지가 뛸 여백이 남는다.
+ *
+ * ★★ 2026-08-01 22 → 27로 키웠다. "섬이 작다"(조아진)는 지적을 실측해 보니 사실이었다:
+ *    집·연못·나무 4그루의 **외곽이 전부 반경 16~18m**에 걸쳐 섬 끝(22m)까지 여유가 4~6m뿐이었다.
+ *    큰 것들이 죄다 같은 링에 붙어 서서 가운데만 뻥 뚫린 도넛 — 그게 "좁아 보이는" 정체다.
+ *    반경을 키우는 것만으로는 부족해서 layout.SPREAD로 배치도 함께 벌렸다(둘은 한 몸이다).
  */
-export const ISLAND_R = 22;
+export const ISLAND_R = 27;
 
 /** 윤곽의 각도 분할 수. 잔디·흙·밑동이 모두 이 수로 쪼개져야 이음새가 안 보인다. */
 export const ISLAND_SEG = 72;
@@ -46,7 +50,7 @@ export const SLAB_H = 2.6;
 export const GRASS_BEVEL = 0.22;
 
 /** 바위 밑동의 길이. 길면 화면 아래를 잡아먹고, 짧으면 섬이 아니라 접시가 된다. */
-export const BASE_H = 19;
+export const BASE_H = 33;
 
 /** 카메라 거리. ortho라 크기에는 영향이 없고, 잘림(near/far) 여유를 만드는 값이다. */
 export const CAM_D = 20;
@@ -59,8 +63,21 @@ export const CAM_D = 20;
 export const CAM_ELEV_DEG = 30;
 const ELEV = THREE.MathUtils.degToRad(CAM_ELEV_DEG);
 
-/** OrbitControls의 polar angle(+Y축 기준)로 환산한 값. 이 각으로 상·하를 잠근다. */
+/** OrbitControls의 polar angle(+Y축 기준)로 환산한 값. 시작 부각. */
 export const CAM_POLAR = THREE.MathUtils.degToRad(90 - CAM_ELEV_DEG);
+
+/**
+ * 상·하(부각) 조작 범위. 예전엔 30°에 완전히 잠가 뒀는데, 돌려볼 수 있는 게 좌우뿐이라
+ * 화면이 답답했다. 아이소메트릭 룩을 만드는 건 각도 잠금이 아니라 직교 투영이므로 풀어도 된다.
+ *
+ * ★ 양 끝을 열어 두지 않는 이유:
+ *   - 너무 낮추면(15° 미만) 지면이 선으로 눌리고 섬 밑동이 화면을 잡아먹는다.
+ *   - 너무 올리면(65° 초과) 위에서 내려다보는 평면도가 돼 오브젝트 실루엣이 사라진다.
+ */
+export const CAM_ELEV_MIN_DEG = 16;
+export const CAM_ELEV_MAX_DEG = 62;
+export const CAM_POLAR_MAX = THREE.MathUtils.degToRad(90 - CAM_ELEV_MIN_DEG);
+export const CAM_POLAR_MIN = THREE.MathUtils.degToRad(90 - CAM_ELEV_MAX_DEG);
 
 /** 초기 카메라 위치 — 수평 45°, 부각 30°. */
 export const CAM_POS: [number, number, number] = [

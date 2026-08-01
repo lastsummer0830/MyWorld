@@ -113,8 +113,45 @@ function baseGeometry() {
   return geo;
 }
 
+/**
+ * 잔디 윗면에 얼룩을 굽는다.
+ *
+ * ★ 왜 필요한가: 잔디는 화면에서 가장 넓은 면인데 단색 평면이라 **초록 시트지**로 보였다
+ *   ("전체적으로 별론 거 알지" 2026-08-01). 잔디는 원래 균일하지 않다 — 밟힌 데, 그늘이
+ *   오래 지는 데, 물이 잘 드는 데가 다 다른 초록이다.
+ * ★ 텍스처가 아니라 vertexColor로 하는 이유: 이 프로젝트는 외부 이미지 에셋을 쓰지 않는다
+ *   (순수 코드 규칙). Extrude 지오메트리의 정점이 촘촘하지 않으므로 **아주 완만한** 얼룩만
+ *   가능하다 — 오히려 그게 맞다. 잘게 얼룩지면 잔디가 아니라 이끼로 보인다.
+ * ★ 옆면(흙에 닿는 단면)까지 얼룩지면 층이 지저분해지므로 윗면(y가 가장 높은 정점)만 칠한다.
+ */
+function bakeGrassMottle(geo: THREE.BufferGeometry) {
+  const pos = geo.getAttribute('position') as THREE.BufferAttribute;
+  const col = new Float32Array(pos.count * 3);
+  let maxY = -Infinity;
+  for (let i = 0; i < pos.count; i++) maxY = Math.max(maxY, pos.getY(i));
+
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const z = pos.getZ(i);
+    // 서로 나누어떨어지지 않는 저주파 셋 — 규칙적인 줄무늬가 생기지 않게
+    const n =
+      0.55 * Math.sin(x * 0.11 + 0.7) * Math.cos(z * 0.093 - 1.2) +
+      0.3 * Math.sin((x + z) * 0.062 + 2.4) +
+      0.15 * Math.cos((x - z) * 0.148 - 0.6);
+    // 윗면에서만 얼룩이 살고, 아래로 내려가면 1(원색)로 되돌아간다.
+    const top = Math.max(0, 1 - (maxY - y) / (GRASS_H * 0.6));
+    const k = 1 + n * 0.075 * top; //  ±7.5% — 이보다 세면 잔디에 구름 그림자가 낀 것처럼 보인다
+    col[i * 3] = k;
+    col[i * 3 + 1] = k * (1 + n * 0.018 * top); //  초록 채널만 아주 살짝 더 흔들어 색조 변화까지
+    col[i * 3 + 2] = k;
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  return geo;
+}
+
 export default function Island() {
-  const grassGeo = useMemo(() => slab(GRASS_H, GRASS_BEVEL), []);
+  const grassGeo = useMemo(() => bakeGrassMottle(slab(GRASS_H, GRASS_BEVEL)), []);
   const soilGeo = useMemo(() => slab(SLAB_H), []);
   const baseGeo = useMemo(() => baseGeometry(), []);
 
@@ -127,7 +164,7 @@ export default function Island() {
         position={[0, -GRASS_BEVEL, 0]}
         // 밤에 잔디가 아주 옅게 자체 발광한다 — 섬이 어둠에 완전히 먹히지 않게 붙잡아 주는 장치.
         // 세게 주면 잔디만 형광색으로 떠서 "밤"이 아니라 "초록 조명"이 된다.
-        material={MAT('foliage', 'grass', { nightGlow: 0.07 })}
+        material={MAT('foliage', 'grass', { nightGlow: 0.07, vertexColors: true })}
         receiveShadow
         castShadow
       />

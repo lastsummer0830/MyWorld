@@ -189,7 +189,7 @@ export const makeTallGrassGeometry = () =>
  * 작은 잎 카드를 흩어 붙여 만든다. 잎 카드의 법선을 반구 바깥으로 두면 어느 각도에서 봐도
  * 잎이 서 있는 것처럼 읽힌다.
  */
-export function makeLeafyMoundGeometry(leaves = 16, r = 0.26, squash = 0.62) {
+export function makeLeafyMoundGeometry(leaves = 16, r = 0.26, squash = 0.62, leafLen = 0) {
   const pos: number[] = [];
   const col: number[] = [];
 
@@ -216,7 +216,16 @@ export function makeLeafyMoundGeometry(leaves = 16, r = 0.26, squash = 0.62) {
     const py = n.y * r * squash; //  y만 눌러 납작한 덩어리로
     const pz = n.z * r;
 
-    const lh = r * (0.55 + hash(k, 9) * 0.45); //  잎 길이
+    /**
+     * ★★ 잎 길이는 덩어리 크기와 **떼어 놓는다** (2026-08-01).
+     *
+     * 예전엔 lh = r * (0.55~1.0)이었다. 그런데 관목 인스턴스가 최대 3.7배까지 스케일되므로
+     * 잎 한 장이 **1m짜리 판때기**가 됐다 — "잡초랑 바나나잎 무성한 수준"(조아진)의 정체다.
+     * 실제 관목은 커져도 잎이 커지지 않는다. **잎 수가 늘 뿐이다.**
+     * → leafLen을 절대값(m)으로 받고, 부피는 덩어리를 여러 개 쌓아서 만든다(GroundCover).
+     */
+    const baseLen = leafLen > 0 ? leafLen : r * 0.75;
+    const lh = baseLen * (0.72 + hash(k, 9) * 0.56); //  잎 길이 — 개체 크기와 무관
     const lw = lh * (0.34 + hash(k, 10) * 0.16); //  잎 반폭
     const roll = (hash(k, 11) - 0.5) * 0.9; //  잎마다 살짝 비틀기
     const cr = Math.cos(roll);

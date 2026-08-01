@@ -47,6 +47,8 @@ export type MatOpts = {
   nightGlow?: number;
   /** 낮에도 발광하는 정도 (알전구는 0, 반딧불이는 1). */
   dayGlow?: number;
+  /** 지오메트리에 구워 둔 색(얼룩·그라데이션)을 곱한다. */
+  vertexColors?: boolean;
 };
 
 /**
@@ -58,14 +60,15 @@ export function MAT(
   color: ColorKey,
   opts: MatOpts = {},
 ): THREE.MeshStandardMaterial {
-  const { nightGlow = 0, dayGlow = 0 } = opts;
-  const key = `${preset}|${color}|${nightGlow}|${dayGlow}`;
+  const { nightGlow = 0, dayGlow = 0, vertexColors = false } = opts;
+  const key = `${preset}|${color}|${nightGlow}|${dayGlow}|${vertexColors}`;
 
   const hit = cache.get(key);
   if (hit) return hit;
 
   const mat = new THREE.MeshStandardMaterial({
     color: COLOR[color],
+    vertexColors,
     ...SPEC[preset],
   });
 

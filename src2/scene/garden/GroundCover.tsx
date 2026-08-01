@@ -8,58 +8,38 @@
 //   군락을 넣어도 골격이 "전면 도배"라 화면에선 여전히 "바닥에 잔디를 복붙한" 것으로 보였다
 //   (2026-07-22 지적). 모양을 고쳐도 구조가 그대로면 지적은 그대로 남는다.
 //
-//   → 구조를 뒤집었다. 이제 배치의 근거는 전부 `layout.ts`의 **lawnDist(x,z)** 하나다:
-//     · 잔디 안(d<0)에는 거의 심지 않는다 — 잔디는 매끈한 면으로 남아야 "열린 곳"이 된다.
-//     · 잔디 밖(d>0)은 전부 식재. 잔디에서 멀수록(d↑) **키가 커진다** — 이 층이 깊이를 만든다.
-//     · 밀도에 잡음을 줘 빽빽한 데와 성긴 데를 만든다(균일하면 수풀 도배일 뿐).
+//   → 그때는 "잔디 밖 = 전부 식재"로 뒤집었는데, 이번엔 그게 문제가 됐다(아래).
 //
-//   2026-07-22에 만든 포기 3종·잎무더기 지오메트리는 **그대로 재사용**한다. 문제는 부품이
-//   아니라 배치였다. 층마다 InstancedMesh 하나(= draw call 4번).
+// ★★ 2026-08-01 재개편 — "잔디 밖 전부 식재"도 틀렸다
+//   섬 둘레가 통째로 초록 벽이 되고 그 벽이 제일 키가 커서 정원이 좁아 보였다
+//   ("빈 공간을 잡초로 메꾼 수준" — 조아진). 이제 배치의 근거는 `layout.ts`의 **bedAt(x,z)** 다:
+//     · **화단으로 지정한 자리에만 심는다.** 나머지는 전부 열린 잔디 — 그게 넓어 보이는 이유다.
+//     · 키는 화단 성격(tone)이 정하고, **섬 가장자리로 갈수록 낮아진다**(예전엔 반대였다).
+//     · 관목의 부피는 잎무더기를 **쌓아서** 만든다. 덩어리 하나를 키우면 잎이 바나나잎이 된다.
+//
+//   포기 3종·잎무더기 지오메트리는 그대로 재사용한다. 층마다 InstancedMesh 하나(= draw call 4번).
 
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { COLOR } from '../palette';
-import { islandRadius } from '../constants';
-import { samplePlanting, lawnDist, plantGrow, type PlantPt } from './layout';
+import { samplePlanting, type PlantPt } from './layout';
 import {
   makeSoftTuftGeometry,
   makeSpikyTuftGeometry,
   makeTallGrassGeometry,
   makeLeafyMoundGeometry,
 } from './groundGeometry';
-import { mulberry32 } from './rng';
-
-const TAU = Math.PI * 2;
-
-/** 식재 자리 추첨 횟수. 필터를 통과하는 건 이 중 25~30%다(layout.samplePlanting 참고). */
-const PLANT_TRIES = 12000;
-
-/** 잔디밭 가장자리에 두르는 낮은 포기 개수 — 잔디와 식재의 경계를 스미게 하는 용도. */
-const LAWN_EDGE_TUFTS = 500;
 
 /**
- * 잔디밭 **안쪽 가장자리**에만 낮은 포기를 성기게 놓는다.
- * ★ 잔디 한복판에는 놓지 않는다. 넓은 잔디는 비어 있는 게 아니라 **열려 있는** 것이고,
- *   거기에 포기를 뿌리는 순간 예전의 "전면 도배"로 되돌아간다.
+ * 식재 자리 추첨 횟수.
+ * ★ 2026-08-01: 화단 구조로 바뀌면서 통과율이 15% 안팎으로 떨어졌다(예전엔 섬 전체가 식재라 30%).
+ *   화단 안은 촘촘해야 화단으로 보이므로 추첨 수를 올려 **좁은 곳에 밀도를 몰아준다.**
+ *   전체 개체 수는 예전과 비슷하되, 흩어져 있던 것이 화단 안으로 모인다.
  */
-function sampleLawnEdge(n: number, seed: number): PlantPt[] {
-  const rand = mulberry32(seed);
-  const out: PlantPt[] = [];
-  let tries = 0;
-  while (out.length < n && tries < n * 12) {
-    tries++;
-    const a = rand() * TAU;
-    const r = Math.sqrt(rand()) * islandRadius(a) * 0.985;
-    const x = Math.cos(a) * r;
-    const z = Math.sin(a) * r;
-    const d = lawnDist(x, z);
-    if (d > 0 || d < -1.2) continue; //  잔디 안, 그것도 가장자리 1.2m 띠 안에서만
-    // 경계에 가까울수록 촘촘 — 안쪽으로 갈수록 확률적으로 사라진다
-    if (rand() > Math.exp(d * 1.8)) continue;
-    out.push({ x, z, d, layer: 'front', a: rand() * TAU, s: 0.62 + rand() * 0.45, c: rand() });
-  }
-  return out;
-}
+const PLANT_TRIES = 20000;
+
+/** 관목 덩어리 하나의 높이(m). 이 단위로 쌓아 관목의 부피를 만든다. */
+const MOUND_STEP = 0.3;
 
 export default function GroundCover() {
   const parts = useMemo(() => {
@@ -93,24 +73,30 @@ export default function GroundCover() {
     const backGrass = back.filter((p) => p.c < 0.18);
     const backShrub = back.filter((p) => p.c >= 0.18);
 
-    /** 포기 층 하나를 굽는다. tints = 개체별 초록 색조. */
+    /**
+     * 포기 층 하나를 굽는다. tints = 개체별 초록 색조.
+     * 키는 layout이 내준 p.h(그 자리에 허용되는 높이 m)를 따른다 —
+     * 화단 성격·화단 안쪽 정도·섬 가장자리 감쇠가 이미 다 반영된 값이다.
+     */
     const buildTufts = (
       geo: THREE.BufferGeometry,
       list: PlantPt[],
       tints: string[],
-      scale: number,
+      /** 이 지오메트리의 기준 높이(m). p.h를 이 값으로 나눠 배율을 얻는다. */
+      geoH: number,
+      /** 이 층이 p.h를 얼마나 채우는가(0~1). 낮은 포기는 화단 키를 다 쓰지 않는다. */
+      fill: number,
       lean: number,
-      /** 잔디에서 가장 먼 곳에서 키가 몇 배가 되는지(포화값 기준) */
-      dGain: number,
     ) => {
       const mesh = new THREE.InstancedMesh(geo, mat, list.length);
       list.forEach((p, i) => {
         dummy.position.set(p.x, 0, p.z);
-        // x·z축 기울기 = 바람에 눕는 변주. 길수록 더 눕는다.
+        // x·z축 기울기 = 바람에 눕는 변주.
         dummy.rotation.set((p.c - 0.5) * lean, p.a, (0.5 - p.s) * lean);
-        const grow = 1 + plantGrow(p.d) * dGain;
-        const s = p.s * scale;
-        dummy.scale.set(s, s * (0.8 + p.c * 0.6) * grow, s);
+        // 세로는 허용 키에 맞추고, 가로는 개체 변주만 — 세로로 늘어난 포기가 가늘어 보이지 않게.
+        const sy = Math.max(0.35, (p.h * fill) / geoH) * (0.85 + p.c * 0.3);
+        const sxz = p.s * (0.9 + 0.25 * Math.min(sy, 1.6));
+        dummy.scale.set(sxz, sy, sxz);
         dummy.updateMatrix();
         mesh.setMatrixAt(i, dummy.matrix);
         _c.set(tints[(p.c * tints.length) | 0]);
@@ -128,70 +114,74 @@ export default function GroundCover() {
     //   받아 이미 어둡게 찍히므로, 팔레트에서까지 짙은 색을 섞으면 잔디보다 어두워져
     //   "잔디밭"이 아니라 "얼룩"이 된다(2026-07-22 실측).
     const lowTints = ['#C6DE8C', COLOR.grass, '#BCD681', COLOR.grass, '#B0CC74'];
-    const soft = buildTufts(
-      makeSoftTuftGeometry(),
-      [...sampleLawnEdge(LAWN_EDGE_TUFTS, 771), ...front],
-      lowTints,
-      1.2,
-      0.34,
-      0.3,
-    );
+    const soft = buildTufts(makeSoftTuftGeometry(), front, lowTints, 0.34, 0.85, 0.34);
 
-    // ── ② 뾰족 악센트 — 잔디 가 식재에만 소수 ──────────────────
+    // ── ② 뾰족 악센트 — 낮은 화단에만 소수 ─────────────────────
     // 전부 뾰족하면 왁스머리가 된다. front의 3할만.
     const spiky = buildTufts(
       makeSpikyTuftGeometry(),
       front.filter((p) => p.c > 0.7),
       ['#C6DE8C', COLOR.grass, '#B0CC74'],
-      1.05,
+      0.46,
+      0.95,
       0.26,
-      0.35,
     );
 
     // ── ③ 긴 잔디 — 중간·뒷줄 ─────────────────────────────────
     // 낮은 포기보다 한 톤만 짙게. 뒤로 물러나되 어두운 덩어리가 되면 안 된다.
+    // 지오메트리 자체가 h=1.15m다 — p.h를 이 값으로 나눠 배율을 얻으므로 4m 갈대가 설 일이 없다.
     const tall = buildTufts(
       makeTallGrassGeometry(),
       [...midGrass, ...backGrass],
       [COLOR.grass, COLOR.grassEdge, '#A8C273', '#BCD681'],
-      // ★ 지오메트리 자체가 h=1.15m다. 여기에 스케일·키변주·grow가 모두 곱해지므로
-      //   배율을 1.0 근처에 두면 4m짜리 갈대가 선다(1차 렌더 실측). 0.75가 상한선.
-      0.75,
+      1.15,
+      0.9,
       0.5,
-      0.2,
     );
 
     // ── ④ 관목 — 잔디에서 멀수록 키큰 덩이 ─────────────────────
     // ★ 잎무더기 하나를 크게 키우면 "초록 돌멩이"가 된다(2026-07-22 실측).
     //   2~3개를 조금씩 어긋나게 쌓아야 부피 있는 관목으로 읽힌다. 같은 InstancedMesh라 공짜다.
     // ★ 색은 leafDeep(#4E7A42)까지 가면 검은 브로콜리가 된다 — leaf~grassEdge 사이에 둔다.
+    /**
+     * ★★ 관목의 부피는 **덩어리를 쌓아서** 만든다 — 덩어리 하나를 키우지 않는다 (2026-08-01).
+     *
+     * 예전엔 잎무더기 하나에 최대 3.7배 스케일을 걸었다. 잎 길이가 덩어리 반경에 비례했으므로
+     * 잎 한 장이 1m가 됐고, 그게 "바나나잎"으로 보였다. 실제 관목은 커져도 잎 크기는 그대로다.
+     * → 덩어리 지오메트리를 **잎 12cm 고정**으로 굽고, 인스턴스 배율은 1 근처로 묶는다.
+     *   키가 큰 자리일수록 덩어리 **개수**를 늘려 황금각으로 쌓는다.
+     */
     const shrubTints = [COLOR.leaf, COLOR.grassEdge, '#A2C06B', '#89AF63'];
     const shrubs = [...midShrub, ...backShrub];
     const blobs: { p: PlantPt; k: number; n: number }[] = [];
     for (const p of shrubs) {
-      const n = p.layer === 'back' ? 2 + ((p.c * 2.99) | 0) : 1 + ((p.c * 1.99) | 0);
+      // 키 1m당 덩어리 7개꼴. 낮은 화단은 1~2개로 낮게 깔린다.
+      const n = Math.max(1, Math.min(13, Math.round((p.h / MOUND_STEP) * 2.2)));
       for (let k = 0; k < n; k++) blobs.push({ p, k, n });
     }
 
-    const clumps = new THREE.InstancedMesh(makeLeafyMoundGeometry(), mat, blobs.length);
+    // 잎 12cm 고정. 덩어리 반경 34cm.
+    const clumps = new THREE.InstancedMesh(makeLeafyMoundGeometry(20, 0.34, 0.62, 0.12), mat, blobs.length);
+    const GOLDEN = 2.3999632; //  황금각 — 겹치지 않게 고르게 퍼지는 배치
     blobs.forEach(({ p, k, n }, i) => {
-      // 잔디에서 멀수록 크게. front 쪽 관목은 낮게 깔려 잔디와 이어져야 한다.
-      const grow = 1.6 + plantGrow(p.d) * 1.8;
-      const base = p.s * grow;
-      const t = k / n; //  위로 갈수록 작아지며 살짝 어긋난다
-      const wob = Math.sin((p.a + k * 2.4) * 3.1);
+      const t = n === 1 ? 0 : k / (n - 1); //  0 = 밑동, 1 = 꼭대기
+      // 위로 갈수록 좁아지는 돔 — 아래가 넓어야 관목이 땅에 앉아 보인다.
+      const rad = (0.3 + 0.5 * (p.h / 1.55)) * p.s;
+      const rr = rad * Math.sqrt(Math.max(0, 1 - t * 0.88)) * (0.3 + 0.7 * ((k * 0.618) % 1));
+      const ang = p.a + k * GOLDEN;
       dummy.position.set(
-        p.x + wob * base * 0.16,
-        0.02 + t * base * 0.5,
-        p.z + Math.cos((p.a + k * 1.7) * 2.6) * base * 0.16,
+        p.x + Math.cos(ang) * rr,
+        0.04 + p.h * t * 0.74,
+        p.z + Math.sin(ang) * rr,
       );
-      dummy.rotation.set(0, p.a + k * 1.1, 0);
-      const s = base * (1 - t * 0.3);
-      dummy.scale.set(s, s * (0.85 + p.c * 0.6), s);
+      dummy.rotation.set(0, ang, 0);
+      // ★ 배율은 0.8~1.15만. 여기를 키우면 잎이 다시 커진다.
+      const s = 0.82 + 0.33 * (1 - t);
+      dummy.scale.set(s, s, s);
       dummy.updateMatrix();
       clumps.setMatrixAt(i, dummy.matrix);
       _c.set(shrubTints[(((p.c + k * 0.23) % 1) * shrubTints.length) | 0]);
-      _c.offsetHSL(0, 0, t * 0.03); //  위쪽 덩이를 아주 살짝 밝게(빛 받는 면)
+      _c.offsetHSL(0, 0, t * 0.05); //  위쪽 덩이를 살짝 밝게(빛 받는 면)
       clumps.setColorAt(i, _c);
     });
     clumps.instanceMatrix.needsUpdate = true;
