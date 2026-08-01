@@ -70,12 +70,15 @@ export const CAM_POLAR = THREE.MathUtils.degToRad(90 - CAM_ELEV_DEG);
  * 상·하(부각) 조작 범위. 예전엔 30°에 완전히 잠가 뒀는데, 돌려볼 수 있는 게 좌우뿐이라
  * 화면이 답답했다. 아이소메트릭 룩을 만드는 건 각도 잠금이 아니라 직교 투영이므로 풀어도 된다.
  *
- * ★ 양 끝을 열어 두지 않는 이유:
- *   - 너무 낮추면(15° 미만) 지면이 선으로 눌리고 섬 밑동이 화면을 잡아먹는다.
- *   - 너무 올리면(65° 초과) 위에서 내려다보는 평면도가 돼 오브젝트 실루엣이 사라진다.
+ * ★ 2026-08-01 2차: 16~62°도 좁다는 지적("섬 위아래로 움직이면서 360도로 보는 게 안 된다")을
+ *   받아 거의 끝까지 열었다. 낮은 각(수평)에서는 섬을 옆에서 보고, 높은 각에서는 평면도처럼
+ *   내려다보게 된다 — 둘 다 이 씬에서 볼 만한 그림이다.
+ * ★ 양 끝을 0°/90°로 두지 않는 이유는 취향이 아니라 수학이다:
+ *   - 0°면 지면이 두께 없는 선으로 눌려 정원이 사라진다.
+ *   - 90°면 카메라 up 벡터와 시선이 나란해져 OrbitControls가 축을 잃고 화면이 튄다(짐벌락).
  */
-export const CAM_ELEV_MIN_DEG = 16;
-export const CAM_ELEV_MAX_DEG = 62;
+export const CAM_ELEV_MIN_DEG = 7;
+export const CAM_ELEV_MAX_DEG = 85;
 export const CAM_POLAR_MAX = THREE.MathUtils.degToRad(90 - CAM_ELEV_MIN_DEG);
 export const CAM_POLAR_MIN = THREE.MathUtils.degToRad(90 - CAM_ELEV_MAX_DEG);
 
@@ -104,9 +107,14 @@ export const fitZoom = (w: number, h: number) => {
   return Math.min(w / sceneW, h / sceneH) * 0.98;
 };
 
-/** 휠 확대 범위 — 기본 배율 대비 배수. 축소 쪽을 넉넉히 열어 섬 전체·구름까지 물러날 수 있게 한다. */
-export const ZOOM_MIN = 0.25;
-export const ZOOM_MAX = 5.0;
+/**
+ * 휠 확대 범위 — 기본 배율 대비 배수.
+ * ★ 2026-08-01 0.25~5.0에서 넓혔다("확대 범위가 답답하다"). 축소는 섬이 손바닥만 해질 때까지,
+ *   확대는 티테이블 위 소품이 화면을 채울 때까지 간다.
+ *   ortho 카메라라 near/far(-300~600)에 여유가 커서 이 범위에서 잘림이 생기지 않는다.
+ */
+export const ZOOM_MIN = 0.1;
+export const ZOOM_MAX = 14.0;
 
 /** 오브젝트를 클릭해 "안으로 들어갔을 때"의 배율. */
 export const ZOOM_FOCUS = 2.6;
