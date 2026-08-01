@@ -14,6 +14,7 @@ export type Preset =
   | 'matte' //  기본 — 흙·나무·구조물
   | 'foliage' //  잎·잔디 — 빛을 거의 반사하지 않는다
   | 'rock' //  바위 — 각진 면(flatShading)으로 굴곡을 만든다
+  | 'fur' //  털 — 바위와 같은 각진 면. 이유는 아래 ★ 참고
   | 'fabric' //  천 — 가장 거칠다
   | 'glossy' //  도자기·찻잔 — 대역 예외
   | 'glass' //  유리 — 반투명
@@ -26,6 +27,14 @@ const SPEC: Record<Preset, Spec> = {
   matte: { roughness: 0.88, metalness: 0 },
   foliage: { roughness: 0.95, metalness: 0 },
   rock: { roughness: 1.0, metalness: 0, flatShading: true },
+  /**
+   * ★ 털이 flatShading인 이유 (2026-08-01 · 강아지가 풍선으로 보인 원인 중 하나)
+   *   이 정원의 꽃·잎·바위·나무는 전부 각진 면이 살아 있는 저폴리다. 그런데 강아지만
+   *   매끈하게 셰이딩되니 혼자 다른 세계의 물건 — 고무풍선 — 으로 보였다.
+   *   표면에 털의 결을 아무리 새겨 넣어도 부드럽게 뭉개져 아무것도 안 보였다.
+   *   각진 면으로 바꾸면 결 하나하나가 다른 밝기를 받아 **털 다발로 읽힌다.**
+   */
+  fur: { roughness: 0.95, metalness: 0, flatShading: true },
   fabric: { roughness: 1.0, metalness: 0 },
   glossy: { roughness: 0.28, metalness: 0 },
   glass: { roughness: 0.12, metalness: 0, transparent: true, opacity: 0.32 },

@@ -7,6 +7,7 @@
 // 지금 놓인 회색 박스는 가구가 아니라 검사용 말뚝이다 — 단계 2에서 실제 배치로 대체된다.
 //
 // `?swatch=1` 로 열면 정원 위에 색견본이 깔린다. 실제 조명·실제 각도에서 색을 확인하기 위한 것.
+// `?inspect=dog` 는 조명·각도를 그대로 둔 채 강아지만 크게 따라간다 — 에셋 검수용.
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
@@ -23,6 +24,7 @@ import {
   SHADOW_SPAN,
   SUN_POS,
   ZOOM_FOCUS,
+  ZOOM_INSPECT,
   ZOOM_MAX,
   ZOOM_MIN,
   fitZoom,
@@ -36,7 +38,7 @@ import Sunlight from './Sunlight';
 import Motes from './Motes';
 import Fireflies from './Fireflies';
 import Garden from './garden/Garden';
-import { setDogNight } from './garden/Dog';
+import { DOG_POS, setDogNight } from './garden/Dog';
 import Hud from '../ui/Hud';
 import type { NavKey } from '../ui/Hud';
 import Panel from '../ui/Panel';
@@ -72,7 +74,7 @@ function Controls() {
  * 카메라 연출 — 클릭한 대상으로 시점이 빨려 들어가고, 배경을 클릭하면 되돌아온다.
  * OrbitControls의 target과 zoom을 함께 몰아야 "들어가는" 느낌이 난다. zoom만 올리면 그냥 확대다.
  */
-function CameraRig({ focus }: { focus: THREE.Vector3 | null }) {
+function CameraRig({ focus, follow }: { focus: THREE.Vector3 | null; follow: THREE.Vector3 | null }) {
   const controls = useThree((s) => s.controls) as { target: THREE.Vector3; update: () => void } | null;
   const camera = useThree((s) => s.camera) as THREE.OrthographicCamera;
   const size = useThree((s) => s.size);
@@ -92,19 +94,24 @@ function CameraRig({ focus }: { focus: THREE.Vector3 | null }) {
   }, [focus]);
 
   useFrame((_, dt) => {
-    if (!controls || !animating.current) return;
+    // 검수 모드는 움직이는 대상을 따라가야 하므로 수렴해도 멈추지 않는다.
+    if (!controls || (!animating.current && !follow)) return;
 
     // 프레임률과 무관한 감쇠. 고정 계수로 lerp하면 저사양 기기에서 카메라가 튄다.
     const k = 1 - Math.pow(0.004, dt);
-    const goalTarget = focus ?? ORIGIN;
-    const goalZoom = focus ? base * ZOOM_FOCUS : base;
+    const goalTarget = follow ?? focus ?? ORIGIN;
+    const goalZoom = base * (follow ? ZOOM_INSPECT : focus ? ZOOM_FOCUS : 1);
 
     controls.target.lerp(goalTarget, k);
     camera.zoom = THREE.MathUtils.lerp(camera.zoom, goalZoom, k);
     camera.updateProjectionMatrix();
     controls.update();
 
-    if (controls.target.distanceTo(goalTarget) < 0.02 && Math.abs(camera.zoom - goalZoom) < 0.4) {
+    if (
+      !follow &&
+      controls.target.distanceTo(goalTarget) < 0.02 &&
+      Math.abs(camera.zoom - goalZoom) < 0.4
+    ) {
       animating.current = false;
     }
   });
@@ -276,6 +283,8 @@ export default function IsoStage() {
   const [isNight, setIsNight] = useState(false);
   const [view, setView] = useState<NavKey | null>(null);
   const [swatch, setSwatch] = useState(false);
+  /** `?inspect=dog` — 에셋 검수 모드. 조명·각도는 그대로 두고 그 오브젝트만 크게 본다. */
+  const [inspect, setInspect] = useState<string | null>(null);
 
   // 낮(0)↔밤(1)의 현재 값. 하늘·구름·빛·재질이 모두 이 하나를 읽는다.
   const nightRef = useRef(0);
@@ -309,7 +318,9 @@ export default function IsoStage() {
 
   // 쿼리 파라미터는 마운트 후에 읽는다 — 서버 렌더 결과와 달라지면 hydration이 깨진다.
   useEffect(() => {
-    setSwatch(new URLSearchParams(window.location.search).has('swatch'));
+    const q = new URLSearchParams(window.location.search);
+    setSwatch(q.has('swatch'));
+    setInspect(q.get('inspect'));
   }, []);
 
   // 오브젝트를 클릭해 그 속으로 파고드는 연출은 단계 6에서 붙인다. 지금은 고정 시점.
@@ -333,7 +344,7 @@ export default function IsoStage() {
 
         <OrthographicCamera makeDefault position={CAM_POS} near={-300} far={600} />
         <Controls />
-        <CameraRig focus={focus} />
+        <CameraRig focus={focus} follow={inspect === 'dog' ? DOG_POS : null} />
         <Mood target={isNight ? 1 : 0} nightRef={nightRef} sunDirRef={sunDirRef} bloom={bloom} />
 
         <Sky nightRef={nightRef} sunDirRef={sunDirRef} />
