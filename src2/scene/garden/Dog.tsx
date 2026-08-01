@@ -24,6 +24,9 @@ import { JOINT, buildBody, buildEar, buildHead, buildLeg, buildRuff, buildTail }
 /** 털 재질 — 부품 전부가 이 하나를 공유한다. 색은 지오메트리에 구워 둔 정점 색이 정한다. */
 const coat = () => MAT('fur', 'dogWhite', { vertexColors: true });
 
+/** 머리를 드는 기본 각도(rad). 오프라인 4면도(scratchpad/dump.js)도 같은 값을 써야 그림이 맞는다. */
+const HEAD_LIFT = 0.10;
+
 /**
  * 강아지가 지금 서 있는 곳(가슴 높이). 검수 모드(`?inspect=dog`)의 카메라가 이걸 따라간다.
  * ★ React state로 올리지 않는 이유는 나비와 같다 — 매 프레임 바뀌는 값을 state에 넣으면
@@ -78,14 +81,17 @@ export default function Dog() {
       body.current.rotation.y = Math.sin(p.gait) * 0.05 * Math.min(1, p.speed);
     }
     if (head.current) {
-      head.current.rotation.z = -p.headPitch; //  +z 회전이 코를 아래로 내린다
+      // ★ 기본 자세로 코를 살짝 든다(HEAD_LIFT). 수평으로 뻗으면 개가 아니라 라마다.
+      //   headPitch가 커질수록 코가 내려간다(회전 부호가 반대).
+      head.current.rotation.z = HEAD_LIFT - p.headPitch;
       head.current.rotation.y = p.headYaw;
     }
     if (tail.current) {
       const t = state.clock.elapsedTime;
       tail.current.rotation.y = Math.sin(t * (5 + p.tailWag * 7)) * (0.15 + p.tailWag * 0.7);
-      // 꼬리는 이미 위로 휘어 있게 만들었다. +z 회전이 그걸 뒤로 눕힌다 — 잘 때 몸에 붙인다.
-      tail.current.rotation.z = p.lie * 1.0 - Math.min(1, p.speed / 1.6) * 0.22;
+      // ★ 꼬리는 이제 **내려가 있다**(사진의 기본 자세). 그래서 회전의 뜻도 뒤집혔다:
+      //   −z 회전이 꼬리를 뒤로 들어 올린다 → 달릴 때 든다. 엎드리면 +z로 몸에 말아 붙인다.
+      tail.current.rotation.z = p.lie * 0.30 - Math.min(1, p.speed / 1.6) * 0.25;
     }
     // 다리 — 대각선 두 쌍이 엇갈려 나간다(트로트 보행).
     const swing = Math.min(1, p.speed / 1.6) * 0.55;
@@ -127,12 +133,16 @@ export default function Dog() {
         <group ref={head} position={JOINT.head}>
           <mesh geometry={geo.head} material={coat()} castShadow receiveShadow />
 
-          {/* 귀 — 좌우로 살짝 벌어져 서고, 윗절반은 지오메트리에서 이미 앞으로 꺾여 있다. */}
+          {/*
+            귀 — 윗절반은 지오메트리에서 이미 앞으로 꺾여 있다(tipped ear).
+            ★ x축 회전으로 좌우 **바깥으로** 벌린다. 이걸 좌우 같은 부호로 주면 두 귀가
+              같은 방향으로 누워 한쪽만 보인다(2차 렌더에서 실제로 그랬다) — 반드시 s를 곱한다.
+          */}
           {[1, -1].map((s) => (
             <group
               key={s}
               position={[JOINT.ear[0], JOINT.ear[1], JOINT.ear[2] * s]}
-              rotation={[0.15 * s, 0, -0.20]}
+              rotation={[0.34 * s, 0, -0.12]}
             >
               <mesh geometry={geo.ear} material={coat()} castShadow />
             </group>
@@ -144,38 +154,45 @@ export default function Dog() {
           </mesh>
 
           {/*
-            ── 오드아이 ── (2026-08-01 조아진 지정)
-            왼쪽 = 파란 눈, 오른쪽 = 검은 눈인데 아래쪽만 바다빛이 돈다.
-            ★ 모델이 +x를 보고 +y가 위이므로 강아지의 **왼쪽은 −z**다(left = up × forward).
-              사진(두 번째 장)에서 얼굴이 향한 쪽을 기준으로 세어 보면 파란 눈이 강아지의 왼쪽이다.
+            ── 오드아이 ── (사진 `idea_resources/dog/` 기준)
+            강아지의 **왼쪽이 파란 눈**, 오른쪽이 짙은 갈색. 모델이 +x를 보고 +y가 위이므로
+            강아지의 왼쪽은 −z다(left = up × forward).
+
+            ★★ 2026-08-01 3차 — 여기가 "백내장" 버그였다.
+              ① 동공을 +x(주둥이 쪽)로 밀었다. 눈은 ±z를 보는데 앞으로 밀었으니 동공이
+                 머리 속에 파묻혀 화면엔 창백한 원반만 남았다. → JOINT.eyeOut(바깥 법선)으로 민다.
+              ② 눈알 반경 0.026은 머리 반폭(0.072)의 1/3짜리 왕눈이었다. 사진의 눈은
+                 작고 옆으로 긴 아몬드다. → 반경을 줄이고 눌러서 얼굴에 박히게 한다.
           */}
-          <mesh
-            position={[JOINT.eye[0], JOINT.eye[1], -JOINT.eye[2]]}
-            material={MAT('glossy', 'eyeBlue')}
-          >
-            <sphereGeometry args={[0.026, 10, 8]} />
-          </mesh>
-          <mesh position={JOINT.eye} material={MAT('glossy', 'dogInk')}>
-            <sphereGeometry args={[0.026, 10, 8]} />
-          </mesh>
-          {/* 오른쪽 눈 아래에만 도는 바다빛 */}
-          <mesh
-            position={[JOINT.eye[0] + 0.006, JOINT.eye[1] - 0.008, JOINT.eye[2]]}
-            scale={[0.5, 0.5, 1]}
-            material={MAT('glossy', 'eyeBlue')}
-          >
-            <sphereGeometry args={[0.023, 10, 8]} />
-          </mesh>
-          {/* 동공 — 양쪽 다 까맣다 */}
-          {[-1, 1].map((s) => (
-            <mesh
-              key={s}
-              position={[JOINT.eye[0] + 0.012, JOINT.eye[1] + 0.001, JOINT.eye[2] * s]}
-              material={MAT('glossy', 'dogInk')}
-            >
-              <sphereGeometry args={[0.011, 8, 6]} />
-            </mesh>
-          ))}
+          {[-1, 1].map((s) => {
+            const [ox, oy, oz] = JOINT.eyeOut;
+            const at = (d: number): [number, number, number] => [
+              JOINT.eye[0] + ox * d,
+              JOINT.eye[1] + oy * d,
+              (JOINT.eye[2] + oz * d) * s,
+            ];
+            const blue = s < 0; //  −z = 강아지의 왼쪽
+            return (
+              <group key={s}>
+                {/* 홍채 — 얼굴에 반쯤 박힌 아몬드 */}
+                <mesh
+                  position={at(0)}
+                  scale={[0.85, 0.62, 0.62]}
+                  material={MAT('glossy', blue ? 'eyeBlue' : 'dogAmber')}
+                >
+                  <sphereGeometry args={[0.021, 10, 8]} />
+                </mesh>
+                {/* 동공 — 바깥 법선을 따라 밀어야 얼굴 밖으로 나온다 */}
+                <mesh position={at(0.006)} scale={[0.8, 0.9, 0.9]} material={MAT('glossy', 'dogInk')}>
+                  <sphereGeometry args={[0.0105, 8, 6]} />
+                </mesh>
+                {/* 눈망울 하이라이트 — 이거 하나로 살아 있는 눈이 된다 */}
+                <mesh position={at(0.0105)} material={MAT('glossy', 'dogWhite')}>
+                  <sphereGeometry args={[0.0034, 6, 5]} />
+                </mesh>
+              </group>
+            );
+          })}
         </group>
 
         {/* 갈기 — 몸에 붙어 있다(머리와 같이 돌면 목도리가 돌아간다). 머리-목 이음매를 덮는 역할도 한다. */}
