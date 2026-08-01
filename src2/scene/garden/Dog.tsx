@@ -150,7 +150,7 @@ export default function Dog() {
 
           {/* 코 */}
           <mesh position={JOINT.nose} scale={[1.1, 0.85, 1]} material={MAT('glossy', 'dogInk')} castShadow>
-            <sphereGeometry args={[0.027, 10, 8]} />
+            <sphereGeometry args={[0.032, 10, 8]} />
           </mesh>
 
           {/*
@@ -180,15 +180,15 @@ export default function Dog() {
                   scale={[0.85, 0.62, 0.62]}
                   material={MAT('glossy', blue ? 'eyeBlue' : 'dogAmber')}
                 >
-                  <sphereGeometry args={[0.021, 10, 8]} />
+                  <sphereGeometry args={[0.026, 10, 8]} />
                 </mesh>
                 {/* 동공 — 바깥 법선을 따라 밀어야 얼굴 밖으로 나온다 */}
                 <mesh position={at(0.006)} scale={[0.8, 0.9, 0.9]} material={MAT('glossy', 'dogInk')}>
-                  <sphereGeometry args={[0.0105, 8, 6]} />
+                  <sphereGeometry args={[0.013, 8, 6]} />
                 </mesh>
                 {/* 눈망울 하이라이트 — 이거 하나로 살아 있는 눈이 된다 */}
                 <mesh position={at(0.0105)} material={MAT('glossy', 'dogWhite')}>
-                  <sphereGeometry args={[0.0034, 6, 5]} />
+                  <sphereGeometry args={[0.0042, 6, 5]} />
                 </mesh>
               </group>
             );
