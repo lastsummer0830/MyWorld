@@ -48,11 +48,8 @@ export default function Garden() {
       <At spot={GARDEN.house}>
         <House />
       </At>
-      <At spot={GARDEN.dog}>
-        <group scale={1.3}>
-          <Dog />
-        </group>
-      </At>
+      {/* 강아지는 자기 자리를 스스로 정한다(dogBrain) — At으로 고정하지 않는다. */}
+      <Dog />
       <Butterflies />
     </group>
   );

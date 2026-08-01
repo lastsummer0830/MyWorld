@@ -36,6 +36,7 @@ import Sunlight from './Sunlight';
 import Motes from './Motes';
 import Fireflies from './Fireflies';
 import Garden from './garden/Garden';
+import { setDogNight } from './garden/Dog';
 import Hud from '../ui/Hud';
 import type { NavKey } from '../ui/Hud';
 import Panel from '../ui/Panel';
@@ -177,6 +178,9 @@ function Mood({
 
     // 발광 재질(잔디의 밤빛·알전구)을 한곳에서 갱신한다.
     tickMaterials(t);
+
+    // 강아지 두뇌에도 밤 값을 흘려준다 — 밤이 되면 잠자리로 걸어가 엎드린다.
+    setDogNight(t);
   });
 
   return (
