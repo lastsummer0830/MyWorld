@@ -90,4 +90,4 @@ npm run dev
 ## 🙏 Credits
 
 - © 2026 조아진 (lastsummer0830)
-- *AI 코딩 도구(Claude by Anthropic) 사용 · Developed with AI coding tools*
+- *AI 코딩 도구 사용 · Developed with AI coding tools*
