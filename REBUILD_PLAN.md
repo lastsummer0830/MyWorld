@@ -1,8 +1,7 @@
 # MyWorld 아이소메트릭 개편 계획 (2026-07-14 확정)
 
 > 방향: **스택 유지(Next.js + TypeScript + Three.js/R3F), 코드 100% 새로 작성, 아이소메트릭 디오라마, 원작(myRoom, CC BY-NC 4.0) 라이선스 완전 탈피.**
-> 기법 정본: **AJ_Proj 루트**의 `.claude/skills/isometric-diorama-builder` (카메라·구도·조명) + `.claude/skills/procedural-asset-styleguide` (에셋·팔레트·라이선스 탈피 규칙)
-> ※ 스킬은 **repo 밖**(AJ_Proj 루트)에 둔다 — 이 repo는 Public 전환 예정이라 AI 작업 지침이 함께 공개되면 안 된다. PC 간 동기화는 감독관 CLAUDE.md §5 백업 규칙(MyStudy)으로 처리.
+> 기법 정본(카메라·구도·조명 / 에셋·팔레트·라이선스 탈피 규칙)은 **이 repo 밖의 작업 문서**에 둔다.
 
 ## 왜 이렇게 가나
 
