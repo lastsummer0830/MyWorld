@@ -5,6 +5,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![Three.js](https://img.shields.io/badge/Three.js-r183-black?logo=three.js)](https://threejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey)](./LICENSE)
 
 <br/>
 
@@ -87,7 +88,16 @@ npm run dev
 
 ---
 
-## 🙏 Credits
+## 🙏 Credits & License
 
-- © 2026 조아진 (lastsummer0830)
+현재 `/` route와 `src/`의 legacy room·gallery 구현은
+[JCJ (cjfwls39)](https://github.com/cjfwls39)의 [**myRoom**](https://github.com/cjfwls39/myRoom)을
+3D 씬 구조·인터랙션·갤러리 시스템의 기반으로 리메이크한 파생 작업물입니다.
+해당 legacy 구현은 원작의 [CC BY-NC 4.0](./LICENSE)을 따릅니다.
+
+`/rebuild` route와 `src2/`는 정원 중심의 새 MyWorld 구현으로 개편 중이며,
+legacy 구현과의 분리 및 라이선스 정리는 아직 완료되지 않았습니다.
+
+- 원작: © 2026 JCJ (cjfwls39) — myRoom
+- MyWorld 리메이크: © 2026 조아진 (lastsummer0830)
 - *AI 코딩 도구 사용 · Developed with AI coding tools*
