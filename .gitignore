@@ -44,6 +44,7 @@ next-env.d.ts
 .claude/
 .cleanse/
 CLAUDE.md
+!CLAUDE.md
 
 # 로컬 개발 서버 로그 (캡처 검증용) — 커밋 대상 아님
 devserver.log
