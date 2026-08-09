@@ -1,0 +1,40 @@
+{
+  "includeCoAuthoredBy": false,
+  "autoMemoryEnabled": false,
+  "disableAllHooks": true,
+  "disableBundledSkills": true,
+  "disableClaudeAiConnectors": true,
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": false
+  },
+  "skillOverrides": {
+    "algorithmic-art": "off",
+    "assignment-quality-review": "off",
+    "canvas-design": "off",
+    "git-workflow-guard": "off",
+    "image-prompt-crafter": "off",
+    "knowva-design-guard": "off",
+    "portfolio-readme-upgrader": "off",
+    "resume-polisher": "off",
+    "theme-factory": "off",
+    "web-artifacts-builder": "off"
+  },
+  "permissions": {
+    "defaultMode": "dontAsk",
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(../**)",
+      "Read(/.git/**)",
+      "Edit(../**)",
+      "Edit(/.git/**)",
+      "Edit(/.claude/**)",
+      "Edit(/CLAUDE.md)",
+      "Edit(/.hermes.md)",
+      "Edit(/AGENTS.md)",
+      "Edit(/.gitignore)",
+      "Bash",
+      "mcp__*"
+    ]
+  }
+}
