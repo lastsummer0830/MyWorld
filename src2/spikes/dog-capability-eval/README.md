@@ -11,7 +11,7 @@
 | --- | --- |
 | `Pick/2026-08-01_비교_모델vs사진.png` (오른쪽 사진) | 비율·무늬·자세의 정본 |
 | `Pick/2026-08-01_강아지_4면도.png` | **실패 증거.** 되풀이하면 안 되는 목록 |
-| `.claude/skills/myworld-visual-implementation`, `myworld-procedural-modeling`, `modeling-recipes.md`의 Animal gate | 작업 규칙 |
+| 조형 작업 규칙 문서의 Animal gate | 작업 규칙 |
 
 ### 4면도에서 읽은 실패 원인 (다시 하지 않을 것)
 1. 긴 튜브 목 위에 작은 머리 → 라마/사슴 실루엣.

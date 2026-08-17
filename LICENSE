@@ -47,16 +47,3 @@ Full license text: https://creativecommons.org/licenses/by-nc/4.0/legalcode
 전문 보기: https://creativecommons.org/licenses/by-nc/4.0/legalcode.ko
 
 ─────────────────────────────────────────────────────────────────
-AI 도구 사용 고지 / AI TOOL DISCLOSURE
-─────────────────────────────────────────────────────────────────
-
-이 프로젝트는 AI 코딩 도구(Anthropic의 Claude 포함)의 도움을 받아
-개발되었습니다. AI 도구는 코드 생성, 최적화, 리팩토링 과정에서 활용되었으며,
-프로젝트의 설계 방향, 기획 및 콘텐츠는 저작권자의 독자적인 저작물입니다.
-
-This project was developed with the assistance of AI coding tools
-(including Claude by Anthropic). AI-assisted portions include code
-generation, optimization, and refactoring. All design decisions, project
-direction, and content remain the original work of the copyright holder.
-
-─────────────────────────────────────────────────────────────────
