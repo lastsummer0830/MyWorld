@@ -1,0 +1,211 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 180" width="1100" height="180" role="img" aria-label="MyWorld"><title>MyWorld</title>
+  <defs>
+    <linearGradient id="sky" gradientUnits="userSpaceOnUse" x1="546.191" y1="-19.073" x2="553.809" y2="199.073"><stop offset="0" stop-color="#86C9EC"/><stop offset="0.88" stop-color="#FFDCB8"/><stop offset="1" stop-color="#FFDCB8"/></linearGradient>
+    <linearGradient id="spill" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="rgb(255,240,200)" stop-opacity="0.42"/><stop offset="1" stop-color="rgb(255,240,200)" stop-opacity="0"/></linearGradient>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#AFD177"/><stop offset="1" stop-color="#96B863"/></linearGradient>
+    <linearGradient id="sunlip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgb(255,240,200)" stop-opacity="0.52"/><stop offset="0.20" stop-color="rgb(255,240,200)" stop-opacity="0.08"/><stop offset="0.44" stop-color="rgb(255,240,200)" stop-opacity="0"/><stop offset="1" stop-color="rgb(255,240,200)" stop-opacity="0"/></linearGradient>
+    <clipPath id="gclip"><rect x="0" y="111.60" width="1100" height="68.40"/></clipPath>
+    <filter id="b2" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="2"/></filter>
+    <radialGradient id="m0"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.260"/><stop offset="0.74" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m1"><stop offset="0" stop-color="rgb(78,122,66)" stop-opacity="0.220"/><stop offset="0.76" stop-color="rgb(78,122,66)" stop-opacity="0"/><stop offset="1" stop-color="rgb(78,122,66)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m2"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.642"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m3"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.690"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m4"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.495"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m5"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.649"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m6"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.681"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m7"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.514"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m8"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.627"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m9"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.440"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m10"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.440"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m11"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.631"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m12"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.541"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m13"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.434"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m14"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.666"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m15"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.452"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m16"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.522"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m17"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.448"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m18"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.513"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m19"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.542"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m20"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.464"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m21"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.589"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m22"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.465"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m23"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.713"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m24"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.561"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m25"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.701"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m26"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.571"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m27"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.648"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m28"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.714"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m29"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.562"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m30"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.622"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m31"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.525"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m32"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.575"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m33"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.505"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m34"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.594"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m35"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.719"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m36"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.626"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m37"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.453"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m38"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.619"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m39"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.542"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m40"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.709"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m41"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.594"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m42"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.224"/><stop offset="0.74" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m43"><stop offset="0" stop-color="rgb(78,122,66)" stop-opacity="0.189"/><stop offset="0.76" stop-color="rgb(78,122,66)" stop-opacity="0"/><stop offset="1" stop-color="rgb(78,122,66)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m44"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.497"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m45"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.431"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m46"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.553"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m47"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.514"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m48"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.634"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m49"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.510"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m50"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.400"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m51"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.504"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m52"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.463"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m53"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.673"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m54"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.607"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m55"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.401"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m56"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.464"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m57"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.514"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m58"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.635"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m59"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.524"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m60"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.576"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m61"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.533"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m62"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.599"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m63"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.597"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m64"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.455"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m65"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.436"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m66"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.550"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m67"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.506"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m68"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.531"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m69"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.584"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m70"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.549"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m71"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.636"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m72"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.418"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m73"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.640"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m74"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.502"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m75"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.417"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m76"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.135"/><stop offset="0.74" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m77"><stop offset="0" stop-color="rgb(78,122,66)" stop-opacity="0.114"/><stop offset="0.76" stop-color="rgb(78,122,66)" stop-opacity="0"/><stop offset="1" stop-color="rgb(78,122,66)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m78"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.385"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m79"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.499"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m80"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.451"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m81"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.338"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m82"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.508"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m83"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.405"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m84"><stop offset="0" stop-color="rgb(243,180,155)" stop-opacity="0.420"/><stop offset="0.7" stop-color="rgb(243,180,155)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,180,155)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m85"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.397"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m86"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.404"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m87"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.357"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m88"><stop offset="0" stop-color="rgb(232,169,188)" stop-opacity="0.377"/><stop offset="0.7" stop-color="rgb(232,169,188)" stop-opacity="0"/><stop offset="1" stop-color="rgb(232,169,188)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m89"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.495"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m90"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.439"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m91"><stop offset="0" stop-color="rgb(243,185,206)" stop-opacity="0.500"/><stop offset="0.7" stop-color="rgb(243,185,206)" stop-opacity="0"/><stop offset="1" stop-color="rgb(243,185,206)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m92"><stop offset="0" stop-color="rgb(201,184,228)" stop-opacity="0.340"/><stop offset="0.7" stop-color="rgb(201,184,228)" stop-opacity="0"/><stop offset="1" stop-color="rgb(201,184,228)" stop-opacity="0"/></radialGradient>
+    <radialGradient id="m93"><stop offset="0" stop-color="rgb(242,193,78)" stop-opacity="0.498"/><stop offset="0.7" stop-color="rgb(242,193,78)" stop-opacity="0"/><stop offset="1" stop-color="rgb(242,193,78)" stop-opacity="0"/></radialGradient>
+    <linearGradient id="bleed" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="rgb(175,209,119)" stop-opacity="0.75"/><stop offset="0.46" stop-color="rgb(214,229,182)" stop-opacity="0.45"/><stop offset="1" stop-color="rgb(230,223,210)" stop-opacity="0"/></linearGradient>
+    <filter id="b6" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="6"/></filter>
+    <radialGradient id="hl"><stop offset="0" stop-color="rgb(248,217,94)" stop-opacity="0.62"/><stop offset="0.46" stop-color="rgb(248,217,94)" stop-opacity="0.20"/><stop offset="1" stop-color="rgb(248,217,94)" stop-opacity="0"/></radialGradient>
+    <filter id="b10" x="-60%" y="-200%" width="220%" height="500%"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+  <rect width="1100" height="180" fill="url(#sky)"/>
+  <rect x="0" y="39.60" width="1100" height="72.00" fill="url(#spill)"/>
+  <rect x="0" y="111.60" width="1100" height="68.40" fill="url(#grass)"/>
+  <rect x="0" y="111.60" width="1100" height="68.40" fill="url(#sunlip)"/>
+  <g clip-path="url(#gclip)" filter="url(#b2)">
+    <ellipse cx="236.50" cy="156.74" rx="218.40" ry="26.00" fill="url(#m0)"/>
+    <ellipse cx="236.50" cy="164.27" rx="187.20" ry="14.00" fill="url(#m1)"/>
+    <ellipse cx="289.22" cy="159.37" rx="19.34" ry="7.77" fill="url(#m2)"/>
+    <ellipse cx="34.44" cy="155.59" rx="21.26" ry="6.60" fill="url(#m3)"/>
+    <ellipse cx="181.50" cy="161.10" rx="13.95" ry="4.41" fill="url(#m4)"/>
+    <ellipse cx="197.10" cy="151.71" rx="20.28" ry="5.56" fill="url(#m5)"/>
+    <ellipse cx="81.53" cy="157.67" rx="10.65" ry="4.01" fill="url(#m6)"/>
+    <ellipse cx="353.87" cy="162.35" rx="11.16" ry="4.67" fill="url(#m7)"/>
+    <ellipse cx="253.33" cy="158.49" rx="11.66" ry="7.76" fill="url(#m8)"/>
+    <ellipse cx="150.18" cy="154.16" rx="11.16" ry="4.58" fill="url(#m9)"/>
+    <ellipse cx="372.66" cy="157.24" rx="16.75" ry="6.83" fill="url(#m10)"/>
+    <ellipse cx="373.14" cy="155.80" rx="13.11" ry="5.92" fill="url(#m11)"/>
+    <ellipse cx="131.90" cy="162.07" rx="21.34" ry="5.43" fill="url(#m12)"/>
+    <ellipse cx="359.94" cy="154.23" rx="16.52" ry="4.04" fill="url(#m13)"/>
+    <ellipse cx="289.57" cy="162.28" rx="10.55" ry="4.98" fill="url(#m14)"/>
+    <ellipse cx="169.74" cy="154.07" rx="15.82" ry="7.10" fill="url(#m15)"/>
+    <ellipse cx="390.81" cy="149.72" rx="21.30" ry="4.36" fill="url(#m16)"/>
+    <ellipse cx="177.57" cy="151.25" rx="12.58" ry="6.81" fill="url(#m17)"/>
+    <ellipse cx="153.35" cy="160.15" rx="17.15" ry="6.88" fill="url(#m18)"/>
+    <ellipse cx="91.30" cy="149.88" rx="21.83" ry="6.13" fill="url(#m19)"/>
+    <ellipse cx="339.70" cy="153.92" rx="12.25" ry="6.60" fill="url(#m20)"/>
+    <ellipse cx="365.91" cy="153.79" rx="11.69" ry="7.93" fill="url(#m21)"/>
+    <ellipse cx="292.44" cy="160.00" rx="10.39" ry="5.74" fill="url(#m22)"/>
+    <ellipse cx="148.47" cy="155.42" rx="21.99" ry="7.41" fill="url(#m23)"/>
+    <ellipse cx="433.90" cy="158.64" rx="13.13" ry="5.10" fill="url(#m24)"/>
+    <ellipse cx="70.29" cy="160.47" rx="15.91" ry="4.72" fill="url(#m25)"/>
+    <ellipse cx="99.27" cy="155.95" rx="15.70" ry="6.19" fill="url(#m26)"/>
+    <ellipse cx="359.20" cy="159.82" rx="18.03" ry="6.66" fill="url(#m27)"/>
+    <ellipse cx="261.95" cy="158.36" rx="19.86" ry="5.06" fill="url(#m28)"/>
+    <ellipse cx="432.50" cy="153.87" rx="11.32" ry="7.41" fill="url(#m29)"/>
+    <ellipse cx="161.81" cy="152.96" rx="12.75" ry="6.00" fill="url(#m30)"/>
+    <ellipse cx="171.24" cy="158.03" rx="18.59" ry="7.31" fill="url(#m31)"/>
+    <ellipse cx="395.19" cy="158.64" rx="21.69" ry="7.83" fill="url(#m32)"/>
+    <ellipse cx="442.51" cy="151.94" rx="13.71" ry="7.42" fill="url(#m33)"/>
+    <ellipse cx="330.75" cy="159.21" rx="11.23" ry="7.12" fill="url(#m34)"/>
+    <ellipse cx="151.84" cy="156.79" rx="20.27" ry="5.08" fill="url(#m35)"/>
+    <ellipse cx="90.65" cy="155.25" rx="17.45" ry="4.88" fill="url(#m36)"/>
+    <ellipse cx="445.19" cy="162.62" rx="11.15" ry="7.57" fill="url(#m37)"/>
+    <ellipse cx="229.06" cy="156.72" rx="14.40" ry="5.40" fill="url(#m38)"/>
+    <ellipse cx="275.18" cy="152.47" rx="20.74" ry="4.00" fill="url(#m39)"/>
+    <ellipse cx="389.16" cy="161.07" rx="17.96" ry="6.19" fill="url(#m40)"/>
+    <ellipse cx="285.22" cy="150.52" rx="16.09" ry="5.36" fill="url(#m41)"/>
+    <ellipse cx="874.50" cy="147.85" rx="207.09" ry="22.36" fill="url(#m42)"/>
+    <ellipse cx="874.50" cy="154.32" rx="177.50" ry="12.04" fill="url(#m43)"/>
+    <ellipse cx="1025.16" cy="146.31" rx="16.83" ry="5.65" fill="url(#m44)"/>
+    <ellipse cx="712.15" cy="145.88" rx="13.07" ry="4.13" fill="url(#m45)"/>
+    <ellipse cx="804.08" cy="151.89" rx="7.75" ry="3.81" fill="url(#m46)"/>
+    <ellipse cx="893.15" cy="145.21" rx="17.54" ry="5.38" fill="url(#m47)"/>
+    <ellipse cx="871.38" cy="147.02" rx="15.66" ry="4.76" fill="url(#m48)"/>
+    <ellipse cx="919.82" cy="144.44" rx="18.71" ry="5.15" fill="url(#m49)"/>
+    <ellipse cx="1085.07" cy="145.00" rx="18.13" ry="3.93" fill="url(#m50)"/>
+    <ellipse cx="1092.47" cy="144.27" rx="8.19" ry="3.91" fill="url(#m51)"/>
+    <ellipse cx="889.90" cy="144.60" rx="18.20" ry="6.13" fill="url(#m52)"/>
+    <ellipse cx="1037.17" cy="149.87" rx="10.93" ry="5.13" fill="url(#m53)"/>
+    <ellipse cx="943.03" cy="148.49" rx="16.05" ry="3.85" fill="url(#m54)"/>
+    <ellipse cx="771.55" cy="149.71" rx="14.60" ry="5.96" fill="url(#m55)"/>
+    <ellipse cx="808.77" cy="150.15" rx="14.35" ry="3.57" fill="url(#m56)"/>
+    <ellipse cx="962.35" cy="142.65" rx="15.43" ry="4.10" fill="url(#m57)"/>
+    <ellipse cx="919.38" cy="149.49" rx="18.40" ry="5.67" fill="url(#m58)"/>
+    <ellipse cx="863.02" cy="149.41" rx="15.79" ry="6.53" fill="url(#m59)"/>
+    <ellipse cx="781.63" cy="141.42" rx="16.45" ry="5.44" fill="url(#m60)"/>
+    <ellipse cx="1068.75" cy="143.06" rx="13.09" ry="5.33" fill="url(#m61)"/>
+    <ellipse cx="892.45" cy="146.39" rx="13.79" ry="3.61" fill="url(#m62)"/>
+    <ellipse cx="1025.67" cy="150.70" rx="15.16" ry="3.53" fill="url(#m63)"/>
+    <ellipse cx="1110.21" cy="149.63" rx="8.29" ry="6.34" fill="url(#m64)"/>
+    <ellipse cx="974.99" cy="142.97" rx="11.01" ry="6.60" fill="url(#m65)"/>
+    <ellipse cx="725.64" cy="150.82" rx="8.49" ry="4.17" fill="url(#m66)"/>
+    <ellipse cx="990.63" cy="144.67" rx="14.12" ry="3.85" fill="url(#m67)"/>
+    <ellipse cx="701.54" cy="146.46" rx="11.26" ry="5.50" fill="url(#m68)"/>
+    <ellipse cx="1070.70" cy="143.01" rx="11.04" ry="5.40" fill="url(#m69)"/>
+    <ellipse cx="1068.63" cy="147.91" rx="14.68" ry="4.35" fill="url(#m70)"/>
+    <ellipse cx="1031.82" cy="144.72" rx="18.64" ry="6.22" fill="url(#m71)"/>
+    <ellipse cx="986.48" cy="143.49" rx="15.71" ry="5.69" fill="url(#m72)"/>
+    <ellipse cx="681.13" cy="142.85" rx="14.38" ry="4.26" fill="url(#m73)"/>
+    <ellipse cx="1093.64" cy="142.65" rx="13.67" ry="5.30" fill="url(#m74)"/>
+    <ellipse cx="1084.81" cy="146.43" rx="16.62" ry="6.02" fill="url(#m75)"/>
+    <ellipse cx="550.00" cy="137.59" rx="69.89" ry="13.52" fill="url(#m76)"/>
+    <ellipse cx="550.00" cy="141.50" rx="59.90" ry="7.28" fill="url(#m77)"/>
+    <ellipse cx="634.64" cy="134.67" rx="8.90" ry="2.82" fill="url(#m78)"/>
+    <ellipse cx="663.66" cy="138.70" rx="10.06" ry="2.87" fill="url(#m79)"/>
+    <ellipse cx="589.04" cy="139.40" rx="7.61" ry="3.85" fill="url(#m80)"/>
+    <ellipse cx="680.17" cy="135.21" rx="5.90" ry="2.21" fill="url(#m81)"/>
+    <ellipse cx="471.44" cy="133.96" rx="10.69" ry="3.08" fill="url(#m82)"/>
+    <ellipse cx="530.72" cy="135.82" rx="11.00" ry="4.00" fill="url(#m83)"/>
+    <ellipse cx="444.33" cy="134.78" rx="5.76" ry="2.86" fill="url(#m84)"/>
+    <ellipse cx="458.16" cy="135.49" rx="6.56" ry="2.42" fill="url(#m85)"/>
+    <ellipse cx="426.75" cy="140.06" rx="7.01" ry="3.64" fill="url(#m86)"/>
+    <ellipse cx="599.56" cy="138.47" rx="7.87" ry="4.05" fill="url(#m87)"/>
+    <ellipse cx="494.85" cy="138.48" rx="9.61" ry="2.42" fill="url(#m88)"/>
+    <ellipse cx="569.73" cy="138.35" rx="8.85" ry="3.98" fill="url(#m89)"/>
+    <ellipse cx="466.70" cy="136.25" rx="5.13" ry="4.15" fill="url(#m90)"/>
+    <ellipse cx="464.37" cy="135.16" rx="4.98" ry="3.35" fill="url(#m91)"/>
+    <ellipse cx="419.66" cy="134.11" rx="9.95" ry="2.93" fill="url(#m92)"/>
+    <ellipse cx="638.58" cy="139.64" rx="8.50" ry="4.03" fill="url(#m93)"/>
+  </g>
+  <rect x="0" y="98.60" width="1100" height="26" fill="url(#bleed)" filter="url(#b6)"/>
+  <ellipse cx="814.00" cy="111.60" rx="326.68" ry="62.23" fill="url(#hl)" filter="url(#b10)"/>
+  
+</svg>

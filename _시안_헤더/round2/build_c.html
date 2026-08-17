@@ -1,0 +1,47 @@
+<meta charset='utf-8'>
+<style>
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('../fonts/Fraunces.ttf') format('truetype');
+  font-weight: 100 900;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1100px; height: 180px; overflow: hidden; }
+.band {
+  position: relative; width: 1100px; height: 180px; overflow: hidden;
+  display: flex; align-items: center;
+}
+.name {
+  position: relative; z-index: 5;
+  font-family: 'Fraunces', serif;
+  font-variation-settings: 'wght' 600, 'opsz' 144, 'SOFT' 40, 'WONK' 0;
+  font-size: 46px; letter-spacing: 0.02em; line-height: 1;
+}
+
+.band { background: #F6F0E7; }
+/* 큰 광무리 — 밴드 안으로 스며든다. 테두리가 보이면 해가 되므로 아주 부드럽게.
+   ★ 1차 렌더 반성: right:-8% 로 밴드 밖에 걸쳐 놨더니 오른쪽 끝에서 색이 새는 것처럼 보였다.
+   안쪽으로 들여 광무리가 밴드 안에서 닫히게 한다. */
+.glow {
+  position: absolute; right: 7%; top: 50%; transform: translateY(-50%);
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(255,240,200,.95) 0%,
+    rgba(255,209,144,.52) 40%,
+    rgba(255,209,144,.14) 66%,
+    rgba(255,209,144,0)  100%);
+  filter: blur(18px);
+}
+/* 잔디에서 반사돼 올라오는 빛 — palette.ts:161 hemiGround.
+   이게 있어야 "정원의 빛"이고, 없으면 그냥 따뜻한 그라데이션이다. */
+.bounce {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to top, rgba(175,209,119,.30) 0%, rgba(175,209,119,0) 52%),
+    linear-gradient(90deg, rgba(175,209,119,.18) 0%, rgba(175,209,119,0) 42%);
+}
+.name { margin-left: 72px; color: #51753E; }
+
+</style>
+<div class='band'><div class='bounce'></div><div class='glow'></div><span class='name'>MyWorld</span></div>

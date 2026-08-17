@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>MyWorld 헤더 시안 A · B · C</title>
+<style>
+  body { margin:0; font:14px/1.6 system-ui,'Malgun Gothic',sans-serif; background:#f6f8fa; color:#1f2328; }
+  header { padding:28px 32px 8px; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  p.note { margin:0; color:#59636e; }
+  section { padding:24px 32px 8px; }
+  h2 { font-size:16px; margin:0 0 12px; }
+  .pair { display:flex; gap:16px; flex-wrap:wrap; }
+  .pane { flex:1 1 420px; border:1px solid #d1d9e0; border-radius:8px; overflow:hidden; }
+  .pane .cap { font-size:12px; padding:6px 10px; background:#eaeef2; color:#59636e; }
+  .light { background:#ffffff; padding:24px; }
+  .dark  { background:#0d1117; padding:24px; }
+  .light img, .dark img { display:block; width:100%; }
+  .narrow { max-width:380px; margin-top:20px; }
+  .narrow .cap { font-size:12px; color:#59636e; padding:6px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>MyWorld 헤더 시안</h1>
+  <p class="note">
+    &lt;img&gt;로 불러 GitHub README와 같은 SVG 샌드박스 조건을 재현합니다.
+    왼쪽 = 라이트 모드(#ffffff) · 오른쪽 = 다크 모드(#0d1117).
+    아래 좁은 폭은 폰 렌더 확인용.
+  </p>
+</header>
+
+<section>
+  <h2>A안 — 밤 밴드 안에 낮이 든 유리 구슬 (현재 README 적용본)</h2>
+  <div class="pair">
+    <div class="pane"><div class="cap">라이트</div><div class="light"><img src="../docs/images/header.svg" alt="A안"></div></div>
+    <div class="pane"><div class="cap">다크</div><div class="dark"><img src="../docs/images/header.svg" alt="A안"></div></div>
+  </div>
+  <div class="narrow"><div class="cap">좁은 폭 380px</div><img src="../docs/images/header.svg" alt="A안 좁은 폭" style="width:100%"></div>
+</section>
+
+<section>
+  <h2>B안 — 낮과 밤이 갈리고 경계에 구슬</h2>
+  <div class="pair">
+    <div class="pane"><div class="cap">라이트</div><div class="light"><img src="b.svg" alt="B안"></div></div>
+    <div class="pane"><div class="cap">다크</div><div class="dark"><img src="b.svg" alt="B안"></div></div>
+  </div>
+  <div class="narrow"><div class="cap">좁은 폭 380px</div><img src="b.svg" alt="B안 좁은 폭" style="width:100%"></div>
+</section>
+
+<section>
+  <h2>C안 — 여름 낮 밝은 안, 섬이 밴드를 가로지름</h2>
+  <div class="pair">
+    <div class="pane"><div class="cap">라이트</div><div class="light"><img src="c.svg" alt="C안"></div></div>
+    <div class="pane"><div class="cap">다크</div><div class="dark"><img src="c.svg" alt="C안"></div></div>
+  </div>
+  <div class="narrow"><div class="cap">좁은 폭 380px</div><img src="c.svg" alt="C안 좁은 폭" style="width:100%"></div>
+</section>
+
+<section>
+  <p class="note">
+    ※ 세 안 모두 글자가 아직 path로 구워지지 않은 상태입니다.
+    이 PC에 Josefin Sans가 없으면 기본 산세리프로 대체되어 보입니다 — 선택 후 굽습니다.
+  </p>
+</section>
+</body>
+</html>

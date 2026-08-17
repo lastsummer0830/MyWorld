@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320" role="img" aria-label="MyWorld">
+  <!-- C안 — 여름 낮 밝은 안. 섬이 밴드 하단을 가로지르고 워드마크는 나무색. 색 출처는 a.svg와 동일 -->
+  <defs>
+    <linearGradient id="mwcSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFF4DC"/>
+      <stop offset="1" stop-color="#FFE9B8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 불투명 낮 밴드 -->
+  <rect width="1280" height="320" fill="url(#mwcSky)"/>
+
+  <!-- 떠 있는 섬 (밴드 하단을 가로지름) -->
+  <path d="M96 268 L1184 268 L1120 300 L1000 316 L820 320 L460 320 L280 314 L160 296 Z" fill="#5B4028"/>
+  <path d="M96 268 L400 268 L360 316 L280 314 L160 296 Z" fill="#4E3620"/>
+  <ellipse cx="640" cy="268" rx="544" ry="30" fill="#549E46"/>
+  <path d="M96 256 A544 30 0 0 1 1184 256 A544 30 0 0 0 96 256 Z" fill="#66B152" opacity="0.8"/>
+  <ellipse cx="1012" cy="272" rx="72" ry="13" fill="#3FA8BF"/>
+
+  <!-- 큰 나무 (왼쪽) -->
+  <rect x="188" y="180" width="13" height="86" fill="#5B4028"/>
+  <circle cx="194" cy="164" r="44" fill="#3E7C3A"/>
+  <circle cx="228" cy="180" r="30" fill="#549E46"/>
+  <circle cx="164" cy="188" r="25" fill="#66B152"/>
+  <circle cx="206" cy="132" r="26" fill="#66B152"/>
+
+  <!-- 작은 나무 (오른쪽) -->
+  <rect x="1128" y="216" width="9" height="52" fill="#5B4028"/>
+  <circle cx="1132" cy="204" r="27" fill="#3E7C3A"/>
+  <circle cx="1152" cy="214" r="18" fill="#66B152"/>
+
+  <!-- 관목 -->
+  <circle cx="330" cy="262" r="10" fill="#66B152"/>
+  <circle cx="898" cy="262" r="8" fill="#549E46"/>
+  <circle cx="560" cy="264" r="7" fill="#66B152"/>
+
+  <!-- 워드마크. 대비 #5B4028 on #FFF4DC = 9.3:1 (WCAG AA 통과) -->
+  <text x="640" y="176" text-anchor="middle"
+        font-family="'Josefin Sans','Josefin Sans SemiBold',Futura,'Century Gothic',sans-serif"
+        font-size="140" font-weight="600" letter-spacing="6" fill="#5B4028"
+        textLength="640" lengthAdjust="spacingAndGlyphs">MyWorld</text>
+</svg>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MyWorld header build</title>
+<style>
+  @font-face { font-family:'Fraunces'; font-weight:100 900; src:url('fonts/Fraunces.ttf') format('truetype-variations'); }
+
+  /* 색은 전부 실제 토큰 — src/components/canvas/DayNightContext.tsx
+     여름 햇살 #FFF4DC · 여름밤 #1C2238 · 달빛 #4A5A9A · 가로등 #FFD580 */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#fff; }
+
+  .band {
+    position:relative; width:2200px; height:360px; overflow:hidden;
+    background:#1C2238; font-family:'Fraunces', serif;
+  }
+
+  /* 밤 쪽 달빛 */
+  .moon { position:absolute; inset:0;
+    background:radial-gradient(56% 128% at 74% 20%, rgba(74,90,154,.52) 0%, rgba(74,90,154,0) 60%); }
+  /* 오른쪽 끝을 눌러 밴드를 닫는다 */
+  .edge { position:absolute; inset:0;
+    background:linear-gradient(90deg, rgba(28,34,56,0) 74%, rgba(15,19,34,.5) 100%); }
+
+  .fly { position:absolute; border-radius:50%; background:#FFD580; }
+
+  /* 시그니처: 이름이 낮과 밤을 가로지른다.
+     .my 블록이 낮 패널이고, box-shadow 로 왼쪽 끝까지 연장 → 경계가 항상 글자에 정확히 붙는다 */
+  .word {
+    position:absolute; inset:0; display:flex; align-items:center;
+    font-size:228px; line-height:1; letter-spacing:-.012em; white-space:nowrap;
+    font-variation-settings:'opsz' 144,'SOFT' 40,'WONK' 1;
+  }
+  .my {
+    align-self:stretch; display:flex; align-items:center;
+    padding:0 4px 0 150px;
+    background:#FFF4DC; box-shadow:-2200px 0 0 #FFF4DC;
+    color:#2A3350; font-weight:300;
+  }
+  .world { padding-left:30px; color:#FFF4DC; font-weight:700; }
+</style>
+</head>
+<body>
+  <div class="band">
+    <div class="moon"></div>
+    <div class="edge"></div>
+
+    <div class="fly" style="left:1352px; top:262px; width:5px; height:5px; opacity:.40"></div>
+    <div class="fly" style="left:1466px; top:104px; width:7px; height:7px; opacity:.62"></div>
+    <div class="fly" style="left:1558px; top:296px; width:5px; height:5px; opacity:.36"></div>
+    <div class="fly" style="left:1642px; top:62px;  width:6px; height:6px; opacity:.55"></div>
+    <div class="fly" style="left:1734px; top:196px; width:9px; height:9px; opacity:.80"></div>
+    <div class="fly" style="left:1826px; top:88px;  width:5px; height:5px; opacity:.44"></div>
+    <div class="fly" style="left:1898px; top:302px; width:6px; height:6px; opacity:.48"></div>
+    <div class="fly" style="left:1984px; top:150px; width:7px; height:7px; opacity:.66"></div>
+    <div class="fly" style="left:2062px; top:242px; width:5px; height:5px; opacity:.38"></div>
+    <div class="fly" style="left:2124px; top:74px;  width:6px; height:6px; opacity:.50"></div>
+
+    <div class="word"><span class="my">My</span><span class="world">World</span></div>
+  </div>
+</body>
+</html>

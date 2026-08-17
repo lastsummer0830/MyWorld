@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "repository": "MyWorld",
+  "productPurpose": "A high-quality interactive 3D portfolio presented as a stylized summer garden island, including authored composition and assets, portfolio interaction through the pergola table laptop, day/night staging, the user's real Sheltie, responsive controls, and eventual verified separation from legacy source.",
+  "environmentStatus": "NOT_READY",
+  "evalPathPrefixes": [
+    "app/capability-eval",
+    "src2/spikes"
+  ],
+  "requiredQualityGates": {
+    "composition": {
+      "status": "PARTIAL",
+      "evidence": "VISUAL_ACCEPTANCE.md composition spike verdict"
+    },
+    "proceduralVegetation": {
+      "status": "UNVERIFIED",
+      "evidence": "No accepted representative fresh render recorded"
+    },
+    "proceduralAnimal": {
+      "status": "INVALIDATED",
+      "evidence": "AJP-004 Skill-ON and v2 fresh multi-view dog renders"
+    },
+    "productionWorkerLoop": {
+      "status": "PARTIAL",
+      "evidence": "Watering-can capability eval completed a worker-owned first-capture inspection and render-driven revision, followed by a Hermes final2 multi-view VALIDATED verdict; two broad visual dispatches still exhausted max-turns before structured return, so production robustness remains unverified."
+    }
+  },
+  "readinessRule": "READY is allowed only when every required quality gate is VALIDATED by fresh representative worker output, independent Hermes verification, and user-visible evidence. Static parsing, permission containment, Skill loading, build success, or capture generation alone cannot satisfy a quality gate."
+}

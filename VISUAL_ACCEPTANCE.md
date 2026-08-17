@@ -11,7 +11,10 @@
 - 제품 컨셉 정본: `REBUILD_PLAN.md`의 정원 섬, 퍼걸러, 티테이블 맥북, 연못, 강아지, 낮/밤 방향.
 - 현재 baseline: `/rebuild` 실제 데스크톱 렌더(1280×577)와 낮/밤 전환.
 - repo 내부 이미지 reference: profile 사진 외 없음.
-- 외부 이미지 reference: 검색 경로가 bot/CAPTCHA로 차단돼 이번 spike에서는 `미검증`이다.
+- 야간 조명 reference: David Dixon의 Wikimedia Commons 사진 2점(CC BY-SA 2.0)을 실제 확인했다.
+  - [Christmas at Dunham Massey - The Illuminated Pergola](https://commons.wikimedia.org/wiki/File:Christmas_at_Dunham_Massey_-_The_Illuminated_Pergola_-_geograph.org.uk_-_5641231.jpg)
+  - [Christmas at Dunham Massey - Pergolas in the Rose Garden](https://commons.wikimedia.org/wiki/File:Christmas_at_Dunham_Massey_-_Pergolas_in_the_Rose_Garden_-_geograph.org.uk_-_5641240.jpg)
+- 확인 범위는 작은 warm bulb의 반복, cool ambient 대비, 지면 spill, 제한된 bloom뿐이다. terrain·구조·동물 등 나머지 외부 이미지 reference는 `미검증`이다.
 - 따라서 `/rebuild-reset`은 최종 미술 시안이 아니라 composition blockout으로만 판정한다.
 
 ## Composition acceptance
@@ -47,4 +50,4 @@
 
 ## Composition spike verdict
 
-`/rebuild-reset` 3차 렌더의 전체 판정은 여전히 `PARTIAL`이다. 과대한 암반 깊이 축소와 pond/bridge 우측 분리는 실제 fresh day 렌더에서 검증됐고 초점 삼각형도 개선됐다. 그러나 night는 구조물이 검게 잠겨 초점 조명이 실패하며, 섬 단면·pond bank·bridge·pergola·house는 여전히 조잡한 blockout이다. production 승격은 금지하고 외부 이미지 reference도 `미검증`으로 유지한다.
+`/rebuild-reset` 4차 fresh 렌더의 전체 판정은 여전히 `PARTIAL`이다. 과대한 암반 깊이 축소와 pond/bridge 우측 분리에 이어, night에서 pergola warm focal light와 pond의 restrained cool fill이 초점 계층을 만드는 것은 `VALIDATED`됐다. target별 inspect 배율을 분리해 island 근경 contour와 grass/soil/rock 층을 함께 보는 검수 프레임도 확보했다. 그러나 night island side는 여전히 검게 붙고, 섬 단면·pond bank·bridge·pergola·house는 조잡한 blockout이다. production 승격은 금지하며 terrain·asset reference는 `미검증`이다.

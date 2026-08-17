@@ -1,0 +1,204 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>MyWorld 헤더 밴드 시안 — round2</title>
+<style>
+  :root { --ink:#1f2328; --mut:#59636e; --line:#d8dee4; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.65 -apple-system,"Segoe UI",Pretendard,sans-serif; color:var(--ink); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  .lead { color: var(--mut); margin: 0 0 32px; font-size: 14px; }
+  h2 { font-size: 17px; margin: 40px 0 4px; }
+  .verdict { font-size: 13px; margin: 0 0 14px; }
+  .ok { color:#1a7f37; } .bad { color:#cf222e; } .mid { color:#9a6700; }
+  .stage { border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .stage img { display:block; width:100%; height:auto; }
+  .row { display:flex; gap:20px; align-items:flex-start; margin-top:12px; }
+  .narrow { width:380px; flex:0 0 380px; }
+  .narrow .cap, .themes .cap { font-size:12px; color:var(--mut); margin:6px 0 0; }
+  .themes { flex:1; }
+  .theme { padding:14px; border-radius:8px; border:1px solid var(--line); }
+  .theme + .theme { margin-top:10px; }
+  .light { background:#ffffff; }
+  .dark  { background:#0d1117; border-color:#30363d; }
+  .dark .cap { color:#8b949e; }
+  table { border-collapse:collapse; width:100%; font-size:13px; margin-top:8px; }
+  th,td { border:1px solid var(--line); padding:6px 9px; text-align:left; }
+  th { background:#f6f8fa; font-weight:600; }
+  code { font:12px ui-monospace,Menlo,Consolas,monospace; background:#f6f8fa; padding:1px 5px; border-radius:4px; }
+  .note { background:#f6f8fa; border-left:3px solid var(--line); padding:10px 14px; font-size:13px; margin:10px 0 0; }
+</style>
+<div class="wrap">
+
+<h1>MyWorld 헤더 밴드 — 시안 3안</h1>
+<p class="lead">
+  1100×180 (6.11:1) · 2배율 2200×360 PNG · 오브젝트 0개 — 색면·빛·여백·글자만.<br>
+  컨셉 <code>REBUILD_PLAN.md §컨셉</code> · 색 <code>src2/scene/palette.ts</code> (지어낸 값 0개) ·
+  생성기 <code>gen_myworld_header.py</code>
+</p>
+
+<h2>A. 사광</h2>
+<p class="verdict bad">내 판정: 실패 — 빛줄기 2개를 넣고 blur를 7px로 줄여도 방향이 안 읽힌다. 180px 높이에서 대각 사광은 뭉개진다.</p>
+<div class="stage"><img src="a.png?v=1786971942" alt="시안 A 사광"></div>
+<div class="row">
+  <div class="narrow">
+    <div class="stage"><img src="a.png?v=1786971942" alt="시안 A 좁은 폭"></div>
+    <p class="cap">좁은 폭 380px (폰)</p>
+  </div>
+  <div class="themes">
+    <div class="theme light"><div class="stage"><img src="a.png?v=1786971942" alt=""></div><p class="cap">라이트</p></div>
+    <div class="theme dark"><div class="stage"><img src="a.png?v=1786971942" alt=""></div><p class="cap">다크</p></div>
+  </div>
+</div>
+
+<h2>B. 지평</h2>
+<p class="verdict ok">내 판정: 이게 된다 — 하늘/잔디 두 색면이 만나는 선이 "떠 있는 정원 섬"으로 읽히고, 오른쪽 지평선의 레몬빛이 왼쪽 글자와 균형을 잡는다. 잔디 윗면의 밝은 테두리가 햇살을 만든다.</p>
+<div class="stage"><img src="b.png?v=1786971943" alt="시안 B 지평"></div>
+<div class="row">
+  <div class="narrow">
+    <div class="stage"><img src="b.png?v=1786971943" alt="시안 B 좁은 폭"></div>
+    <p class="cap">좁은 폭 380px (폰)</p>
+  </div>
+  <div class="themes">
+    <div class="theme light"><div class="stage"><img src="b.png?v=1786971943" alt=""></div><p class="cap">라이트</p></div>
+    <div class="theme dark"><div class="stage"><img src="b.png?v=1786971943" alt=""></div><p class="cap">다크</p></div>
+  </div>
+</div>
+
+<h2>B2. 지평 · 글자 가운데</h2>
+<p class="verdict ok">내 판정: B보다 낫다 — 헤더 밴드 바로 아래에 가운데 정렬 한 줄 소개가 오므로(<code>품질기준</code> §1-② · 실물 <code>pokemonJava/README.md:3</code>) README 상단의 축이 하나로 맞는다. 오른쪽 지평선 빛도 글자와 자리를 다투지 않는다.</p>
+<div class="stage"><img src="b2.png?v=1786971944" alt="시안 B2 지평 가운데"></div>
+<div class="row">
+  <div class="narrow">
+    <div class="stage"><img src="b2.png?v=1786971944" alt="시안 B2 좁은 폭"></div>
+    <p class="cap">좁은 폭 380px (폰)</p>
+  </div>
+  <div class="themes">
+    <div class="theme light"><div class="stage"><img src="b2.png?v=1786971944" alt=""></div><p class="cap">라이트</p></div>
+    <div class="theme dark"><div class="stage"><img src="b2.png?v=1786971944" alt=""></div><p class="cap">다크</p></div>
+  </div>
+</div>
+<p class="note">
+  <b>정렬 근거 —</b> 규칙은 헤더 정렬을 지정하지 않는다. 실물 선례
+  <code>Knowva/docs/portfolio/images/header.svg</code>(A등급)는 <b>왼쪽 정렬</b>이지만,
+  오른쪽을 행성 궤도 모티프로 채워 밴드가 좌우로 꽉 차 있다. B는 오른쪽이 빈 하늘이라 사정이 다르다.
+  아래 참고로 그 선례를 같은 조건(1100×180, 2배율)으로 렌더해 붙였다.
+</p>
+<div class="stage" style="margin-top:8px"><img src="_ref_knowva.png?v=1786961144" alt="참고: Knowva 헤더 실물"></div>
+<p class="cap" style="font-size:12px;color:var(--mut)">참고 — Knowva 실물 헤더 (왼쪽 정렬 + 오른쪽 모티프)</p>
+
+<h2>B4. B2 + 꽃밭 ★ 현재 후보</h2>
+<p class="verdict ok">
+  B2 위에 꽃밭 기운만 얹었다. <b>흙 단면과 곡률 돔은 뺐다</b>(B3가 과했다).
+  B3에서 잃었던 흐린 수채 느낌은 <b>지평선까지 번지게</b> 해서 B2보다 더 밀었다 — 딱딱해진 원인이 돔·흙의 하드 엣지였다.
+</p>
+<div class="stage"><img src="b4.png?v=1786971945" alt="시안 B4 B2 더하기 꽃밭"></div>
+<div class="row">
+  <div class="narrow">
+    <div class="stage"><img src="b4.png?v=1786971945" alt="시안 B4 좁은 폭"></div>
+    <p class="cap">좁은 폭 380px (폰)</p>
+  </div>
+  <div class="themes">
+    <div class="theme light"><div class="stage"><img src="b4.png?v=1786971945" alt=""></div><p class="cap">라이트</p></div>
+    <div class="theme dark"><div class="stage"><img src="b4.png?v=1786971945" alt=""></div><p class="cap">다크</p></div>
+  </div>
+</div>
+<p class="note">
+  <b>꽃밭 = 화단 매스 2구역.</b> 좌·우에 뭉치고 가운데는 열린 잔디로 비웠다
+  (<code>VISUAL_ACCEPTANCE.md:31</code> "개별 줄기 scatter 금지, 멀리서 <b>하나의 화단 매스</b>로" ·
+  <code>:25</code> "의도적인 이동 흐름과 열린 잔디"). 각 화단은 ① 매스 밑칠 ② 밑동 잎그늘
+  (<code>leafDeep</code> — 잔디보다 짙어야 땅에 붙는다) ③ 작고 진한 꽃송이로 3층이다.
+  색은 <code>rose #E8A9BC</code> · <code>pollen #F2C14E</code>(palette.ts가 "꽃잎보다 채도 높은 포인트"로 지정) ·
+  <code>petalPink</code> · <code>petalCoral</code> · <code>petalLav</code>. 고정 시드라 다시 구워도 같은 그림이다.
+</p>
+<p class="note">
+  <b>여기서 세 번 되돌렸다 —</b>
+  ① 비슷한 크기 타원 6개를 두 줄에 번갈아 놓자 <b>웅덩이가 일자로 늘어선</b> 패턴이 됐다.
+  ② 원근을 넣어 전폭에 흩뿌리니 진한 얼룩이 밴드 아래로 잘려 <b>지저분한 띠</b>가 됐고, 그게 규칙이 금지한 scatter였다.
+  ③ 파스텔 꽃잎색을 잔디 위에 옅게 얹으면 <b>회탁색</b>이 되고 흰 얼룩은 대머리로 보였다 →
+  채도 높은 <code>rose</code>·<code>pollen</code>을 작고 진하게 찍는 방식으로 바꿨다.
+</p>
+
+<h2>B3. 지평 + 흙 단면 (과함 — 참고용)</h2>
+<p class="verdict bad">판정: <b>과하다.</b> 흙 단면과 곡률 돔이 하드 엣지를 만들어 B2의 흐린 수채 느낌을 죽였다. 채택하지 않는다 — 무엇을 왜 뺐는지 남기려고 둔다.</p>
+<div class="stage"><img src="b3.png?v=1786971944" alt="시안 B3 지평 다듬음"></div>
+<div class="row">
+  <div class="narrow">
+    <div class="stage"><img src="b3.png?v=1786971944" alt="시안 B3 좁은 폭"></div>
+    <p class="cap">좁은 폭 380px (폰)</p>
+  </div>
+  <div class="themes">
+    <div class="theme light"><div class="stage"><img src="b3.png?v=1786971944" alt=""></div><p class="cap">라이트</p></div>
+    <div class="theme dark"><div class="stage"><img src="b3.png?v=1786971944" alt=""></div><p class="cap">다크</p></div>
+  </div>
+</div>
+<table>
+  <tr><th>B2의 결함</th><th>고친 것</th><th>근거</th></tr>
+  <tr>
+    <td>지평선이 밴드 끝에서 끝까지 직선 → <b>무한한 평야</b>로 읽힌다</td>
+    <td>경계를 아주 완만한 돔으로 휘었다. 오브젝트가 아니라 색면 윗변의 곡률만 바꿨다</td>
+    <td><code>REBUILD_PLAN.md:17</code> — 32m×32m <b>떠 있는 정원 섬</b></td>
+  </tr>
+  <tr>
+    <td>잔디 아래가 그냥 잘려 끝난다</td>
+    <td>흙 단면 색면 1개 추가. 밴드 아래로 잘려 나간다 — 단면이 계속되는 게 맞다</td>
+    <td>같은 줄 — "잔디 뚜껑 + 흙 단면 = 땅을 도려내 온 조각"</td>
+  </tr>
+  <tr>
+    <td>글자 하단이 지평선에 거의 닿는다</td>
+    <td>글자 46→50px, 섬을 낮추고 여백 확보</td>
+    <td><code>디자인기준</code> §4-3 — 여백 ≥ 가장 작은 글자 높이</td>
+  </tr>
+  <tr>
+    <td>하늘 위 2/3가 단일 그라데이션이라 밋밋하다</td>
+    <td>지평선 부근에 fog 안개층을 얹어 원경을 녹였다</td>
+    <td><code>palette.ts</code> DAY.fog:155</td>
+  </tr>
+</table>
+<p class="note">
+  <b>중간에 두 번 되돌린 것 —</b> ① 곡선 컨테이너 안에 색 정지점으로 흙 경계를 넣었더니 위는 곡선인데
+  경계는 직선이라 케이크 층처럼 보였다 → 같은 곡률의 돔 2개로 따로 깎았다.
+  ② 흙을 <code>REBUILD_PLAN.md:64</code>의 0.8m:1.6m 비율대로 넣자 갈색이 밴드를 지배했다 →
+  아이소메트릭에서는 잔디 <b>윗면</b>이 보이므로 초록 면적이 커야 맞다. 잔디 40% · 흙 13%로 잡았다.
+  ③ 안개 사각형 아래 끝이 뚝 끊겨 좌우에서 직선으로 노출됐다 → 양끝을 0으로 뺐다.
+</p>
+
+<h2>C. 빛무리</h2>
+<p class="verdict mid">내 판정: 무해하지만 특정성이 없다 — 따뜻한 그라데이션이라 어느 브랜드에도 쓸 수 있다. MyWorld여야 할 이유가 약하다.</p>
+<div class="stage"><img src="c.png?v=1786971946" alt="시안 C 빛무리"></div>
+<div class="row">
+  <div class="narrow">
+    <div class="stage"><img src="c.png?v=1786971946" alt="시안 C 좁은 폭"></div>
+    <p class="cap">좁은 폭 380px (폰)</p>
+  </div>
+  <div class="themes">
+    <div class="theme light"><div class="stage"><img src="c.png?v=1786971946" alt=""></div><p class="cap">라이트</p></div>
+    <div class="theme dark"><div class="stage"><img src="c.png?v=1786971946" alt=""></div><p class="cap">다크</p></div>
+  </div>
+</div>
+
+<h2>수치</h2>
+<table>
+  <tr><th>안</th><th>글자색</th><th>배경</th><th>대비</th><th>근거</th></tr>
+  <tr><td>A 사광</td><td>#49713D</td><td>#F2E8DC fabric</td><td>4.67:1 PASS</td><td>leafDeep × 93% 그늘</td></tr>
+  <tr><td>B 지평</td><td>#456D3B</td><td>#FFDCB8 skyBottom</td><td>4.62:1 PASS</td><td>leafDeep × 89% 그늘</td></tr>
+  <tr><td>B2 지평·중앙</td><td>#456D3B</td><td>#FFDCB8 skyBottom</td><td>4.62:1 PASS</td><td>leafDeep × 89% 그늘</td></tr>
+  <tr><td><b>B3 지평·다듬음</b></td><td>#456D3B</td><td>#FFDCB8 skyBottom</td><td>4.62:1 PASS</td><td>leafDeep × 89% 그늘</td></tr>
+  <tr><td>C 빛무리</td><td>#51753E</td><td>#F6F0E7 petalWhite</td><td>4.68:1 PASS</td><td>leafCitrusDeep × 85% 그늘</td></tr>
+</table>
+<p class="note">
+  파스텔 팔레트의 가장 짙은 초록(<code>leafDeep #4E7A42</code>)조차 크림 배경에서 <b>4.14:1로 미달</b>이었다.
+  <code>palette.ts</code>는 "검정은 쓰지 않는다 — 어두운 색이 필요하면 그늘진 같은 색으로 간다"고 못박고,
+  같은 파일 :127은 그늘을 "팔레트 색의 약 37% 밝기"로 정의한다. 그 규칙을 4.5:1을 막 넘는 최소 깊이까지만 적용했다.
+  새 색을 지어낸 것이 아니다.
+</p>
+
+<h2>지킨 컨셉 금지 3건</h2>
+<table>
+  <tr><th>금지</th><th>근거</th></tr>
+  <tr><td>강아지 없음</td><td>VISUAL_ACCEPTANCE.md:34 — 실제 셸티 reference·silhouette gate 전 씬 복귀 금지</td></tr>
+  <tr><td>구름·부유섬 없음</td><td>같은 문서 :35 / :27 — 외곽 없이도 섬이 완결돼 보일 것</td></tr>
+  <tr><td>씬 실렌더 미사용</td><td>같은 문서 :5 "포트폴리오 메인 비주얼로 승인하지 않는다" · :53 PARTIAL, production 승격 금지</td></tr>
+</table>
+
+</div>

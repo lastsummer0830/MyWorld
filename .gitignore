@@ -46,7 +46,9 @@ next-env.d.ts
 !.claude/skills/
 .claude/skills/*
 !.claude/skills/myworld-visual-implementation/
-!.claude/skills/myworld-visual-implementation/SKILL.md
+!.claude/skills/myworld-visual-implementation/**
+!.claude/skills/myworld-procedural-modeling/
+!.claude/skills/myworld-procedural-modeling/**
 .cleanse/
 
 # 로컬 개발 서버 로그 (캡처 검증용) — 커밋 대상 아님

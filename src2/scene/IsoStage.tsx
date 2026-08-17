@@ -42,8 +42,23 @@ import { DOG_POS, setDogNight } from './garden/Dog';
 import Hud from '../ui/Hud';
 import type { NavKey } from '../ui/Hud';
 import Panel from '../ui/Panel';
+import ResetIsland from '../spikes/composition-reset/ResetIsland';
+import ResetComposition from '../spikes/composition-reset/ResetComposition';
 
 const ORIGIN = new THREE.Vector3(0, 0, 0);
+
+/**
+ * `/rebuild-reset` 검수 대상 — 대상마다 시선과 배율을 따로 잡는다.
+ * 하나의 고정 배율로는 성립하지 않는다: 퍼걸러는 크게 봐야 하고,
+ * 섬 단면은 잔디·흙·바위가 **한 화면에 같이** 들어와야 판정할 수 있다.
+ * island 시선은 카메라 기본 방위(+x·+z)의 근경 사면 중간 높이다(잔디 0 ~ 바위 밑 -8.9의 중간).
+ */
+const RESET_INSPECT: Record<string, { target: THREE.Vector3; zoom: number }> = {
+  island: { target: new THREE.Vector3(12, -5.2, 12), zoom: 2.05 },
+  pergola: { target: new THREE.Vector3(0, 2.8, 0), zoom: 2.6 },
+  pond: { target: new THREE.Vector3(18, 0.3, 1), zoom: 2.2 },
+  house: { target: new THREE.Vector3(-15, 2, -4.5), zoom: 2.6 },
+};
 
 /**
  * 마우스 조작. 수평은 360° 자유, 부각만 30°로 잠근다 — 아이소메트릭 문법은 이 각에서 나온다.
@@ -74,7 +89,15 @@ function Controls() {
  * 카메라 연출 — 클릭한 대상으로 시점이 빨려 들어가고, 배경을 클릭하면 되돌아온다.
  * OrbitControls의 target과 zoom을 함께 몰아야 "들어가는" 느낌이 난다. zoom만 올리면 그냥 확대다.
  */
-function CameraRig({ focus, follow }: { focus: THREE.Vector3 | null; follow: THREE.Vector3 | null }) {
+function CameraRig({
+  focus,
+  follow,
+  followZoom = ZOOM_INSPECT,
+}: {
+  focus: THREE.Vector3 | null;
+  follow: THREE.Vector3 | null;
+  followZoom?: number;
+}) {
   const controls = useThree((s) => s.controls) as { target: THREE.Vector3; update: () => void } | null;
   const camera = useThree((s) => s.camera) as THREE.OrthographicCamera;
   const size = useThree((s) => s.size);
@@ -100,7 +123,7 @@ function CameraRig({ focus, follow }: { focus: THREE.Vector3 | null; follow: THR
     // 프레임률과 무관한 감쇠. 고정 계수로 lerp하면 저사양 기기에서 카메라가 튄다.
     const k = 1 - Math.pow(0.004, dt);
     const goalTarget = follow ?? focus ?? ORIGIN;
-    const goalZoom = base * (follow ? ZOOM_INSPECT : focus ? ZOOM_FOCUS : 1);
+    const goalZoom = base * (follow ? followZoom : focus ? ZOOM_FOCUS : 1);
 
     controls.target.lerp(goalTarget, k);
     camera.zoom = THREE.MathUtils.lerp(camera.zoom, goalZoom, k);
@@ -279,7 +302,11 @@ function SwatchBoard() {
   );
 }
 
-export default function IsoStage() {
+export default function IsoStage({
+  composition = 'current',
+}: {
+  composition?: 'current' | 'reset';
+}) {
   const [isNight, setIsNight] = useState(false);
   const [view, setView] = useState<NavKey | null>(null);
   const [swatch, setSwatch] = useState(false);
@@ -325,6 +352,8 @@ export default function IsoStage() {
 
   // 오브젝트를 클릭해 그 속으로 파고드는 연출은 단계 6에서 붙인다. 지금은 고정 시점.
   const focus: THREE.Vector3 | null = null;
+  const resetInspection = composition === 'reset' && inspect ? RESET_INSPECT[inspect] ?? null : null;
+  const dogFollow = composition === 'current' && inspect === 'dog' ? DOG_POS : null;
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
@@ -344,20 +373,31 @@ export default function IsoStage() {
 
         <OrthographicCamera makeDefault position={CAM_POS} near={-300} far={600} />
         <Controls />
-        <CameraRig focus={focus} follow={inspect === 'dog' ? DOG_POS : null} />
+        <CameraRig
+          focus={focus}
+          follow={dogFollow ?? resetInspection?.target ?? null}
+          followZoom={resetInspection?.zoom ?? ZOOM_INSPECT}
+        />
         <Mood target={isNight ? 1 : 0} nightRef={nightRef} sunDirRef={sunDirRef} bloom={bloom} />
 
         <Sky nightRef={nightRef} sunDirRef={sunDirRef} />
-        <Surroundings nightRef={nightRef} />
-        <Island />
+        {composition === 'current' && <Surroundings nightRef={nightRef} />}
+        {composition === 'reset' ? <ResetIsland /> : <Island />}
         {/* 낮의 금빛 부유물 ↔ 밤의 반딧불이. 낮/밤에 서로 자리를 넘겨준다. */}
-        <Motes nightRef={nightRef} />
-        <Fireflies nightRef={nightRef} />
+        {composition === 'current' && <Motes nightRef={nightRef} />}
+        {composition === 'current' && <Fireflies nightRef={nightRef} />}
 
         {/* 햇살 — 씬 위에 얹히는 빛기둥. 맨 마지막에 가산 합성으로 그린다. */}
-        <Sunlight nightRef={nightRef} sunDirRef={sunDirRef} />
+        {composition === 'current' && <Sunlight nightRef={nightRef} sunDirRef={sunDirRef} />}
 
-        {swatch ? <SwatchBoard /> : <Garden />}
+        {swatch ? (
+          <SwatchBoard />
+        ) : composition === 'reset' ? (
+          // 밤 초점 조명은 Mood가 굴리는 nightRef 하나를 그대로 읽는다 — 두 번째 낮/밤 상태를 만들지 않는다.
+          <ResetComposition nightRef={nightRef} />
+        ) : (
+          <Garden />
+        )}
 
         {/*
           Bloom — 밤의 필수 요소. 반딧불이가 "빛"으로 보이려면 번져야 한다.

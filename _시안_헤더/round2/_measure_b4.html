@@ -1,0 +1,167 @@
+<meta charset='utf-8'>
+<style>
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('../fonts/Fraunces.ttf') format('truetype');
+  font-weight: 100 900;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1100px; height: 180px; overflow: hidden; }
+.band {
+  position: relative; width: 1100px; height: 180px; overflow: hidden;
+  display: flex; align-items: center;
+}
+.name {
+  position: relative; z-index: 5;
+  font-family: 'Fraunces', serif;
+  font-variation-settings: 'wght' 600, 'opsz' 144, 'SOFT' 40, 'WONK' 0;
+  font-size: 46px; letter-spacing: 0.02em; line-height: 1;
+}
+
+.band {
+  justify-content: center;
+  background: linear-gradient(178deg, #86C9EC 0%, #FFDCB8 88%);
+}
+/* 잔디 색면 — 윗면에 햇살 테두리 */
+.ground {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 38%;
+  background:
+    linear-gradient(to bottom,
+      rgba(255,240,200,.52) 0%, rgba(255,240,200,.08) 20%, rgba(255,240,200,0) 44%),
+    linear-gradient(to bottom, #AFD177 0%, #96B863 100%);
+}
+/* ★ 꽃밭 — 꽃을 그리지 않고 꽃잎 색이 번진 얼룩만 얹는다.
+   높이를 낮게(타원) 눌러야 지면에 깔린 화단으로 읽히고, 세우면 풍선이 된다. */
+.meadow {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 38%;
+  background:
+    radial-gradient(ellipse 218px 26px at 21.5% 66%, rgba(232,169,188,0.26), transparent 74%),
+    radial-gradient(ellipse 187px 14px at 21.5% 77%, rgba(78,122,66,0.22), transparent 76%),
+    radial-gradient(ellipse 19px 8px at 26.3% 69.8%, rgba(201,184,228,0.64), transparent 70%),
+    radial-gradient(ellipse 21px 7px at 3.1% 64.3%, rgba(232,169,188,0.69), transparent 70%),
+    radial-gradient(ellipse 14px 4px at 16.5% 72.4%, rgba(242,193,78,0.49), transparent 70%),
+    radial-gradient(ellipse 20px 6px at 17.9% 58.6%, rgba(232,169,188,0.65), transparent 70%),
+    radial-gradient(ellipse 11px 4px at 7.4% 67.3%, rgba(242,193,78,0.68), transparent 70%),
+    radial-gradient(ellipse 11px 5px at 32.2% 74.2%, rgba(242,193,78,0.51), transparent 70%),
+    radial-gradient(ellipse 12px 8px at 23.0% 68.6%, rgba(243,180,155,0.63), transparent 70%),
+    radial-gradient(ellipse 11px 5px at 13.7% 62.2%, rgba(243,185,206,0.44), transparent 70%),
+    radial-gradient(ellipse 17px 7px at 33.9% 66.7%, rgba(243,185,206,0.44), transparent 70%),
+    radial-gradient(ellipse 13px 6px at 33.9% 64.6%, rgba(232,169,188,0.63), transparent 70%),
+    radial-gradient(ellipse 21px 5px at 12.0% 73.8%, rgba(201,184,228,0.54), transparent 70%),
+    radial-gradient(ellipse 17px 4px at 32.7% 62.3%, rgba(242,193,78,0.43), transparent 70%),
+    radial-gradient(ellipse 11px 5px at 26.3% 74.1%, rgba(243,180,155,0.67), transparent 70%),
+    radial-gradient(ellipse 16px 7px at 15.4% 62.1%, rgba(243,185,206,0.45), transparent 70%),
+    radial-gradient(ellipse 21px 4px at 35.5% 55.7%, rgba(201,184,228,0.52), transparent 70%),
+    radial-gradient(ellipse 13px 7px at 16.1% 58.0%, rgba(243,185,206,0.45), transparent 70%),
+    radial-gradient(ellipse 17px 7px at 13.9% 71.0%, rgba(243,180,155,0.51), transparent 70%),
+    radial-gradient(ellipse 22px 6px at 8.3% 56.0%, rgba(242,193,78,0.54), transparent 70%),
+    radial-gradient(ellipse 12px 7px at 30.9% 61.9%, rgba(232,169,188,0.46), transparent 70%),
+    radial-gradient(ellipse 12px 8px at 33.3% 61.7%, rgba(242,193,78,0.59), transparent 70%),
+    radial-gradient(ellipse 10px 6px at 26.6% 70.8%, rgba(243,180,155,0.46), transparent 70%),
+    radial-gradient(ellipse 22px 7px at 13.5% 64.1%, rgba(243,180,155,0.71), transparent 70%),
+    radial-gradient(ellipse 13px 5px at 39.4% 68.8%, rgba(242,193,78,0.56), transparent 70%),
+    radial-gradient(ellipse 16px 5px at 6.4% 71.4%, rgba(243,185,206,0.70), transparent 70%),
+    radial-gradient(ellipse 16px 6px at 9.0% 64.8%, rgba(232,169,188,0.57), transparent 70%),
+    radial-gradient(ellipse 18px 7px at 32.7% 70.5%, rgba(243,185,206,0.65), transparent 70%),
+    radial-gradient(ellipse 20px 5px at 23.8% 68.4%, rgba(243,185,206,0.71), transparent 70%),
+    radial-gradient(ellipse 11px 7px at 39.3% 61.8%, rgba(243,185,206,0.56), transparent 70%),
+    radial-gradient(ellipse 13px 6px at 14.7% 60.5%, rgba(243,185,206,0.62), transparent 70%),
+    radial-gradient(ellipse 19px 7px at 15.6% 67.9%, rgba(242,193,78,0.53), transparent 70%),
+    radial-gradient(ellipse 22px 8px at 35.9% 68.8%, rgba(201,184,228,0.58), transparent 70%),
+    radial-gradient(ellipse 14px 7px at 40.2% 59.0%, rgba(232,169,188,0.50), transparent 70%),
+    radial-gradient(ellipse 11px 7px at 30.1% 69.6%, rgba(243,180,155,0.59), transparent 70%),
+    radial-gradient(ellipse 20px 5px at 13.8% 66.1%, rgba(242,193,78,0.72), transparent 70%),
+    radial-gradient(ellipse 17px 5px at 8.2% 63.8%, rgba(232,169,188,0.63), transparent 70%),
+    radial-gradient(ellipse 11px 8px at 40.5% 74.6%, rgba(242,193,78,0.45), transparent 70%),
+    radial-gradient(ellipse 14px 5px at 20.8% 66.0%, rgba(232,169,188,0.62), transparent 70%),
+    radial-gradient(ellipse 21px 4px at 25.0% 59.8%, rgba(243,185,206,0.54), transparent 70%),
+    radial-gradient(ellipse 18px 6px at 35.4% 72.3%, rgba(201,184,228,0.71), transparent 70%),
+    radial-gradient(ellipse 16px 5px at 25.9% 56.9%, rgba(243,185,206,0.59), transparent 70%),
+    radial-gradient(ellipse 207px 22px at 79.5% 53%, rgba(232,169,188,0.22), transparent 74%),
+    radial-gradient(ellipse 178px 12px at 79.5% 62%, rgba(78,122,66,0.19), transparent 76%),
+    radial-gradient(ellipse 17px 6px at 93.2% 50.7%, rgba(242,193,78,0.50), transparent 70%),
+    radial-gradient(ellipse 13px 4px at 64.7% 50.1%, rgba(232,169,188,0.43), transparent 70%),
+    radial-gradient(ellipse 8px 4px at 73.1% 58.9%, rgba(201,184,228,0.55), transparent 70%),
+    radial-gradient(ellipse 18px 5px at 81.2% 49.1%, rgba(242,193,78,0.51), transparent 70%),
+    radial-gradient(ellipse 16px 5px at 79.2% 51.8%, rgba(242,193,78,0.63), transparent 70%),
+    radial-gradient(ellipse 19px 5px at 83.6% 48.0%, rgba(243,185,206,0.51), transparent 70%),
+    radial-gradient(ellipse 18px 4px at 98.6% 48.8%, rgba(201,184,228,0.40), transparent 70%),
+    radial-gradient(ellipse 8px 4px at 99.3% 47.8%, rgba(243,180,155,0.50), transparent 70%),
+    radial-gradient(ellipse 18px 6px at 80.9% 48.2%, rgba(243,185,206,0.46), transparent 70%),
+    radial-gradient(ellipse 11px 5px at 94.3% 55.9%, rgba(201,184,228,0.67), transparent 70%),
+    radial-gradient(ellipse 16px 4px at 85.7% 53.9%, rgba(243,185,206,0.61), transparent 70%),
+    radial-gradient(ellipse 15px 6px at 70.1% 55.7%, rgba(243,185,206,0.40), transparent 70%),
+    radial-gradient(ellipse 14px 4px at 73.5% 56.4%, rgba(243,180,155,0.46), transparent 70%),
+    radial-gradient(ellipse 15px 4px at 87.5% 45.4%, rgba(243,180,155,0.51), transparent 70%),
+    radial-gradient(ellipse 18px 6px at 83.6% 55.4%, rgba(243,180,155,0.63), transparent 70%),
+    radial-gradient(ellipse 16px 7px at 78.5% 55.3%, rgba(232,169,188,0.52), transparent 70%),
+    radial-gradient(ellipse 16px 5px at 71.1% 43.6%, rgba(243,180,155,0.58), transparent 70%),
+    radial-gradient(ellipse 13px 5px at 97.2% 46.0%, rgba(243,185,206,0.53), transparent 70%),
+    radial-gradient(ellipse 14px 4px at 81.1% 50.9%, rgba(243,185,206,0.60), transparent 70%),
+    radial-gradient(ellipse 15px 4px at 93.2% 57.2%, rgba(232,169,188,0.60), transparent 70%),
+    radial-gradient(ellipse 8px 6px at 100.9% 55.6%, rgba(232,169,188,0.46), transparent 70%),
+    radial-gradient(ellipse 11px 7px at 88.6% 45.9%, rgba(201,184,228,0.44), transparent 70%),
+    radial-gradient(ellipse 8px 4px at 66.0% 57.3%, rgba(243,180,155,0.55), transparent 70%),
+    radial-gradient(ellipse 14px 4px at 90.1% 48.4%, rgba(201,184,228,0.51), transparent 70%),
+    radial-gradient(ellipse 11px 6px at 63.8% 51.0%, rgba(243,185,206,0.53), transparent 70%),
+    radial-gradient(ellipse 11px 5px at 97.3% 45.9%, rgba(243,185,206,0.58), transparent 70%),
+    radial-gradient(ellipse 15px 4px at 97.1% 53.1%, rgba(243,185,206,0.55), transparent 70%),
+    radial-gradient(ellipse 19px 6px at 93.8% 48.4%, rgba(243,180,155,0.64), transparent 70%),
+    radial-gradient(ellipse 16px 6px at 89.7% 46.6%, rgba(232,169,188,0.42), transparent 70%),
+    radial-gradient(ellipse 14px 4px at 61.9% 45.7%, rgba(243,180,155,0.64), transparent 70%),
+    radial-gradient(ellipse 14px 5px at 99.4% 45.4%, rgba(242,193,78,0.50), transparent 70%),
+    radial-gradient(ellipse 17px 6px at 98.6% 50.9%, rgba(243,180,155,0.42), transparent 70%),
+    radial-gradient(ellipse 70px 14px at 50.0% 38%, rgba(232,169,188,0.14), transparent 74%),
+    radial-gradient(ellipse 60px 7px at 50.0% 44%, rgba(78,122,66,0.11), transparent 76%),
+    radial-gradient(ellipse 9px 3px at 57.7% 33.7%, rgba(243,185,206,0.38), transparent 70%),
+    radial-gradient(ellipse 10px 3px at 60.3% 39.6%, rgba(243,185,206,0.50), transparent 70%),
+    radial-gradient(ellipse 8px 4px at 53.5% 40.6%, rgba(201,184,228,0.45), transparent 70%),
+    radial-gradient(ellipse 6px 2px at 61.8% 34.5%, rgba(242,193,78,0.34), transparent 70%),
+    radial-gradient(ellipse 11px 3px at 42.9% 32.7%, rgba(232,169,188,0.51), transparent 70%),
+    radial-gradient(ellipse 11px 4px at 48.2% 35.4%, rgba(243,180,155,0.41), transparent 70%),
+    radial-gradient(ellipse 6px 3px at 40.4% 33.9%, rgba(243,180,155,0.42), transparent 70%),
+    radial-gradient(ellipse 7px 2px at 41.7% 34.9%, rgba(242,193,78,0.40), transparent 70%),
+    radial-gradient(ellipse 7px 4px at 38.8% 41.6%, rgba(232,169,188,0.40), transparent 70%),
+    radial-gradient(ellipse 8px 4px at 54.5% 39.3%, rgba(243,185,206,0.36), transparent 70%),
+    radial-gradient(ellipse 10px 2px at 45.0% 39.3%, rgba(232,169,188,0.38), transparent 70%),
+    radial-gradient(ellipse 9px 4px at 51.8% 39.1%, rgba(243,185,206,0.50), transparent 70%),
+    radial-gradient(ellipse 5px 4px at 42.4% 36.0%, rgba(242,193,78,0.44), transparent 70%),
+    radial-gradient(ellipse 5px 3px at 42.2% 34.5%, rgba(243,185,206,0.50), transparent 70%),
+    radial-gradient(ellipse 10px 3px at 38.2% 32.9%, rgba(201,184,228,0.34), transparent 70%),
+    radial-gradient(ellipse 9px 4px at 58.1% 41.0%, rgba(242,193,78,0.50), transparent 70%);
+  filter: blur(2px);
+}
+/* ★ 지평선을 번지게 한다 — B2 는 여기가 면도날이었다. 물감이 종이에 번지듯 경계를 풀어 준다 */
+.horizonBleed {
+  position: absolute; left: 0; right: 0; bottom: 38%; height: 26px;
+  transform: translateY(50%);
+  background: linear-gradient(to top,
+    rgba(175,209,119,.75) 0%, rgba(214,229,182,.45) 46%, rgba(230,223,210,0) 100%);
+  filter: blur(6px);
+}
+/* 지평선 오른쪽이 햇살을 받아 레몬색으로 물든다 — 밴드 안 유일한 고채도 */
+.horizonLight {
+  position: absolute; right: 5%; bottom: 38%; width: 42%; height: 88px;
+  transform: translateY(50%);
+  background: radial-gradient(ellipse at center,
+    rgba(248,217,94,.62) 0%, rgba(248,217,94,.20) 46%, rgba(248,217,94,0) 100%);
+  filter: blur(10px);
+}
+/* 지평선 위 공기 */
+.spill {
+  position: absolute; left: 0; right: 0; bottom: 38%; height: 40%;
+  background: linear-gradient(to top, rgba(255,240,200,.42), rgba(255,240,200,0));
+}
+.name { margin-bottom: 20px; color: #456D3B; }
+
+</style>
+<div class='band'><div class='spill'></div><div class='ground'></div><div class='meadow'></div><div class='horizonBleed'></div><div class='horizonLight'></div><span class='name'>MyWorld</span></div>
+<script>
+window.addEventListener('load',()=>{
+  const s=document.querySelector('.name'), r=s.getBoundingClientRect();
+  const cs=getComputedStyle(s);
+  document.title="MEASURE:"+JSON.stringify({x:r.x,y:r.y,w:r.width,h:r.height,
+    fs:cs.fontSize,ls:cs.letterSpacing,lh:cs.lineHeight,color:cs.color});
+});
+</script>

@@ -1,49 +1,69 @@
 ---
 name: myworld-visual-implementation
-description: Use when implementing or revising MyWorld Three.js/R3F visuals, including composition, orthographic camera, terrain, structures, materials, lighting, day/night states, or visual polish.
+description: Use for any MyWorld 3D scene, lighting, composition, camera, terrain, or asset implementation. Enforces reference-first planning and render evidence.
 ---
 
-# MyWorld Visual Implementation
+# MyWorld visual implementation
 
-Claude is the implementation worker. Hermes owns scope, acceptance, independent rendering, and final approval.
+## Authority
+Hermes supplies the task contract, allowed files, reference set, and acceptance target. Implement only that contract. Report evidence to Hermes; do not ask the user directly and do not edit Claude controls.
 
-## Before editing
+## Required inputs
+Read before code:
+1. the task contract;
+2. the assigned source files and their direct dependencies;
+3. `REBUILD_PLAN.md` and the relevant section of `VISUAL_ACCEPTANCE.md`;
+4. every reference path named by Hermes;
+5. `references/reference-map.md` in this Skill.
 
-1. Hermes가 기록한 MyWorld Git baseline을 확인하고 기존 dirty를 보존한다.
-2. Read `VISUAL_ACCEPTANCE.md`, the active spike README, and only the source needed for the assigned object family.
-3. Restate the target, allowed files, supplied reference, and observable acceptance criteria.
-4. If reference or product meaning is missing, implement reversible composition/blockout work only and report final art as unverified.
+If a required reference cannot be read, stop and report the exact inaccessible path. Do not substitute memory or a generic web aesthetic.
 
-## Implementation order
+For flowers, trees, plants, animals, architecture, props, or terrain geometry, also apply `/myworld-procedural-modeling`.
 
-1. Fix screen-space hierarchy and overlap at the actual orthographic camera before adding detail.
-2. Validate silhouette and proportions before material, lighting, or decorative polish.
-3. Change one coherent family at a time: terrain, bridge/pond, architecture, vegetation, character, or atmosphere.
-4. Preserve `/rebuild` as the comparison baseline; use `/rebuild-reset` until Hermes explicitly promotes work.
-5. Do not restore or lightly polish the unapproved dog, flowers, trees, clouds, outer islands, house, pergola, pond, or bridge as a shortcut.
-6. Reuse current project architecture where sound, but do not inherit fixed coordinates, palettes, geometry recipes, licensing claims, or camera assumptions from legacy Skills without current evidence.
+## Phase 1 — evidence and plan
+Before editing, return a compact plan containing:
+- observed reference traits: silhouette, part hierarchy, proportions, negative space, palette, surface planes;
+- current render/code defects tied to those traits;
+- geometry/material/lighting changes;
+- allowed files only;
+- overview, close-up, day, and night checks that apply.
 
-## Quality rules
+A Hermes implementation prompt may include an already-approved plan. In that case, verify it against the references and proceed without asking for another approval.
 
-- Judge composition in screen space, not world coordinates alone.
-- Prefer a clear silhouette and focal hierarchy over primitive count or surface detail.
-- Keep day and night readable; ambient brightness must not erase form, and darkness must not collapse key silhouettes.
-- Use deterministic geometry only when it improves reproducibility; avoid repeated identical scatter and arbitrary complexity.
-- Treat build success as technical evidence only, never visual approval.
+## Phase 2 — implementation
+- Preserve pre-existing dirty work and unrelated behavior.
+- Build major silhouette and part hierarchy before decorative detail.
+- Keep authored family resemblance; do not hide weak assets with random scale/rotation scatter.
+- Use deterministic variation. Seeded variation may adjust authored variants but must not invent the structure.
+- Keep palette and material families centralized where the current architecture already does so.
+- Do not remove intended sunlight shafts, day/night mood, or focal elements without explicit contract scope.
+- Do not install packages. Prefer existing Three.js/R3F capabilities.
 
-## Verification contract
+### Orthographic diorama rules
+- Orthographic projection creates the isometric look; it does not excuse crude geometry or require a locked horizontal orbit.
+- Pick one elevation family for the task (30° dimetric or 35.264° true isometric) and judge composition in the actual product camera, not a convenient front view.
+- Distance does not make objects smaller in an orthographic camera. Build distant masses physically smaller and use fog/value separation deliberately.
+- Derive framing from the projected scene bounds. At 30° elevation, horizontal depth contributes about `sin(30°)` and vertical height about `cos(30°)` to screen height; verify the result in a fresh render rather than trusting the estimate.
+- World-space sky domes and radial perspective-style god rays are poor defaults for an orthographic scene. Prefer screen-space sky treatment and parallel light shafts aligned from the projected sun direction when the task includes atmosphere.
+- Lighting must preserve palette and form: use one readable key direction, restrained ambient fill, grounded hemisphere color, and shadows wide enough for the diorama. Warmth comes from color contrast and direction, not indiscriminate brightness or bloom.
 
-Claude does not receive Bash, server, browser, or MCP tools. Claude must report the files it changed, the checks Hermes should run, and anything it could not verify; it must not claim technical or visual completion.
+Every visual worker run targets one meaningful checkpoint named by the Hermes contract. Do not force a fixed checkpoint count or fixed three-stage sequence. Stop when that checkpoint's deterministic route/query and fixed camera states are ready, and do not continue into the next major revision unless the contract records the previous Hermes render verdict.
 
-Hermes independently performs the required acceptance loop:
+For animals, Phase 2 ends after the untextured anatomy scaffold. Return control to Hermes for the fixed multi-view silhouette gate defined in `/myworld-procedural-modeling`. Do not spend the same worker run on face details, fur, markings, animation, or scene integration unless the task contract cites a recorded Hermes scaffold pass.
 
-1. Run targeted ESLint for affected files while iterating.
-2. Run `npm run lint`, `npm run build`, and `git diff --check`; distinguish pre-existing failures from regressions.
-3. Render comparable desktop day/night overviews and close-ups of each affected family.
-4. Check browser JavaScript errors and warnings separately from the visual verdict.
-5. Stop bounded dev processes and verify their port is released.
-6. Compare Claude's reported files with the real Git diff and classify remaining items as `VALIDATED`, `PARTIAL`, `INVALIDATED`, or `unverified`.
+## Phase 3 — self-check
+Run the allowed checks relevant to the changed files. Build success proves only code health, not visual quality.
 
-## Prohibited side effects
+For every visual task, direct worker render inspection is mandatory. The worker environment can run the wrapper-bounded capture tool and read its PNG output; the obsolete claim that Claude cannot see a 3D scene no longer applies here. Run the exact capture command named in the Hermes contract after each judgeable revision, then use `Read` on its contact sheet and relevant individual PNGs. State what is visibly wrong, compare it with the assigned style/reference criteria, and revise before reporting ready. Code inspection, numeric ratios, route availability, and a capture path that was not opened are not substitutes. If the capture tool fails or cannot be read, return `blocked`; do not claim the checkpoint is ready.
 
-Do not install packages, delete or move files, commit, push, deploy, access sibling repositories, or modify Claude/Hermes controls unless the current Hermes task contract explicitly assigns that control-plane work.
+Before reporting completion, inspect the fresh captures you generated and state:
+- what changed in the silhouette and hierarchy;
+- what remains primitive-like or visually unresolved;
+- whether overview and close-up both read;
+- whether day/night focal hierarchy survives;
+- which claims still require a fresh Hermes render.
+
+Return the named checkpoint, deterministic route/query, required overview/close-up states, and known visual failures. A file path or successful build is not render evidence, and the worker must never claim that the user has seen an image. Hermes owns fresh capture, comparison, user-visible attachment, and verdict.
+
+## Promotion gate
+A spike or capability sample is not production. Hermes promotes it only after independent diff review, lint/build, clean runtime console, and fresh reference comparison. Never replace production code merely because a sample compiles.

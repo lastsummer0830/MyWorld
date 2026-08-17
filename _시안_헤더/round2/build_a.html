@@ -1,0 +1,59 @@
+<meta charset='utf-8'>
+<style>
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('../fonts/Fraunces.ttf') format('truetype');
+  font-weight: 100 900;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1100px; height: 180px; overflow: hidden; }
+.band {
+  position: relative; width: 1100px; height: 180px; overflow: hidden;
+  display: flex; align-items: center;
+}
+.name {
+  position: relative; z-index: 5;
+  font-family: 'Fraunces', serif;
+  font-variation-settings: 'wght' 600, 'opsz' 144, 'SOFT' 40, 'WONK' 0;
+  font-size: 46px; letter-spacing: 0.02em; line-height: 1;
+}
+
+.band { background: #F2E8DC; }
+/* ★ 1차 렌더 반성: blur 14px + 짧은 줄기 → 방향이 안 읽히고 왼쪽 얼룩이 됐다.
+   빛줄기는 밴드를 끝까지 가로질러 나가야 "들어오는 빛"이 된다. blur 를 줄이고 길이를 키운다. */
+.shaft {
+  position: absolute; top: -110%; left: -14%; width: 30%; height: 320%;
+  background: linear-gradient(96deg,
+    rgba(255,209,144,0)   0%,
+    rgba(255,240,200,.92) 46%,
+    rgba(255,240,200,.92) 58%,
+    rgba(255,209,144,0)  100%);
+  transform: rotate(24deg); transform-origin: top left;
+  filter: blur(7px);
+}
+/* 두 번째 줄기 — 하나면 우연처럼 보이고, 둘이면 방향이 된다. 더 얇고 옅게 */
+.shaft2 {
+  position: absolute; top: -110%; left: 26%; width: 13%; height: 320%;
+  background: linear-gradient(96deg,
+    rgba(255,240,200,0) 0%, rgba(255,240,200,.55) 50%, rgba(255,240,200,0) 100%);
+  transform: rotate(24deg); transform-origin: top left;
+  filter: blur(9px);
+}
+/* 빛이 내려앉는 자리 — 오른쪽 아래. 여기가 없으면 오른쪽 절반이 죽는다 */
+.pool {
+  position: absolute; right: -6%; bottom: -70%; width: 46%; height: 150%;
+  background: radial-gradient(ellipse at center,
+    rgba(255,209,144,.55) 0%, rgba(255,209,144,.16) 55%, rgba(255,209,144,0) 100%);
+  filter: blur(10px);
+}
+/* 그늘 — 빛 반대쪽. 이 낙차가 햇살이다 (palette.ts:140) */
+.shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(102deg,
+    rgba(95,138,73,.16) 0%, rgba(95,138,73,.06) 24%, rgba(95,138,73,0) 50%);
+}
+.name { margin-left: 72px; color: #49713D; }
+
+</style>
+<div class='band'><div class='shade'></div><div class='shaft'></div><div class='shaft2'></div><div class='pool'></div><span class='name'>MyWorld</span></div>

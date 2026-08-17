@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MyWorld 헤더 — 서체 비교</title>
+<style>
+  @font-face { font-family:'Josefin'; font-weight:300; src:url('../public/fonts/JosefinSans-Light.ttf') format('truetype'); }
+  @font-face { font-family:'Josefin'; font-weight:600; src:url('../public/fonts/JosefinSans-SemiBold.ttf') format('truetype'); }
+  @font-face { font-family:'Outfit';  font-weight:100 900; src:url('fonts/Outfit.ttf') format('truetype-variations'); }
+  @font-face { font-family:'Grotesk'; font-weight:300 700; src:url('fonts/SpaceGrotesk.ttf') format('truetype-variations'); }
+  @font-face { font-family:'Fraunces'; font-weight:100 900; src:url('fonts/Fraunces.ttf') format('truetype-variations'); }
+  @font-face { font-family:'RubikX'; font-weight:400; src:url('file:///C:/Windows/Fonts/Rubik-Regular.ttf') format('truetype'); }
+  @font-face { font-family:'RubikX'; font-weight:700; src:url('file:///C:/Windows/Fonts/Rubik-Bold.ttf') format('truetype'); }
+  @font-face { font-family:'BahnX';  src:url('file:///C:/Windows/Fonts/bahnschrift.ttf') format('truetype-variations'); }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f6f8fa; font:13px/1.5 system-ui,'Malgun Gothic',sans-serif; color:#1f2328; padding:24px; }
+  h1 { font-size:18px; margin-bottom:4px; }
+  p.lead { color:#59636e; margin-bottom:20px; }
+  .row { margin-bottom:22px; }
+  .lab { font-weight:600; margin-bottom:6px; }
+  .lab span { font-weight:400; color:#59636e; }
+
+  /* 밴드는 전 후보 동일 — 서체만 다름. 색은 실제 토큰(DayNightContext.tsx) */
+  .band { position:relative; width:1100px; height:180px; overflow:hidden; background:#1C2238; border-radius:6px; }
+  .day { position:absolute; inset:0;
+    background:radial-gradient(120% 190% at -6% 42%, #FFF4DC 0%, rgba(255,244,220,.92) 9%,
+      rgba(255,233,184,.62) 20%, rgba(255,213,128,.26) 31%, rgba(74,90,154,.30) 48%, rgba(28,34,56,0) 66%); }
+  .moon { position:absolute; inset:0;
+    background:radial-gradient(70% 120% at 82% 24%, rgba(74,90,154,.55) 0%, rgba(74,90,154,0) 62%); }
+  .horizon { position:absolute; left:0; right:0; top:70%; height:1px;
+    background:linear-gradient(90deg, rgba(255,244,220,.55) 0%, rgba(255,213,128,.30) 26%,
+      rgba(74,90,154,.22) 58%, rgba(74,90,154,0) 88%); }
+  .word { position:absolute; left:75px; top:50%; transform:translateY(-52%);
+    font-size:112px; line-height:1; white-space:nowrap; }
+  .word .my { color:#2A3350; } .word .world { color:#FFF4DC; }
+  .fly { position:absolute; border-radius:50%; background:#FFD580; }
+
+  .f1 .word { font-family:'Josefin',sans-serif; letter-spacing:.005em }
+  .f1 .my{font-weight:300} .f1 .world{font-weight:600}
+
+  .f2 .word { font-family:'Outfit',sans-serif; letter-spacing:-.005em }
+  .f2 .my{font-weight:200} .f2 .world{font-weight:600}
+
+  .f3 .word { font-family:'Grotesk',sans-serif; letter-spacing:-.015em }
+  .f3 .my{font-weight:300} .f3 .world{font-weight:700}
+
+  .f4 .word { font-family:'Fraunces',serif; letter-spacing:-.01em;
+              font-variation-settings:'opsz' 144,'SOFT' 40,'WONK' 1 }
+  .f4 .my{font-weight:300} .f4 .world{font-weight:700}
+
+  .f5 .word { font-family:'RubikX',sans-serif; letter-spacing:-.01em }
+  .f5 .my{font-weight:400} .f5 .world{font-weight:700}
+
+  .f6 .word { font-family:'BahnX',sans-serif; letter-spacing:.01em }
+  .f6 .my{font-variation-settings:'wght' 300} .f6 .world{font-variation-settings:'wght' 700}
+</style>
+</head>
+<body>
+<h1>MyWorld 헤더 — 서체 비교</h1>
+<p class="lead">밴드 디자인·색·레이아웃 전부 동일. 서체만 다릅니다. 이름 안에서 웨이트를 갈라(My=가늘게 / World=굵게) 부제 없이 위계를 만듭니다.</p>
+
+<div class="row f1"><div class="lab">① Josefin Sans <span>— 제품이 실제로 쓰는 서체. 기하학·허리 높음·아르데코</span></div>
+<div class="band"><div class="day"></div><div class="moon"></div><div class="horizon"></div>
+<div class="word"><span class="my">My</span><span class="world">World</span></div>
+<div class="fly" style="left:760px;top:48px;width:4px;height:4px;opacity:.75"></div>
+<div class="fly" style="left:932px;top:66px;width:4px;height:4px;opacity:.8"></div>
+<div class="fly" style="left:1039px;top:87px;width:3px;height:3px;opacity:.6"></div></div></div>
+
+<div class="row f2"><div class="lab">② Outfit <span>— 기하학 산세리프. 가장 깔끔하고 제품 워드마크다움</span></div>
+<div class="band"><div class="day"></div><div class="moon"></div><div class="horizon"></div>
+<div class="word"><span class="my">My</span><span class="world">World</span></div>
+<div class="fly" style="left:760px;top:48px;width:4px;height:4px;opacity:.75"></div>
+<div class="fly" style="left:932px;top:66px;width:4px;height:4px;opacity:.8"></div>
+<div class="fly" style="left:1039px;top:87px;width:3px;height:3px;opacity:.6"></div></div></div>
+
+<div class="row f3"><div class="lab">③ Space Grotesk <span>— 살짝 비뚠 그로테스크. 개성 있어 기본값 느낌이 안 남</span></div>
+<div class="band"><div class="day"></div><div class="moon"></div><div class="horizon"></div>
+<div class="word"><span class="my">My</span><span class="world">World</span></div>
+<div class="fly" style="left:760px;top:48px;width:4px;height:4px;opacity:.75"></div>
+<div class="fly" style="left:932px;top:66px;width:4px;height:4px;opacity:.8"></div>
+<div class="fly" style="left:1039px;top:87px;width:3px;height:3px;opacity:.6"></div></div></div>
+
+<div class="row f4"><div class="lab">④ Fraunces <span>— 소프트 세리프. SOFT·WONK 축을 켜 동화책 질감. 이번 판의 위험 선택</span></div>
+<div class="band"><div class="day"></div><div class="moon"></div><div class="horizon"></div>
+<div class="word"><span class="my">My</span><span class="world">World</span></div>
+<div class="fly" style="left:760px;top:48px;width:4px;height:4px;opacity:.75"></div>
+<div class="fly" style="left:932px;top:66px;width:4px;height:4px;opacity:.8"></div>
+<div class="fly" style="left:1039px;top:87px;width:3px;height:3px;opacity:.6"></div></div></div>
+
+<div class="row f5"><div class="lab">⑤ Rubik <span>— 모서리가 둥근 기하학 산세리프. 파스텔 로우폴리와 결이 맞음</span></div>
+<div class="band"><div class="day"></div><div class="moon"></div><div class="horizon"></div>
+<div class="word"><span class="my">My</span><span class="world">World</span></div>
+<div class="fly" style="left:760px;top:48px;width:4px;height:4px;opacity:.75"></div>
+<div class="fly" style="left:932px;top:66px;width:4px;height:4px;opacity:.8"></div>
+<div class="fly" style="left:1039px;top:87px;width:3px;height:3px;opacity:.6"></div></div></div>
+
+<div class="row f6"><div class="lab">⑥ Bahnschrift <span>— DIN 계열. 정밀·공학적. 부드러운 씬과 대비를 주는 쪽</span></div>
+<div class="band"><div class="day"></div><div class="moon"></div><div class="horizon"></div>
+<div class="word"><span class="my">My</span><span class="world">World</span></div>
+<div class="fly" style="left:760px;top:48px;width:4px;height:4px;opacity:.75"></div>
+<div class="fly" style="left:932px;top:66px;width:4px;height:4px;opacity:.8"></div>
+<div class="fly" style="left:1039px;top:87px;width:3px;height:3px;opacity:.6"></div></div></div>
+</body>
+</html>
